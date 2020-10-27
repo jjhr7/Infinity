@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "939404088776",
+    "firebase_url": "https://infinity-crop-cc8b9.firebaseio.com",
+    "project_id": "infinity-crop-cc8b9",
+    "storage_bucket": "infinity-crop-cc8b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939404088776:android:f01d95a601404ed1575cfd",
+        "android_client_info": {
+          "package_name": "com.example.infinitycrop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939404088776-l6hpk5np6ommdkl1tgjabqsmh06fut92.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.infinitycrop",
+            "certificate_hash": "abd3807122def60182868f4b9da2b09f6dbc8e15"
+          }
+        },
+        {
+          "client_id": "939404088776-791k20f8fd0q1n8q0b2ujltd30vas8s1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2Gt27V9AYmVEs8gkHyjC5S2ikz8HP5Y8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939404088776-791k20f8fd0q1n8q0b2ujltd30vas8s1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
