@@ -5,19 +5,24 @@ import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.example.infinitycrop.ui.graphic.GraphicFragment;
 import com.example.infinitycrop.ui.notifications.NotificationFragment;
 import com.example.infinitycrop.ui.profile.ProfileFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
+
     private ChipNavigationBar chipNavigationBar;
     private Fragment fragment=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         chipNavigationBar=findViewById(R.id.chipNavigation);
         chipNavigationBar=findViewById(R.id.chipNavigation);
@@ -50,7 +55,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
     }
+
+    
+
 
 
 }
