@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.infinitycrop.MainActivity;
+import com.example.infinitycrop.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -22,59 +24,56 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener listener;
+    private List<AuthUI.IdpConfig> providers;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(listener);
+    }
+
+    @Override
+    protected void onStop() {
+        if(listener!=null){
+            mAuth.removeAuthStateListener(listener);
+        }
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        init();
+    }
+
+    private void init(){
+        providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build()
+        );
+
         mAuth = FirebaseAuth.getInstance();
-        login();
-    }
+        listener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode,Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                login();
-                finish();
-            } else {
-                String s = "";
-                IdpResponse response = IdpResponse.fromResultIntent(data);
-                if (response == null) s = "Cancelado";
-                else switch (response.getError().getErrorCode()) {
-                    case ErrorCodes.NO_NETWORK: s="Sin conexión a Internet"; break;
-                    case ErrorCodes.PROVIDER_ERROR: s="Error en proveedor"; break;
-                    case ErrorCodes.DEVELOPER_ERROR: s="Error desarrollador"; break;
-                    default: s="Otros errores de autentificación";
+                FirebaseUser user = mAuth.getCurrentUser();
+                if(user != null)
+                {
+                    Toast.makeText(LoginActivity.this, "You're already login with uid:" + user.getUid(), Toast.LENGTH_SHORT).show();
+                    // mAuth.signOut(); para cerrar sesión cuando se quiera hacer pruebas
                 }
-                Toast.makeText(this, s, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private void login() {
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
-        if (usuario != null) {
-            Toast.makeText(this, "inicia sesión: " + usuario.getDisplayName() +
-                    " - " + usuario.getEmail(), Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this, MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    | Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-        } else {
-            List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build(),
-                    new AuthUI.IdpConfig.GoogleBuilder().build());
-            startActivityForResult(
-                    AuthUI.getInstance().createSignInIntentBuilder()
+                else {
+                    startActivityForResult(AuthUI.getInstance()
+                            .createSignInIntentBuilder()
                             .setAvailableProviders(providers)
-                            .setIsSmartLockEnabled(true)
-                            .build(),
-                    RC_SIGN_IN);
-        }
+                            .setTheme(R.style.login)
+                            .build(),RC_SIGN_IN);
+                }
+            }
+        };
+
     }
-
-
 
 }
