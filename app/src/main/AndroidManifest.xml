@@ -11,7 +11,8 @@
         android:theme="@style/AppThemeHome"
         >
 
-        <activity android:name=".MainActivity"> <!--Aquí llamamos nuestro tema -->
+        <activity android:name=".MainActivity"
+            android:theme="@style/SplashTheme"> <!--Aquí llamamos nuestro tema -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

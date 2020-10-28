@@ -16,9 +16,12 @@
         <item name="titleTextColor">@color/tittleTextApparience</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/pantalla_carga</item>
-    </style>
+
+        <style name="SplashTheme" parent="AppTheme">
+            <item name="android:windowBackground">@drawable/pantalla_carga</item>
+        </style>
+
+
     <style name="login" parent="Theme.AppCompat.Light.NoActionBar"></style>
 
     <!-- Base application theme. -> Dashboard -->

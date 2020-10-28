@@ -16,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        //setTheme(R.style.SplashTheme);
         setContentView(R.layout.activity_main);
         chipNavigationBar=findViewById(R.id.chipNavigation);
         chipNavigationBar=findViewById(R.id.chipNavigation);
