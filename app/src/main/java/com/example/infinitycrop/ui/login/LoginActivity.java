@@ -62,7 +62,8 @@ public class LoginActivity extends AppCompatActivity {
                 if(user != null)
                 {
                     Toast.makeText(LoginActivity.this, "You're already login with uid:" + user.getUid(), Toast.LENGTH_SHORT).show();
-                    // mAuth.signOut(); para cerrar sesión cuando se quiera hacer pruebas
+                    // mAuth.signOut();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
                 else {
                     startActivityForResult(AuthUI.getInstance()
