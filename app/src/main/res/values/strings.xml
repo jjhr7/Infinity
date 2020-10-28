@@ -4,6 +4,13 @@
     <string name="title_inicio">Inicio</string>
     <string name="title_dashboard">Panel de control</string>
     <string name="title_notifications">Notificaciones</string>
+    <string name="title_wellcome_login">¡Te damos la bienvenida!</string>
+    <string name="title_orderLog">Inicia sesión</string>
+    <string name="title_cont_faceboock">Iniciar sesión con Facebook</string>
+    <string name="title_cont_google">Iniciar sesión con Google</string>
+    <string name="title_cont_mail">Iniciar sesión con Email</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

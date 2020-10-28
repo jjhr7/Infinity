@@ -7,4 +7,8 @@
     <color name="colorSecondaryLight">#d4f96f</color>
     <color name="colorSecondaryDark">#6e9500</color>
     <color name="tittleTextApparience">#424242</color>
+    <!-- dashboard colors-->
+    <color name="colorPrimaryDashboard">#a0c63e</color>
+    <color name="colorPrimaryDarkDashboard">#3700B3</color>
+    <color name="colorAccentDashboard">#a0c63e</color>
 </resources>
