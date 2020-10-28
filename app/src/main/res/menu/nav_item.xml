@@ -9,9 +9,16 @@
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff" />
     <item
-        android:id="@+id/cart"
-        android:icon="@drawable/ic_cart"
-        android:title="Cart"
+        android:id="@+id/graphics"
+        android:icon="@drawable/icons_line_chart"
+        android:title="Graphics"
+        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff" />
+    <item
+        android:id="@+id/notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="Notifications"
         app:cnb_backgroundColor="@color/colorPrimaryDashboard"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff" />

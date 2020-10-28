@@ -1,4 +1,4 @@
-package com.example.infinitycrop;
+package com.example.infinitycrop.ui.recycler_control;
 
 public class StaticRvModel {
     private int image;

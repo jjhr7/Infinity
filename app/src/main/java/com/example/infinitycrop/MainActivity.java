@@ -1,19 +1,14 @@
 package com.example.infinitycrop;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.widget.Toolbar;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.infinitycrop.ui.dashboard.DashboardFragment;
+import com.example.infinitycrop.ui.graphic.GraphicFragment;
+import com.example.infinitycrop.ui.notifications.NotificationFragment;
+import com.example.infinitycrop.ui.profile.ProfileFragment;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
     private ChipNavigationBar chipNavigationBar;
@@ -37,11 +32,14 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.home:
                         fragment=new DashboardFragment();
                         break;
-                    case R.id.cart:
-                        fragment=new CartFragment();
+                    case R.id.graphics:
+                        fragment=new GraphicFragment();
                         break;
                     case R.id.profile:
                         fragment=new ProfileFragment();
+                        break;
+                    case R.id.notifications:
+                        fragment=new NotificationFragment();
                         break;
                 }
 
