@@ -24,6 +24,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.login.LoginActivity;
+import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -82,6 +83,18 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
+
+        //Enlaces de los botones de configuracion
+        RelativeLayout aboutInfinity_btn =v.findViewById(R.id.relativeLayout6);
+        aboutInfinity_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AboutInfinityCrap.class);
+                startActivity(intent);
+            }
+        });
+
+
         //Recojo los datos del usuario
         FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
         //guardo el nombre en un textView
