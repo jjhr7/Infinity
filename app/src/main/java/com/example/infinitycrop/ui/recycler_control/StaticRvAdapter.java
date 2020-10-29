@@ -15,7 +15,6 @@ import com.example.infinitycrop.R;
 import java.util.ArrayList;
 
 public class StaticRvAdapter extends RecyclerView.Adapter<StaticRvAdapter.StaticTVViewHolder> {
-
     private ArrayList<StaticRvModel> items;
     int row_index=-1;
 
@@ -47,7 +46,6 @@ public class StaticRvAdapter extends RecyclerView.Adapter<StaticRvAdapter.Static
 
         if(row_index == position){
             holder.linearLayout.setBackgroundResource(R.drawable.static_rv_selected);
-
         }else{
             holder.linearLayout.setBackgroundResource(R.drawable.static_rv_bg);
 

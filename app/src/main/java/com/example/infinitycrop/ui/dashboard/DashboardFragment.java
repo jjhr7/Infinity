@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.infinitycrop.R;
@@ -92,6 +93,7 @@ public class DashboardFragment extends Fragment {
         staticRvAdapter=new StaticRvAdapter(item);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(staticRvAdapter);
+
 
         return v;
     }

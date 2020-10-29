@@ -7,6 +7,7 @@ public class StaticRvModel {
     public StaticRvModel(int image, String text) {
         this.image = image;
         this.text = text;
+
     }
 
     public int getImage() {
@@ -16,4 +17,6 @@ public class StaticRvModel {
     public String getText() {
         return text;
     }
+
+
 }
