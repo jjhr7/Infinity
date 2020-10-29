@@ -52,7 +52,7 @@
                 android:layout_toRightOf="@+id/profile"
                 android:text="ejemplo@gmail.com"
                 android:textColor="#ffff"
-                android:textSize="16dp" />
+                android:textSize="13dp" />
 
 
             <ImageView

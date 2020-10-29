@@ -97,7 +97,7 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="16dp"
-                android:text="Sobre Infinity Crap"
+                android:text="Ayuda"
                 android:textColor="#202020"
                 android:textSize="20sp" />
 
@@ -118,7 +118,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="34dp"
-            android:onClick="verPgWeb"
             android:background="@drawable/bg_settings"
             android:padding="12dp"
             android:layout_marginEnd="24dp"
@@ -132,7 +131,7 @@
                 android:layout_height="25dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
-                android:src="@drawable/icons_website">
+                android:src="@drawable/icons_guide">
 
             </ImageView>
 
@@ -164,7 +163,7 @@
             android:layout_marginTop="34dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/bg_settings"
-            android:onClick="play"
+            android:onClick="verPgWeb"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -176,7 +175,7 @@
                 android:layout_height="25dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
-                android:src="@drawable/icons_song">
+                android:src="@drawable/icons_report">
 
             </ImageView>
 
