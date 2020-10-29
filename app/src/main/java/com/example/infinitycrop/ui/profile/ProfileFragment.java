@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.login.LoginActivity;
 import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
+import com.example.infinitycrop.ui.profile.settings.HelpProfile;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -85,11 +86,21 @@ public class ProfileFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
 
         //Enlaces de los botones de configuracion
+        //about us
         RelativeLayout aboutInfinity_btn =v.findViewById(R.id.relativeLayout6);
         aboutInfinity_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AboutInfinityCrap.class);
+                startActivity(intent);
+            }
+        });
+        //help
+        RelativeLayout help_profile =v.findViewById(R.id.relativeLayout5);
+        help_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), HelpProfile.class);
                 startActivity(intent);
             }
         });

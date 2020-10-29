@@ -28,6 +28,9 @@
         <activity android:name=".ui.profile.settings.AboutInfinityCrap">
 
         </activity>
+        <activity android:name=".ui.profile.settings.HelpProfile">
+
+        </activity>
 
     </application>
 
