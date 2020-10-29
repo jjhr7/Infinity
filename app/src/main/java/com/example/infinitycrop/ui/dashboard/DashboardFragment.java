@@ -1,9 +1,7 @@
 package com.example.infinitycrop.ui.dashboard;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,14 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.recycler_control.StaticRvAdapter;
 import com.example.infinitycrop.ui.recycler_control.StaticRvModel;
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -75,18 +72,26 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        ArrayList<StaticRvModel> item = new ArrayList<>();
-        item.add(new StaticRvModel(R.drawable.icons_sun, "Soleado"));
-        item.add(new StaticRvModel(R.drawable.icons_night_mode, "Nocturno"));
-        item.add(new StaticRvModel(R.drawable.icons_energy_saving, "Ahorro"));
-        item.add(new StaticRvModel(R.drawable.icons_power_off, "Apagado"));
-        item.add(new StaticRvModel(R.drawable.icons_custom, "Custom"));
-        recyclerView = v.findViewById(R.id.rv_1);
-        staticRvAdapter = new StaticRvAdapter(item);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(staticRvAdapter);
+        View v= inflater.inflate(R.layout.fragment_dashboard, container, false);
+        //FIREBASE
+        //Recojo los datos del usuario
+        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        //guardo el nombre en un textView
+        TextView nombre = (TextView) v.findViewById(R.id.hello_text);
+        String res="Hola"+" "+usuario.getDisplayName();
+        nombre.setText(res);
 
+        //RECYCLER VIEW
+        ArrayList<StaticRvModel> item=new ArrayList<>();
+        item.add(new StaticRvModel(R.drawable.icons_sun,"Soleado"));
+        item.add(new StaticRvModel(R.drawable.icons_night_mode,"Nocturno"));
+        item.add(new StaticRvModel(R.drawable.icons_energy_saving,"Ahorro"));
+        item.add(new StaticRvModel(R.drawable.icons_power_off,"Apagado"));
+        item.add(new StaticRvModel(R.drawable.icons_custom,"Custom"));
+        recyclerView=v.findViewById(R.id.rv_1);
+        staticRvAdapter=new StaticRvAdapter(item);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setAdapter(staticRvAdapter);
 
         return v;
     }

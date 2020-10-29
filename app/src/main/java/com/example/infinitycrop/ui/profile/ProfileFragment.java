@@ -1,27 +1,41 @@
 package com.example.infinitycrop.ui.profile;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.login.LoginActivity;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class
-
-ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,12 +81,76 @@ ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View v= inflater.inflate(R.layout.fragment_profile, container, false);
+        //Recojo los datos del usuario
+        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        //guardo el nombre en un textView
+        TextView nombre = (TextView) v.findViewById(R.id.username);
+        nombre.setText(usuario.getDisplayName());
+        //guardo el mail en un textView
+        TextView correo = (TextView) v.findViewById(R.id.mailUser);
+        correo.setText(usuario.getEmail());
+        //boton cerrar sesion
+        RelativeLayout cerrarSesion =(RelativeLayout) v.findViewById(R.id.btn_end_session);
+        cerrarSesion.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Cerrar sesión")
+                        .setMessage("¿Estas seguro que quieres cerrar sesión?")
+                        .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                AuthUI.getInstance().signOut(getActivity())
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Intent i = new Intent(getActivity(), LoginActivity.class);
+                                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                        | Intent.FLAG_ACTIVITY_NEW_TASK
+                                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(i);
+                                                getActivity().finish();
+                                            }
+                                        });
+
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
 
 
+            }
+        });
 
+
+        /*RequestQueue colaPeticiones = Volley.newRequestQueue(getActivity()
+                .getApplicationContext());
+        ImageLoader lectorImagenes = new ImageLoader(colaPeticiones,
+                new ImageLoader.ImageCache() {
+                    private final LruCache<String, Bitmap> cache =
+                            new LruCache<String, Bitmap>(10);
+                    public void putBitmap(String url, Bitmap bitmap) {
+                        cache.put(url, bitmap);
+                    }
+                    public Bitmap getBitmap(String url) {
+                        return cache.get(url);
+                    }
+                });
+        Uri urlImagen = usuario.getPhotoUrl();
+        if (urlImagen != null) {
+            NetworkImageView fotoUsuario = (NetworkImageView)
+                    v.findViewById(R.id.profile);
+            fotoUsuario.setImageUrl(urlImagen.toString(), lectorImagenes);
+        }else{
+            NetworkImageView fotoUsuario = (NetworkImageView)
+                    v.findViewById(R.id.profile);
+            fotoUsuario.setImageUrl(String.valueOf(R.drawable.icons_user), lectorImagenes);
+        }*/
+        return v;
     }
-
-
-
 }
