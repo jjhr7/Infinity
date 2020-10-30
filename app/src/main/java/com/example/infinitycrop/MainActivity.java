@@ -56,17 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        //----------------------------------------------------GUGLU-------------------
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null){
-            String personName = acct.getDisplayName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
-
-        }
-
-
 
     }
 
