@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.recycler_control.StaticRvAdapter;
@@ -89,10 +90,17 @@ public class DashboardFragment extends Fragment {
         item.add(new StaticRvModel(R.drawable.icons_energy_saving,"Ahorro"));
         item.add(new StaticRvModel(R.drawable.icons_power_off,"Apagado"));
         item.add(new StaticRvModel(R.drawable.icons_custom,"Custom"));
+
+        TextView medidasT=v.findViewById(R.id.medidaTemperatura);
+        TextView medidasH=v.findViewById(R.id.medidaHumedad);
+        TextView medidasS=v.findViewById(R.id.medidaSalinidad);
+        TextView medidasL=v.findViewById(R.id.medidasLuminosidad);
+
         recyclerView=v.findViewById(R.id.rv_1);
-        staticRvAdapter=new StaticRvAdapter(item);
+        staticRvAdapter=new StaticRvAdapter(item,medidasT,medidasH,medidasS,medidasL);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(staticRvAdapter);
+
 
 
         return v;
