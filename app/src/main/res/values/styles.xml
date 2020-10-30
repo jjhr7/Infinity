@@ -24,10 +24,10 @@
 
     <style name="login" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <item name="windowActionBar">false</item>
+       <!-- <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/fondo_login</item>
-        <item name="colorButtonNormal">@color/colorSecondary</item>
+        <item name="colorButtonNormal">@color/colorSecondary</item>-->
 
     </style>
 

@@ -1,10 +1,13 @@
 package com.example.infinitycrop;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.example.infinitycrop.ui.graphic.GraphicFragment;
 import com.example.infinitycrop.ui.notifications.NotificationFragment;
 import com.example.infinitycrop.ui.profile.ProfileFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
@@ -53,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        //----------------------------------------------------GUGLU-------------------
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null){
+            String personName = acct.getDisplayName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+
+        }
 
 
 

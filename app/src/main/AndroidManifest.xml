@@ -19,7 +19,7 @@
             </intent-filter> -->
 
         </activity>
-        <activity android:name="com.example.infinitycrop.ui.login.LoginActivity">
+        <activity android:name="com.example.infinitycrop.ui.login.LogActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,6 +31,9 @@
         <activity android:name=".ui.profile.settings.HelpProfile">
 
         </activity>
+        <activity android:name=".ui.logmail.RegisterActivity"></activity>
+        <activity android:name=".ui.logmail.LoginActivity"></activity>
+        
 
     </application>
 

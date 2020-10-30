@@ -1,17 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="horizontal"
-tools:context=".ui.login.LoginActivity">
-<fragment
-    android:id="@+id/usuario_fragment"
-    android:name="com.example.infinitycrop.ui.dashboard.DashboardFragment"
-    android:layout_width="0dp"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:clickable="true"/>
-</LinearLayout>
+    tools:context=".ui.login.LogActivity" >
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="254dp"
+        android:layout_height="188dp"
+        android:contentDescription="@string/title_wellcome_login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/stickerlog" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="184dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="52dp"
+        android:text="@string/title_wellcome_login"
+        android:textColor="@color/colorPrimaryLight"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="151dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="84dp"
+        android:text="@string/title_orderLog"
+        android:textColor="@color/colorPrimary"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="530dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4"
+        app:layout_constraintVertical_bias="0.527">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="254dp"
+            android:layout_height="146dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="70dp"
+            android:contentDescription="@string/title_wellcome_login"
+            app:srcCompat="@drawable/logo_and_text" />
+
+        <!--   <Button
+               android:id="@+id/btn_facebook"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@drawable/btn_facebook"
+               android:drawableLeft="@drawable/ic_facebook_icon"
+               android:paddingLeft="20dp"
+               android:textColor="#FFFF"
+               android:layout_marginLeft="20dp"
+               android:layout_marginRight="20dp"
+               android:text="@string/title_cont_faceboock" /> -->
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btn_google"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_google"
+            android:drawableLeft="@drawable/ic_google_icon"
+            android:text="@string/title_cont_google"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/btn_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_mail"
+            android:drawableLeft="@drawable/ic_mail_icon"
+            android:onClick="Email"
+            android:paddingLeft="20dp"
+            android:text="@string/title_cont_mail"
+            android:textColor="#000000" />
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
