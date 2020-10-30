@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.logmail.LoginActivity;
+import com.example.infinitycrop.ui.logmail.RegisterActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,8 +41,8 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
                 .build();
         googleApiClient = new GoogleApiClient.Builder(this)
         .enableAutoManage(this, this)
-    .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-    .build();
+        .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+        .build();
         signInButton =findViewById(R.id.btn_google);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,8 +72,9 @@ public class LogActivity extends AppCompatActivity implements GoogleApiClient.On
     }
 
     private void goMainScreen() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+       Intent intent=new Intent(this, RegisterActivity.class);
+       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+       startActivity(intent);
     }
 
     //metodo para navegar entre activitys con los botones
