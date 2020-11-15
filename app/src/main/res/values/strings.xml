@@ -10,6 +10,17 @@
     <string name="title_cont_google">Iniciar sesión con Google</string>
     <string name="title_cont_mail">Iniciar sesión con Email</string>
 
+    <string name="title_register">Registrate</string>
+    <string name="title_bienv">Hola de nuevo!</string>
+    <string name="title_bienvR">¡Hola, es un placer!</string>
+    <string name="title_userR">Introduce un correo:</string>
+    <string name="title_nameR">Introduce un nombre:</string>
+    <string name="title_passwordR">Introduce una contraseña:</string>
+    <string name="title_registrar">Acceder</string>
+    <string name="btn_newuser">Si no tienes una cuenta, puedes registarte <u>Aquí</u> </string>
+    <string name="title_olvidado">He olvidado mi contraseña</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

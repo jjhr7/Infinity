@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginFragment" >
+    tools:context=".ui.login.LogActivity" >
 
     <ImageView
         android:id="@+id/imageView4"
@@ -63,41 +63,43 @@
             android:contentDescription="@string/title_wellcome_login"
             app:srcCompat="@drawable/logo_and_text" />
 
-        <Button
-            android:id="@+id/btn_facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_facebook"
-            android:drawableLeft="@drawable/ic_facebook_icon"
-            android:paddingLeft="20dp"
-            android:textColor="#FFFF"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="@string/title_cont_faceboock" />
-        <Button
+        <!--   <Button
+               android:id="@+id/btn_facebook"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@drawable/btn_facebook"
+               android:drawableLeft="@drawable/ic_facebook_icon"
+               android:paddingLeft="20dp"
+               android:textColor="#FFFF"
+               android:layout_marginLeft="20dp"
+               android:layout_marginRight="20dp"
+               android:text="@string/title_cont_faceboock" /> -->
+
+        <com.google.android.gms.common.SignInButton
             android:id="@+id/btn_google"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_google"
-            android:drawableLeft="@drawable/ic_google_icon"
-            android:paddingLeft="20dp"
-            android:textColor="#000000"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="@string/title_cont_google" />
+            android:background="@drawable/btn_google"
+            android:drawableLeft="@drawable/ic_google_icon"
+            android:text="@string/title_cont_google"
+            android:textColor="#000000" />
+
         <Button
             android:id="@+id/btn_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/btn_mail"
             android:drawableLeft="@drawable/ic_mail_icon"
+            android:onClick="Email"
             android:paddingLeft="20dp"
-            android:textColor="#000000"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="@string/title_cont_mail" />
+            android:text="@string/title_cont_mail"
+            android:textColor="#000000" />
 
     </LinearLayout>
 
