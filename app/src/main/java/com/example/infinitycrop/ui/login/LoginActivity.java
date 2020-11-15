@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.datosFirebase.Usuarios;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 {
                     Toast.makeText(LoginActivity.this, "You're already login with uid:" + user.getUid(), Toast.LENGTH_SHORT).show();
                     // mAuth.signOut();
+                    Usuarios.guardarUsuario(user);
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
                 else {
