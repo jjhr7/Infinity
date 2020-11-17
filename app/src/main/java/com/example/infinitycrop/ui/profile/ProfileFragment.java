@@ -18,17 +18,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.login.LogActivity;
 import com.example.infinitycrop.ui.login.LoginActivity;
 import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
 import com.example.infinitycrop.ui.profile.settings.HelpProfile;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +47,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class ProfileFragment extends Fragment {
 
-    private FirebaseAuth mAuth;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -111,6 +117,9 @@ public class ProfileFragment extends Fragment {
 
 
         //Recojo los datos del usuario
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final GoogleSignInClient mGoogleSignInClient;
+        GoogleSignInOptions gso;
         FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
         //guardo el nombre en un textView
         TextView nombre = (TextView) v.findViewById(R.id.username);
@@ -123,6 +132,14 @@ public class ProfileFragment extends Fragment {
         //cargar imágen con glide:
         Glide.with(this).load(usuario.getPhotoUrl()).into(img);
         //boton cerrar sesion
+
+        //Configurar las gso para google signIn con el fin de luego desloguear de google
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
         RelativeLayout cerrarSesion =(RelativeLayout) v.findViewById(R.id.btn_end_session);
         cerrarSesion.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -132,18 +149,23 @@ public class ProfileFragment extends Fragment {
                         .setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                AuthUI.getInstance().signOut(getActivity())
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                Intent i = new Intent(getActivity(), LoginActivity.class);
-                                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                                        | Intent.FLAG_ACTIVITY_NEW_TASK
-                                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(i);
-                                                getActivity().finish();
-                                            }
-                                        });
+                                //Cerrar session con Firebase
+                                mAuth.signOut();
+                                //Cerrar sesión con google tambien: Google sign out
+                                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        //Abrir MainActivity con SigIn button
+                                        if(task.isSuccessful()){
+                                            Intent logActivity = new Intent(getActivity().getApplicationContext(), LogActivity.class);
+                                            startActivity(logActivity);
+                                            getActivity().finish();
+                                        }else{
+                                            Toast.makeText(getActivity().getApplicationContext(), "No se pudo cerrar sesión con google",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
 
                             }
                         })
