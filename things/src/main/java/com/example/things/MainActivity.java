@@ -61,10 +61,16 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
         Map<String, Object> datosS3 = new HashMap<>();
         datosS3.put("Estado", "Desactivado");
 
+        //Datos del sensor de temperatura
+        Map<String, Object> datosS4 = new HashMap<>();
+        datosS4.put("Medición", "ºC");
+        datosS4.put("Estado:", "Activado");
+
 
         db.collection("SensoresA-T").document("Humedad").set(datosS1);//colocamos la coleccion y luego el document para enviarse
         db.collection("SensoresA-T").document("Iluminación").set(datosS2);//colocamos la coleccion y luego el document para enviarse
         db.collection("SensoresA-T").document("Ventilación").set(datosS3);//colocamos la coleccion y luego el document para enviarse
+        db.collection("SensoresA-T").document("Temperatura").set(datosS4);//colocamos la coleccion y luego el document para enviarse
         try {
             Log.i(Mqtt.TAG, "Conectando al broker " + Mqtt.broker);
             client = new MqttClient(Mqtt.broker, Mqtt.clientId,
