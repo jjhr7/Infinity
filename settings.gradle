@@ -1,2 +1,4 @@
+include ':comun'
+include ':things'
 include ':app'
 rootProject.name = "Infinity crop"
