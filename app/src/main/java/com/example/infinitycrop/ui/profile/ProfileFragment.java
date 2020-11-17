@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.login.LoginActivity;
 import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
@@ -38,6 +40,8 @@ import com.google.firebase.auth.FirebaseUser;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+
+    private FirebaseAuth mAuth;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -114,6 +118,10 @@ public class ProfileFragment extends Fragment {
         //guardo el mail en un textView
         TextView correo = (TextView) v.findViewById(R.id.mailUser);
         correo.setText(usuario.getEmail());
+        //guardo la imagen en un ImagenView
+        ImageView img = (ImageView) v.findViewById(R.id.profile);
+        //cargar imágen con glide:
+        Glide.with(this).load(usuario.getPhotoUrl()).into(img);
         //boton cerrar sesion
         RelativeLayout cerrarSesion =(RelativeLayout) v.findViewById(R.id.btn_end_session);
         cerrarSesion.setOnClickListener(new View.OnClickListener() {

@@ -23,7 +23,7 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 123;
+  /*  private static final int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener listener;
     private List<AuthUI.IdpConfig> providers;
@@ -77,6 +77,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-    }
+    }*/
 
 }

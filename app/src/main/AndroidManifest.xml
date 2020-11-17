@@ -3,6 +3,7 @@
     package="com.example.infinitycrop">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -12,14 +13,7 @@
         android:theme="@style/AppThemeHome"
         >
 
-        <activity android:name=".MainActivity"
-            android:theme="@style/SplashTheme"> <!--Aquí llamamos nuestro tema -->
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
-
+        <activity android:name=".MainActivity" android:theme="@style/SplashTheme">
         </activity>
         <activity android:name="com.example.infinitycrop.ui.login.LogActivity">
             <intent-filter>
