@@ -94,10 +94,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="false"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginLeft="16dp"
-                android:text="Sobre Infinity Crap"
+                android:text="Sobre Infinity Crop"
                 android:textColor="#202020"
                 android:textSize="20sp" />
 

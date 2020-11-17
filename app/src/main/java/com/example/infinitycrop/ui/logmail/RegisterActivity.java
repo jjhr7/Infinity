@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -15,10 +16,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Document;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     //objetos visibles
@@ -28,14 +38,16 @@ public class RegisterActivity extends AppCompatActivity {
     private LinearLayout Btnregistrar;
     private ProgressDialog progressDialog;
     //objeto firebase
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore fStore;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        firebaseAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        fStore=FirebaseFirestore.getInstance();
         //referenciamos los views
         Textmail = (EditText) findViewById(R.id.editTextTextPersonName);
         Textname = (EditText) findViewById(R.id.editTextTextPersonName2);
@@ -55,10 +67,14 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     }
+    public void onclick(View view){
+        //invocamos al metodo
+        registrarUsuario();
+    }
     private void registrarUsuario(){
         //obtendremos el email y la contraseña desde la caja de texto
-        String email = Textmail.getText().toString().trim();
-        String nombre = Textname.getText().toString().trim();
+        final String email = Textmail.getText().toString().trim();
+        final String nombre = Textname.getText().toString().trim();
         String password = Textpassword.getText().toString().trim();
 
         //verificamos si las cajas estan vacias o no
@@ -77,15 +93,32 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog.setMessage("Registrando obteniendo contenido en línea...");
         progressDialog.show();
         //creando un nuevo usuario
-        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener( this, new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener( this, new OnCompleteListener<AuthResult>() {
 
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     //comprovar si el resultado ha sido resuelto correctamente
                     if (task.isSuccessful()) {
-                        Toast.makeText(RegisterActivity.this, "Iniciando sesión", Toast.LENGTH_LONG).show();
-                        Intent intencion = new Intent (getApplication(), MainActivity.class);
-                        startActivity(intencion);
+                        String userID= mAuth.getCurrentUser().getUid();
+                        DocumentReference documentReference=fStore.collection("Usuarios").document(userID);
+                        Map<String,Object> datauser=new HashMap<>();
+                        datauser.put("username",nombre);
+                        datauser.put("mail",email);
+                        documentReference.set(datauser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(RegisterActivity.this, "Iniciando sesión", Toast.LENGTH_LONG).show();
+                                Intent intencion = new Intent (getApplication(), MainActivity.class);
+                                startActivity(intencion);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+
+
 
                     } else {
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si se presenta una colisión
@@ -100,9 +133,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
     }
-    public void onclick(View view){
-        //invocamos al metodo
-        registrarUsuario();
-    }
+
 
 }

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.infinitycrop">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,14 +13,7 @@
         android:theme="@style/AppThemeHome"
         >
 
-        <activity android:name=".MainActivity"
-            android:theme="@style/SplashTheme"> <!--Aquí llamamos nuestro tema -->
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
-
+        <activity android:name=".MainActivity" android:theme="@style/SplashTheme">
         </activity>
         <activity android:name="com.example.infinitycrop.ui.login.LogActivity">
             <intent-filter>
@@ -33,7 +29,9 @@
         </activity>
         <activity android:name=".ui.logmail.RegisterActivity"></activity>
         <activity android:name=".ui.logmail.LoginActivity"></activity>
-        
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
     </application>
 

@@ -2,6 +2,7 @@ package com.example.infinitycrop.ui.dashboard;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +17,15 @@ import android.widget.Toast;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.recycler_control.StaticRvAdapter;
 import com.example.infinitycrop.ui.recycler_control.StaticRvModel;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 
@@ -77,11 +85,24 @@ public class DashboardFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_dashboard, container, false);
         //FIREBASE
         //Recojo los datos del usuario
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser usuario = mAuth.getCurrentUser();
+        final FirebaseFirestore fStore=FirebaseFirestore.getInstance();
+        String idUser=usuario.getUid();
         //guardo el nombre en un textView
-        TextView nombre = (TextView) v.findViewById(R.id.hello_text);
+        final TextView nombre = (TextView) v.findViewById(R.id.hello_text);
         String res="Hola"+" "+usuario.getDisplayName();
         nombre.setText(res);
+        DocumentReference documentReference=fStore.collection("Usuarios").document(idUser);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if(usuario.getDisplayName() == null){
+                    String res1="Hola"+" "+snapshot.getString("username");
+                    nombre.setText(res1);
+                }
+            }
+        });
 
         //RECYCLER VIEW
         ArrayList<StaticRvModel> item=new ArrayList<>();
