@@ -28,14 +28,14 @@ public class RegisterActivity extends AppCompatActivity {
     private LinearLayout Btnregistrar;
     private ProgressDialog progressDialog;
     //objeto firebase
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth mAuth;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        firebaseAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         //referenciamos los views
         Textmail = (EditText) findViewById(R.id.editTextTextPersonName);
         Textname = (EditText) findViewById(R.id.editTextTextPersonName2);
@@ -54,6 +54,10 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
+    }
+    public void onclick(View view){
+        //invocamos al metodo
+        registrarUsuario();
     }
     private void registrarUsuario(){
         //obtendremos el email y la contraseña desde la caja de texto
@@ -77,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog.setMessage("Registrando obteniendo contenido en línea...");
         progressDialog.show();
         //creando un nuevo usuario
-        firebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener( this, new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener( this, new OnCompleteListener<AuthResult>() {
 
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -100,9 +104,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
     }
-    public void onclick(View view){
-        //invocamos al metodo
-        registrarUsuario();
-    }
+
 
 }

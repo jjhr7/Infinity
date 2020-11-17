@@ -151,6 +151,11 @@ public class LogActivity extends AppCompatActivity{
         }
         super.onStart();
     }
+    //metodo para navegar entre activitys con los botones
+    public void Email (View view){
+        Intent email = new Intent(this, LoginActivity.class);
+        startActivity(email);
+    }
    /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
