@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -39,7 +40,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -119,13 +124,28 @@ public class ProfileFragment extends Fragment {
 
         //Recojo los datos del usuario
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore fStore;
+        //firebase
+        final FirebaseFirestore fStore=FirebaseFirestore.getInstance();
+        String idUser=mAuth.getCurrentUser().getUid();
         final GoogleSignInClient mGoogleSignInClient;
         GoogleSignInOptions gso;
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
         //guardo el nombre en un textView
-        TextView nombre = (TextView) v.findViewById(R.id.username);
+        final TextView nombre = (TextView) v.findViewById(R.id.username);
         nombre.setText(usuario.getDisplayName());
+        DocumentReference documentReference=fStore.collection("Usuarios").document(idUser);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if(nombre.getText() == ""){
+                    nombre.setText(snapshot.getString("username"));
+                }
+            }
+        });
+
+
+
+
         //guardo el mail en un textView
         TextView correo = (TextView) v.findViewById(R.id.mailUser);
         correo.setText(usuario.getEmail());
