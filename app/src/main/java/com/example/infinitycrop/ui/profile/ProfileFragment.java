@@ -29,7 +29,6 @@ import com.bumptech.glide.Glide;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.login.LogActivity;
-import com.example.infinitycrop.ui.login.LoginActivity;
 import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
 import com.example.infinitycrop.ui.profile.settings.HelpProfile;
 import com.firebase.ui.auth.AuthUI;
@@ -130,6 +129,8 @@ public class ProfileFragment extends Fragment {
         final GoogleSignInClient mGoogleSignInClient;
         GoogleSignInOptions gso;
         final FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        //guardo la imagen en un ImagenView
+        final ImageView img = (ImageView) v.findViewById(R.id.profile);
         //guardo el nombre en un textView
         final TextView nombre = (TextView) v.findViewById(R.id.username);
         nombre.setText(usuario.getDisplayName());
@@ -139,18 +140,14 @@ public class ProfileFragment extends Fragment {
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
                 if(nombre.getText() == ""){
                     nombre.setText(snapshot.getString("username"));
+                    img.setImageResource(R.drawable.icons_user);
                 }
             }
         });
 
-
-
-
         //guardo el mail en un textView
         TextView correo = (TextView) v.findViewById(R.id.mailUser);
         correo.setText(usuario.getEmail());
-        //guardo la imagen en un ImagenView
-        ImageView img = (ImageView) v.findViewById(R.id.profile);
         //cargar imágen con glide:
         Glide.with(this).load(usuario.getPhotoUrl()).into(img);
         //boton cerrar sesion
