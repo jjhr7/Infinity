@@ -50,12 +50,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.firebaseui:firebase-ui-firestore:6.3.0'
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
     //biblioteca para mostrar images a través de URL
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     //import del mqtt
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.1'
-
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    compile 'com.google.android.gms:play-services-location:16.0.0'
 
 }
 apply plugin: 'com.google.gms.google-services'
