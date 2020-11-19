@@ -188,8 +188,8 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
                             .update("Porcentaje", parts[1]);
 
                     db.collection("SensoresA-T")
-                            .document("Temperatura ambiente")
-                            .update("Medición", parts[2]);
+                            .document("Humedad Ambiente")
+                            .update("Medicion", parts[2]);
 
                     db.collection("SensoresA-T")
                             .document("Temperatura")
