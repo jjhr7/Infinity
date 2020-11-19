@@ -113,39 +113,36 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
         }*/
 
-
-
-
         //instancia con el Firestore
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        /*FirebaseFirestore db = FirebaseFirestore.getInstance();*/
         //esto de bajo una vez acabemos con las comunicaciones de los mensajes se podrá borrar
 
         //Datos del sensor de humedad
-        Map<String, Object> datosS1 = new HashMap<>();
+        /*Map<String, Object> datosS1 = new HashMap<>();
         datosS1.put("Porcentaje", "%");
-        datosS1.put("Estado", "Activado");
+        datosS1.put("Estado", "Activado");*/
 
         //Datos del sensor de iluminación
-        Map<String, Object> datosS2 = new HashMap<>();
+        /*Map<String, Object> datosS2 = new HashMap<>();
         datosS2.put("Porcentaje", "%");
-        datosS2.put("Estado", "Desactivado");
+        datosS2.put("Estado", "Desactivado");*/
         /* datosS2.put("fecha", System.currentTimeMillis());*/
 
         //Datos del sensor de temperatura en ambiente
-        Map<String, Object> datosS3 = new HashMap<>();
+        /*Map<String, Object> datosS3 = new HashMap<>();
         datosS3.put("Medición", "ºC");
-        datosS3.put("Estado", "Desactivado");
+        datosS3.put("Estado", "Desactivado");*/
 
         //Datos del sensor de temperatura
-        Map<String, Object> datosS4 = new HashMap<>();
+        /*Map<String, Object> datosS4 = new HashMap<>();
         datosS4.put("Medición", "ºC");
-        datosS4.put("Estado:", "Activado");
+        datosS4.put("Estado:", "Activado");*/
 
 
-        db.collection("SensoresA-T").document("Humedad").set(datosS1);//colocamos la coleccion y luego el document para enviarse con los datos
+        /*db.collection("SensoresA-T").document("Humedad").set(datosS1);//colocamos la coleccion y luego el document para enviarse con los datos
         db.collection("SensoresA-T").document("Iluminación").set(datosS2);//colocamos la coleccion y luego el document para enviarse con los datos
         db.collection("SensoresA-T").document("Temperatura ambiente").set(datosS3);//colocamos la coleccion y luego el document para enviarse con los datos
-        db.collection("SensoresA-T").document("Temperatura").set(datosS4);//colocamos la coleccion y luego el document para enviarse con los datos
+        db.collection("SensoresA-T").document("Temperatura").set(datosS4);*///colocamos la coleccion y luego el document para enviarse con los datos
 
     }
     // Se ejecuta cuando se pierde la conexión
@@ -175,13 +172,13 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
 
     }
     private void topicLectura(final String payload) {
-        // parts0=humedad, parts0=humedad,parts1=iluminosidad,parts2=humedadHambiente,parts3=temperatura
+        // parts0=humedad,parts1=iluminosidad,parts2=humedadHambiente,parts3=temperatura
         String[] parts = payload.split("-");//comprueba si los datos introducidos van referentes a cada sensor: nombre,medición, estado
-        db.collection("SensoresA-T").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        /*db.collection("SensoresA-T").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){// si se han introducido bien los datos exigidos
-
+*/
                     db.collection("SensoresA-T")
                             .document("Humedad")
                             .update("Porcentaje", parts[0]);//verificar los estados y actualizarlos
@@ -191,19 +188,20 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
                             .update("Porcentaje", parts[1]);
 
                     db.collection("SensoresA-T")
-                            .document("Temperatura ambiente")
-                            .update("Medición", parts[2]);
+                            .document("Humedad Ambiente")
+                            .update("Medicion", parts[2]);
 
                     db.collection("SensoresA-T")
                             .document("Temperatura")
                             .update("Medición", parts[3]);
 
 
-                }
+             /*   }
 
             }
 
-        });
+        });*/
+
     }
 
     private void topicLuces(final String payload) {
