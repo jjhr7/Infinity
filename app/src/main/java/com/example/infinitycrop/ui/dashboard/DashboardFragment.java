@@ -104,6 +104,7 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+
         //RECYCLER VIEW
         ArrayList<StaticRvModel> item=new ArrayList<>();
         item.add(new StaticRvModel(R.drawable.icons_sun,"Soleado"));
@@ -112,16 +113,53 @@ public class DashboardFragment extends Fragment {
         item.add(new StaticRvModel(R.drawable.icons_power_off,"Apagado"));
         item.add(new StaticRvModel(R.drawable.icons_custom,"Custom"));
 
-        TextView medidasT=v.findViewById(R.id.medidaTemperatura);
-        TextView medidasH=v.findViewById(R.id.medidaHumedad);
-        TextView medidasS=v.findViewById(R.id.medidaSalinidad);
-        TextView medidasL=v.findViewById(R.id.medidasLuminosidad);
+        final TextView medidasT=v.findViewById(R.id.medidaTemperatura);
+        final TextView medidasH=v.findViewById(R.id.medidaHumedad);
+        final TextView medidasS=v.findViewById(R.id.medidaSalinidad);
+        final TextView medidasL=v.findViewById(R.id.medidasLuminosidad);
 
         recyclerView=v.findViewById(R.id.rv_1);
         staticRvAdapter=new StaticRvAdapter(item,medidasT,medidasH,medidasS,medidasL);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(staticRvAdapter);
 
+        //LEER DATOS FIREBASE
+        //Temperatura
+        DocumentReference documentTemperatura=fStore.collection("SensoresA-T").document("Temperatura");
+        documentTemperatura.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                String resMediTemp=snapshot.getString("Medición")+"°C";
+                medidasT.setText(resMediTemp);
+            }
+        });
+        //Humedad
+        DocumentReference documentHumedad=fStore.collection("SensoresA-T").document("Humedad");
+        documentHumedad.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                String resMediHum=snapshot.getString("Porcentaje")+"%";
+                medidasH.setText(resMediHum);
+            }
+        });
+        //Iluminación
+        DocumentReference documentIluminación=fStore.collection("SensoresA-T").document("Iluminación");
+        documentIluminación.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                String resMediIlum=snapshot.getString("Porcentaje")+"%";
+                medidasL.setText(resMediIlum);
+            }
+        });
+        //Temperatura ambiente
+        DocumentReference documentambiente=fStore.collection("SensoresA-T").document("Temperatura ambiente");
+        documentambiente.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                String resMediIAmb=snapshot.getString("Medición")+"°C";
+                medidasS.setText(resMediIAmb);
+            }
+        });
 
 
         return v;
