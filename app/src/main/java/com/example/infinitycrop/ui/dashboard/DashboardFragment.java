@@ -7,13 +7,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.comun.Mqtt;
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.recycler_control.StaticRvAdapter;
 import com.example.infinitycrop.ui.recycler_control.StaticRvModel;
@@ -27,17 +32,27 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
 import java.util.ArrayList;
+
+import static com.example.comun.Mqtt.topicRoot;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link DashboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements MqttCallback{
     private RecyclerView recyclerView;
     private StaticRvAdapter staticRvAdapter;
-
+    public static MqttClient client = null;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -104,6 +119,19 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        //switch methods
+        Switch switchLuz = (Switch) v.findViewById(R.id.switchLuminosidad);
+        switchLuz.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    enviarLucesOn();
+                } else {
+                    // The toggle is disabled
+                    enviarLucesOff();
+                }
+            }
+        });
 
         //RECYCLER VIEW
         ArrayList<StaticRvModel> item=new ArrayList<>();
@@ -163,5 +191,95 @@ public class DashboardFragment extends Fragment {
 
 
         return v;
+    }
+
+    public void enviarLucesOff(){
+        try {
+            client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
+                    MemoryPersistence());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(true);
+        connOpts.setKeepAliveInterval(60);
+        connOpts.setWill(topicRoot+"WillTopic", "App desconectada".getBytes(),Mqtt.qos, false);
+
+        try {
+            client.connect(connOpts);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        //conexión con el broker Root1 = Lector de datos
+        //nos subscribimos a topic lectura
+        try {
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "luces");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "luces", Mqtt.qos);
+            client.setCallback((MqttCallback) this);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al suscribir.", e);
+        }
+        try {
+            Log.i(Mqtt.TAG, "Publicando mensaje: " + "mensaje");
+            MqttMessage message = new MqttMessage("luces OFF".getBytes());
+            message.setQos(Mqtt.qos);
+            message.setRetained(false);
+            client.publish(topicRoot+"luces", message);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al publicar.", e);
+        }
+    }
+    public void enviarLucesOn(){
+        try {
+            client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
+                    MemoryPersistence());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(true);
+        connOpts.setKeepAliveInterval(60);
+        connOpts.setWill(topicRoot+"WillTopic", "App desconectada".getBytes(),Mqtt.qos, false);
+
+        try {
+            client.connect(connOpts);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        //conexión con el broker Root1 = Lector de datos
+        //nos subscribimos a topic lectura
+        try {
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "luces");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "luces", Mqtt.qos);
+            client.setCallback((MqttCallback) this);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al suscribir.", e);
+        }
+        try {
+            Log.i(Mqtt.TAG, "Publicando mensaje: " + "mensaje");
+            MqttMessage message = new MqttMessage("luces ON".getBytes());
+            message.setQos(Mqtt.qos);
+            message.setRetained(false);
+            client.publish(topicRoot+"luces", message);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al publicar.", e);
+        }
+    }
+
+    @Override
+    public void connectionLost(Throwable cause) {
+        Log.d(Mqtt.TAG, "Conexión perdida");
+    }
+
+    @Override
+    public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+    }
+
+    @Override
+    public void deliveryComplete(IMqttDeliveryToken token) {
+        Log.d(Mqtt.TAG, "Entrega completa");
     }
 }
