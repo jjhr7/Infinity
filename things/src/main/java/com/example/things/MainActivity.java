@@ -85,33 +85,33 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //Root2 = Canal de senyal de luces
 
-        try {
+        /*try {
             Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "luces");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
             client.subscribe(topicRoot + "luces", Mqtt.qos);
             client.setCallback(this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
-        }
+        }*/
         //--------------------------------------------------------------------------------------------------------------------------------------------
         //Root 3= Canal de senyal de  ventiladores
 
-        try {
+       /* try {
             Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "ventiladores");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
             client.subscribe(topicRoot + "ventiladores", Mqtt.qos);
             client.setCallback(this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
-        }
+        }*/
         //--------------------------------------------------------------------------------------------------------------------------------------
         //Root 4= Canal de senyal riego
 
-        try {
+       /* try {
             Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "riego");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
             client.subscribe(topicRoot + "riego", Mqtt.qos);
             client.setCallback(this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
-        }
+        }*/
 
 
 
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
             topicLectura(payload);
         }
 
-        if(topic.equals(topicRoot+"luces")){
+        /*if(topic.equals(topicRoot+"luces")){
             topicLuces(payload);
         }
         if(topic.equals(topicRoot+"riego")){
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
         }
         if(topic.equals(topicRoot+"ventiladores")){
             topicVentiladores(payload);
-        }
+        }*/
 
     }
     private void topicLectura(final String payload) {
