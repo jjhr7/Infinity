@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
         //conexión con el broker Root1 = Lector de datos
         //nos subscribimos a topic lectura
         try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "lectura");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "lectura", Mqtt.qos);
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "lecturaDatos");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "lecturaDatos", Mqtt.qos);
             client.setCallback(this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
         String payload = new String(message.getPayload());
         Log.d(Mqtt.TAG, "Recibiendo: " + topic + "->" + payload);
 
-        if(topic.equals(topicRoot+"lectura")){
+        if(topic.equals(topicRoot+"lecturaDatos")){
             topicLectura(payload);
         }
 
@@ -175,19 +175,29 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
 
     }
     private void topicLectura(final String payload) {
+        // parts0=humedad, parts0=humedad,parts1=iluminosidad,parts2=humedadHambiente,parts3=temperatura
         String[] parts = payload.split("-");//comprueba si los datos introducidos van referentes a cada sensor: nombre,medición, estado
         db.collection("SensoresA-T").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){// si se han introducido bien los datos exigidos
-                   if(parts[0].equals("Humedad")){
-                       db.collection("SensoresA-T")
-                               .document("Humedad")
-                               .update("Nombre", parts[0] ,"Estado",parts[1],"Porcentaje", parts[2]);//verificar los estados y actualizarlos
-                   }
-                   else {
-                       Log.w(Mqtt.TAG, "Error al obtener documentos.", task.getException());
-                   }
+
+                    db.collection("SensoresA-T")
+                            .document("Humedad")
+                            .update("Porcentaje", parts[0]);//verificar los estados y actualizarlos
+
+                    db.collection("SensoresA-T")
+                            .document("Iluminación")
+                            .update("Porcentaje", parts[1]);
+
+                    db.collection("SensoresA-T")
+                            .document("Temperatura ambiente")
+                            .update("Medición", parts[2]);
+
+                    db.collection("SensoresA-T")
+                            .document("Temperatura")
+                            .update("Medición", parts[3]);
+
 
                 }
 
