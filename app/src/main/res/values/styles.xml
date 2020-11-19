@@ -4,16 +4,39 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!---<item name="colorPrimaryLight">@color/colorPrimaryLight</item>-->
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <!---<item name="colorSecondaryLight">@color/colorSecondaryLight</item>-->
+        <!---<item name="colorSecondaryDark">@color/colorSecondaryDark</item>-->
+    </style>
+    <style name="Tittle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="titleTextColor">@color/tittleTextApparience</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
+
+        <style name="SplashTheme" parent="AppTheme">
+            <item name="android:windowBackground">@drawable/pantalla_carga</item>
+        </style>
+
+
+    <style name="login" parent="Theme.AppCompat.Light.NoActionBar">
+
+       <!-- <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/fondo_login</item>
+        <item name="colorButtonNormal">@color/colorSecondary</item>-->
+
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!-- Base application theme. -> Dashboard -->
+    <style name="AppThemeHome" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDashboard</item>
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDarkDashboard</item>-->
+        <item name="colorAccent">@color/colorAccentDashboard</item>
+    </style>
 
 </resources>
