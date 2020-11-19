@@ -125,7 +125,7 @@ public class DashboardFragment extends Fragment {
 
         //LEER DATOS FIREBASE
         //Temperatura
-       /* DocumentReference documentTemperatura=fStore.collection("SensoresA-T").document("Temperatura");
+       DocumentReference documentTemperatura=fStore.collection("SensoresA-T").document("Temperatura");
         documentTemperatura.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
@@ -159,7 +159,7 @@ public class DashboardFragment extends Fragment {
                 String resMediIAmb=snapshot.getString("Medición")+"°C";
                 medidasS.setText(resMediIAmb);
             }
-        });*/
+        });
 
 
         return v;
