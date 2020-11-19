@@ -1,0 +1,4 @@
+com/example/things/BuildConfig.java
+ com.example.things.BuildConfig
+com/example/things/MainActivity.java
+ com.example.things.MainActivity

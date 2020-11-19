@@ -1,0 +1,168 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.things"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="27"
+8-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="27" />
+9-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:29:5-67
+11-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:29:22-64
+12
+13    <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+14    <!-- <uses-sdk android:minSdkVersion="14" /> -->
+15    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+15-->[com.google.firebase:firebase-firestore:22.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\2740076feedd5cf04dbc7570105e4ad1\jetified-firebase-firestore-22.0.0\AndroidManifest.xml:13:5-79
+15-->[com.google.firebase:firebase-firestore:22.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\2740076feedd5cf04dbc7570105e4ad1\jetified-firebase-firestore-22.0.0\AndroidManifest.xml:13:22-76
+16    <uses-permission android:name="android.permission.WAKE_LOCK" />
+16-->[com.google.android.gms:play-services-measurement-api:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b3070c817ad8945013e90d1f7810a4aa\jetified-play-services-measurement-api-18.0.0\AndroidManifest.xml:24:5-68
+16-->[com.google.android.gms:play-services-measurement-api:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b3070c817ad8945013e90d1f7810a4aa\jetified-play-services-measurement-api-18.0.0\AndroidManifest.xml:24:22-65
+17    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+17-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:26:5-110
+17-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:26:22-107
+18
+19    <application
+19-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:5:5-28:19
+20        android:allowBackup="true"
+20-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:6:9-35
+21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+21-->[androidx.core:core:1.3.1] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\12a6bf48d95b151f5141a87053ee8e99\core-1.3.1\AndroidManifest.xml:24:18-86
+22        android:debuggable="true"
+23        android:extractNativeLibs="false"
+24        android:icon="@mipmap/ic_launcher"
+24-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:7:9-43
+25        android:label="@string/app_name"
+25-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:8:9-41
+26        android:roundIcon="@mipmap/ic_launcher_round"
+26-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:9:9-54
+27        android:supportsRtl="true"
+27-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:10:9-35
+28        android:testOnly="true"
+29        android:theme="@style/Theme.InfinityCrop" >
+29-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:11:9-50
+30        <uses-library android:name="com.google.android.things" />
+30-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:12:9-66
+30-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:12:23-63
+31
+32        <activity android:name="com.example.things.MainActivity" >
+32-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:14:9-27:20
+32-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:14:19-47
+33            <intent-filter>
+33-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:15:13-19:29
+34                <action android:name="android.intent.action.MAIN" />
+34-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:16:17-69
+34-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:16:25-66
+35
+36                <category android:name="android.intent.category.LAUNCHER" />
+36-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:18:17-77
+36-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:18:27-74
+37            </intent-filter>
+38            <!-- Make this the first activity that is displayed when the device boots. -->
+39            <intent-filter>
+39-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:21:13-26:29
+40                <action android:name="android.intent.action.MAIN" />
+40-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:16:17-69
+40-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:16:25-66
+41
+42                <category android:name="android.intent.category.HOME" />
+42-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:24:17-73
+42-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:24:27-70
+43                <category android:name="android.intent.category.DEFAULT" />
+43-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:25:17-76
+43-->C:\Users\Johnny\Desktop\GTI\Segundo\IoT Proyecto\ProyectoInfinity\V1\things\src\main\AndroidManifest.xml:25:27-73
+44            </intent-filter>
+45        </activity>
+46
+47        <service
+47-->[com.google.firebase:firebase-firestore:22.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\2740076feedd5cf04dbc7570105e4ad1\jetified-firebase-firestore-22.0.0\AndroidManifest.xml:17:9-23:19
+48            android:name="com.google.firebase.components.ComponentDiscoveryService"
+48-->[com.google.firebase:firebase-firestore:22.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\2740076feedd5cf04dbc7570105e4ad1\jetified-firebase-firestore-22.0.0\AndroidManifest.xml:18:13-84
+49            android:directBootAware="true"
+49-->[com.google.firebase:firebase-common:19.4.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b6aa8edcb2528d8f625e616b4b2fc525\jetified-firebase-common-19.4.0\AndroidManifest.xml:35:13-43
+50            android:exported="false" >
+50-->[com.google.firebase:firebase-firestore:22.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\2740076feedd5cf04dbc7570105e4ad1\jetified-firebase-firestore-22.0.0\AndroidManifest.xml:19:13-37
+51            <meta-data
+51-->[com.google.firebase:firebase-firestore:22.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\2740076feedd5cf04dbc7570105e4ad1\jetified-firebase-firestore-22.0.0\AndroidManifest.xml:20:13-22:85
+52                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+52-->[com.google.firebase:firebase-firestore:22.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\2740076feedd5cf04dbc7570105e4ad1\jetified-firebase-firestore-22.0.0\AndroidManifest.xml:21:17-111
+53                android:value="com.google.firebase.components.ComponentRegistrar" />
+53-->[com.google.firebase:firebase-firestore:22.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\2740076feedd5cf04dbc7570105e4ad1\jetified-firebase-firestore-22.0.0\AndroidManifest.xml:22:17-82
+54            <meta-data
+54-->[com.google.android.gms:play-services-measurement-api:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b3070c817ad8945013e90d1f7810a4aa\jetified-play-services-measurement-api-18.0.0\AndroidManifest.xml:30:13-32:85
+55                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+55-->[com.google.android.gms:play-services-measurement-api:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b3070c817ad8945013e90d1f7810a4aa\jetified-play-services-measurement-api-18.0.0\AndroidManifest.xml:31:17-139
+56                android:value="com.google.firebase.components.ComponentRegistrar" />
+56-->[com.google.android.gms:play-services-measurement-api:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b3070c817ad8945013e90d1f7810a4aa\jetified-play-services-measurement-api-18.0.0\AndroidManifest.xml:32:17-82
+57            <meta-data
+57-->[com.google.firebase:firebase-installations:16.3.4] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\299ee1042bcdaa75ad45cb773deff7e0\jetified-firebase-installations-16.3.4\AndroidManifest.xml:18:13-20:85
+58                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+58-->[com.google.firebase:firebase-installations:16.3.4] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\299ee1042bcdaa75ad45cb773deff7e0\jetified-firebase-installations-16.3.4\AndroidManifest.xml:19:17-127
+59                android:value="com.google.firebase.components.ComponentRegistrar" />
+59-->[com.google.firebase:firebase-installations:16.3.4] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\299ee1042bcdaa75ad45cb773deff7e0\jetified-firebase-installations-16.3.4\AndroidManifest.xml:20:17-82
+60        </service>
+61
+62        <provider
+62-->[com.google.firebase:firebase-common:19.4.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b6aa8edcb2528d8f625e616b4b2fc525\jetified-firebase-common-19.4.0\AndroidManifest.xml:26:9-31:39
+63            android:name="com.google.firebase.provider.FirebaseInitProvider"
+63-->[com.google.firebase:firebase-common:19.4.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b6aa8edcb2528d8f625e616b4b2fc525\jetified-firebase-common-19.4.0\AndroidManifest.xml:27:13-77
+64            android:authorities="com.example.things.firebaseinitprovider"
+64-->[com.google.firebase:firebase-common:19.4.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b6aa8edcb2528d8f625e616b4b2fc525\jetified-firebase-common-19.4.0\AndroidManifest.xml:28:13-72
+65            android:directBootAware="true"
+65-->[com.google.firebase:firebase-common:19.4.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b6aa8edcb2528d8f625e616b4b2fc525\jetified-firebase-common-19.4.0\AndroidManifest.xml:29:13-43
+66            android:exported="false"
+66-->[com.google.firebase:firebase-common:19.4.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b6aa8edcb2528d8f625e616b4b2fc525\jetified-firebase-common-19.4.0\AndroidManifest.xml:30:13-37
+67            android:initOrder="100" />
+67-->[com.google.firebase:firebase-common:19.4.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\b6aa8edcb2528d8f625e616b4b2fc525\jetified-firebase-common-19.4.0\AndroidManifest.xml:31:13-36
+68
+69        <activity
+69-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\d9faaaf26fc140f365e3b207d6db990b\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+70            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+70-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\d9faaaf26fc140f365e3b207d6db990b\jetified-play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+71            android:exported="false"
+71-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\d9faaaf26fc140f365e3b207d6db990b\jetified-play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+72            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+72-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\d9faaaf26fc140f365e3b207d6db990b\jetified-play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+73
+74        <receiver
+74-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:29:9-33:20
+75            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+75-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:30:13-85
+76            android:enabled="true"
+76-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:31:13-35
+77            android:exported="false" >
+77-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:32:13-37
+78        </receiver>
+79
+80        <service
+80-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:35:9-38:40
+81            android:name="com.google.android.gms.measurement.AppMeasurementService"
+81-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:36:13-84
+82            android:enabled="true"
+82-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:37:13-35
+83            android:exported="false" />
+83-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:38:13-37
+84        <service
+84-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:39:9-43:72
+85            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+85-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:40:13-87
+86            android:enabled="true"
+86-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:41:13-35
+87            android:exported="false"
+87-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:42:13-37
+88            android:permission="android.permission.BIND_JOB_SERVICE" />
+88-->[com.google.android.gms:play-services-measurement:18.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\e7088e93aa9e4ba3fcef4d8a3f9d1310\jetified-play-services-measurement-18.0.0\AndroidManifest.xml:43:13-69
+89
+90        <meta-data
+90-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\ce53febe539132800a46a9079cdd025f\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+91            android:name="com.google.android.gms.version"
+91-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\ce53febe539132800a46a9079cdd025f\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+92            android:value="@integer/google_play_services_version" />
+92-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Johnny\.gradle\caches\transforms-2\files-2.1\ce53febe539132800a46a9079cdd025f\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+93    </application>
+94
+95</manifest>

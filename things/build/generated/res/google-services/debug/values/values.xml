@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">939404088776-791k20f8fd0q1n8q0b2ujltd30vas8s1.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://infinity-crop-cc8b9.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">939404088776</string>
+    <string name="google_api_key" translatable="false">AIzaSyD2Gt27V9AYmVEs8gkHyjC5S2ikz8HP5Y8</string>
+    <string name="google_app_id" translatable="false">1:939404088776:android:f01d95a601404ed1575cfd</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyD2Gt27V9AYmVEs8gkHyjC5S2ikz8HP5Y8</string>
+    <string name="google_storage_bucket" translatable="false">infinity-crop-cc8b9.appspot.com</string>
+    <string name="project_id" translatable="false">infinity-crop-cc8b9</string>
+</resources>
