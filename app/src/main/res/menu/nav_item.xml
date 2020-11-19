@@ -4,7 +4,7 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/ic_home"
-        android:title="Home"
+        android:title="Inicio"
         app:cnb_backgroundColor="@color/colorPrimaryDashboard"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff" />
@@ -17,15 +17,15 @@
         app:cnb_textColor="#ffffff" />
     <item
         android:id="@+id/notifications"
-        android:icon="@drawable/ic_notifications"
-        android:title="Notifications"
+        android:icon="@drawable/ic_baseline_map"
+        android:title="Mapa"
         app:cnb_backgroundColor="@color/colorPrimaryDashboard"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff" />
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_profile"
-        android:title="Profile"
+        android:title="Perfil"
         app:cnb_backgroundColor="@color/colorPrimaryDashboard"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff" />

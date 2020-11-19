@@ -1,22 +1,16 @@
 package com.example.infinitycrop;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.example.infinitycrop.ui.graphic.GraphicFragment;
-import com.example.infinitycrop.ui.notifications.NotificationFragment;
+import com.example.infinitycrop.ui.notifications.MapFragment;
 import com.example.infinitycrop.ui.profile.ProfileFragment;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment=new ProfileFragment();
                         break;
                     case R.id.notifications:
-                        fragment=new NotificationFragment();
+                        fragment=new MapFragment();
                         break;
                 }
 
