@@ -105,7 +105,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         final FirebaseFirestore fStore=FirebaseFirestore.getInstance();
         String idUser=usuario.getUid();
         //guardo el nombre en un textView
-        final TextView nombre = (TextView) v.findViewById(R.id.hello_text);
+        /*final TextView nombre = (TextView) v.findViewById(R.id.hello_text);
         String res="Hola"+" "+usuario.getDisplayName();
         nombre.setText(res);
         DocumentReference documentReference=fStore.collection("Usuarios").document(idUser);
@@ -117,7 +117,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
                     nombre.setText(res1);
                 }
             }
-        });
+        });*/
 
         //switch methods
         Switch switchLuz = (Switch) v.findViewById(R.id.switchLuminosidad);
