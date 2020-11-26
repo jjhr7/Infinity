@@ -3,7 +3,7 @@ import android.os.Bundle;
 
 import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.example.infinitycrop.ui.graphic.GraphicFragment;
-import com.example.infinitycrop.ui.notifications.MapFragment;
+import com.example.infinitycrop.ui.map.MapFragment;
 import com.example.infinitycrop.ui.profile.ProfileFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
