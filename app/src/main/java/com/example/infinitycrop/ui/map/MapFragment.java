@@ -113,8 +113,6 @@ public class MapFragment extends Fragment implements
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
     }
 
     @Override
@@ -132,8 +130,6 @@ public class MapFragment extends Fragment implements
             }
         });
 
-
-
         return v;
     }
 
@@ -150,6 +146,7 @@ public class MapFragment extends Fragment implements
             fetchLocation();
             return;
         }
+
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -246,6 +243,9 @@ public class MapFragment extends Fragment implements
                                         .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                                             public void onClick(final DialogInterface dialog, final int id) {
                                                 startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                                                // Hacemos que esta función se llame a si misma para que no tengamos que cerrar y abrir la app de nuevo para ver nuestra localización
+                                                EnableGPSAutoMatically();
                                             }
                                         })
                                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -264,7 +264,7 @@ public class MapFragment extends Fragment implements
                             }
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            toast("Setting change not allowed");
+                            toast("No has activado el GPS");
                             // Location settings are not satisfied. However, we have
                             // no way to fix the
                             // settings so we won't show the dialog.
