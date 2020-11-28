@@ -33,6 +33,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LogActivity extends AppCompatActivity{
@@ -126,6 +130,19 @@ public class LogActivity extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            FirebaseFirestore db=FirebaseFirestore.getInstance();
+                            String userID= mAuth.getCurrentUser().getUid();
+                            String name= mAuth.getCurrentUser().getDisplayName();
+                            String mail= mAuth.getCurrentUser().getEmail();
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("username", name);
+                            data.put("mail", mail);
+                            db.collection("Usuarios").document(userID)
+                                    .set(data);
+                            /*db.collection("Usuarios").document(userID)
+                                    .collection("Maquinas").document("fecha")
+                                    .set(data);*/
+
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
