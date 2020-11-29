@@ -237,26 +237,7 @@ public class MapFragment extends Fragment implements
                             // fixed by showing the user
                             // a dialog.
                             try {
-                                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setMessage("El GPS parece estar desactivado, ¿quieres activarlo?")
-                                        .setCancelable(false)
-                                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-                                            public void onClick(final DialogInterface dialog, final int id) {
-                                                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-
-                                                // Hacemos que esta función se llame a si misma para que no tengamos que cerrar y abrir la app de nuevo para ver nuestra localización
-                                                EnableGPSAutoMatically();
-                                            }
-                                        })
-                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                            public void onClick(final DialogInterface dialog, final int id) {
-                                                dialog.cancel();
-                                            }
-                                        });
-                                final AlertDialog alert = builder.create();
-                                alert.show();
-                                // ,
-                                // and check the result in onActivityResult().
+                               
                                 status.startResolutionForResult(getActivity(), 1000);
 
                             } catch (IntentSender.SendIntentException e) {
