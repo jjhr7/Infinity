@@ -1,0 +1,106 @@
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_17_11_2020_3_17__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_17_11_2020_3_17__Default_Changelist_.xml	(revision b7f9fef730f16cff05882000de3f7000f78267b6)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_17_11_2020_3_17__Default_Changelist_.xml	(revision b7f9fef730f16cff05882000de3f7000f78267b6)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_17_11_2020_3_17_[Default_Changelist]" date="1605579434673" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_11_2020_3_17_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 17/11/2020 3:17 [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_17_11_2020_3_17_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_17_11_2020_3_17_[Default_Changelist]/shelved.patch	(revision b7f9fef730f16cff05882000de3f7000f78267b6)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_17_11_2020_3_17_[Default_Changelist]/shelved.patch	(revision b7f9fef730f16cff05882000de3f7000f78267b6)
+@@ -1,91 +0,0 @@
+-Index: app/google-services.json
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/google-services.json	(revision 0ef769d0743e2e82fb4810e6a30b51faea8bf355)
+-+++ app/google-services.json	(revision 0ef769d0743e2e82fb4810e6a30b51faea8bf355)
+-@@ -1,48 +0,0 @@
+--{
+--  "project_info": {
+--    "project_number": "939404088776",
+--    "firebase_url": "https://infinity-crop-cc8b9.firebaseio.com",
+--    "project_id": "infinity-crop-cc8b9",
+--    "storage_bucket": "infinity-crop-cc8b9.appspot.com"
+--  },
+--  "client": [
+--    {
+--      "client_info": {
+--        "mobilesdk_app_id": "1:939404088776:android:f01d95a601404ed1575cfd",
+--        "android_client_info": {
+--          "package_name": "com.example.infinitycrop"
+--        }
+--      },
+--      "oauth_client": [
+--        {
+--          "client_id": "939404088776-l6hpk5np6ommdkl1tgjabqsmh06fut92.apps.googleusercontent.com",
+--          "client_type": 1,
+--          "android_info": {
+--            "package_name": "com.example.infinitycrop",
+--            "certificate_hash": "abd3807122def60182868f4b9da2b09f6dbc8e15"
+--          }
+--        },
+--        {
+--          "client_id": "939404088776-791k20f8fd0q1n8q0b2ujltd30vas8s1.apps.googleusercontent.com",
+--          "client_type": 3
+--        }
+--      ],
+--      "api_key": [
+--        {
+--          "current_key": "AIzaSyD2Gt27V9AYmVEs8gkHyjC5S2ikz8HP5Y8"
+--        }
+--      ],
+--      "services": {
+--        "appinvite_service": {
+--          "other_platform_oauth_client": [
+--            {
+--              "client_id": "939404088776-791k20f8fd0q1n8q0b2ujltd30vas8s1.apps.googleusercontent.com",
+--              "client_type": 3
+--            }
+--          ]
+--        }
+--      }
+--    }
+--  ],
+--  "configuration_version": "1"
+--}
+-\ No newline at end of file
+-Index: .idea/misc.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_7\" default=\"true\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/misc.xml	(revision 0ef769d0743e2e82fb4810e6a30b51faea8bf355)
+-+++ .idea/misc.xml	(date 1605576568340)
+-@@ -1,6 +1,6 @@
+- <?xml version="1.0" encoding="UTF-8"?>
+- <project version="4">
+--  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+-+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+-     <output url="file://$PROJECT_DIR$/build/classes" />
+-   </component>
+-   <component name="ProjectType">
+-Index: .idea/gradle.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"PLATFORM\" />\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"1.8\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/gradle.xml	(revision 0ef769d0743e2e82fb4810e6a30b51faea8bf355)
+-+++ .idea/gradle.xml	(date 1605576568353)
+-@@ -15,6 +15,7 @@
+-           </set>
+-         </option>
+-         <option name="resolveModulePerSourceSet" value="false" />
+-+        <option name="useQualifiedModuleNames" value="true" />
+-       </GradleProjectSettings>
+-     </option>
+-   </component>
