@@ -237,23 +237,28 @@ public class MapFragment extends Fragment implements
                             // fixed by showing the user
                             // a dialog.
                             try {
-                                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    builder.setMessage("Parece que tienes el GPS desactivado, ¿quieres activarlo?")
-                                            .setCancelable(false)
-                                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                                public void onClick(final DialogInterface dialog, final int id) {
-                                                    EnableGPSAutoMatically();
-                                                }
-                                            })
-                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                                public void onClick(final DialogInterface dialog, final int id) {
-                                                    dialog.cancel();
 
-                                                }
-                                            });
-                                    final AlertDialog alert = builder.create();
-                                    alert.show();
-                                status.startResolutionForResult(getActivity(), 1000);
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setMessage("Parece que tienes el GPS desactivado, ¿quieres activarlo?")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            public void onClick(final DialogInterface dialog, final int id) {
+                                                EnableGPSAutoMatically();
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            public void onClick(final DialogInterface dialog, final int id) {
+                                                dialog.cancel();
+
+                                            }
+                                        });
+                                final AlertDialog alert = builder.create();
+                                alert.show();
+                                status.startResolutionForResult(getActivity(), REQUEST_LOCATION);
+//                              finish();
+
 
                             } catch (IntentSender.SendIntentException e) {
                                 // Ignore the error.
