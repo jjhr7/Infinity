@@ -241,19 +241,14 @@ public class MapFragment extends Fragment implements
                                 // Show the dialog by calling startResolutionForResult(),
                                 // and check the result in onActivityResult().
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setMessage("Parece que tienes el GPS desactivado, ¿quieres activarlo?")
+                                builder.setMessage("Se activará el GPS para poder utilizar la función.")
                                         .setCancelable(false)
-                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             public void onClick(final DialogInterface dialog, final int id) {
                                                 EnableGPSAutoMatically();
                                             }
-                                        })
-                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                            public void onClick(final DialogInterface dialog, final int id) {
-                                                dialog.cancel();
-
-                                            }
                                         });
+
                                 final AlertDialog alert = builder.create();
                                 alert.show();
                                 status.startResolutionForResult(getActivity(), REQUEST_LOCATION);
