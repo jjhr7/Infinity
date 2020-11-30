@@ -220,7 +220,6 @@ public class MapFragment extends Fragment implements
                             // All location settings are satisfied. The client can
                             // initialize location
                             // requests here.
-                            fetchLocation();
                             mapa.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                             mapa.animateCamera(CameraUpdateFactory.newLatLng(UPV));
                             mapa.moveCamera(CameraUpdateFactory.newLatLngZoom(UPV, 18));
