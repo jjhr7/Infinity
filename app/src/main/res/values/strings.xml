@@ -19,6 +19,17 @@
     <string name="title_registrar">Acceder</string>
     <string name="btn_newuser">Si no tienes una cuenta, puedes registarte <u>Aquí</u> </string>
     <string name="title_olvidado">He olvidado mi contraseña</string>
+    <!-- ANYADIR UNA NUEVA MAQUINA STRINGS -->
+    <string name="title_register_machine">Registra una nueva máquina</string>
+    <string name="title_infoMachine">Completa estos campos</string>
+    <string name="btn_registMachine">Añadir máquina</string>
+    <string name="title_name_machine">Introduce el nombre de tu máquina:</string>
+    <string name="title_name_model">Modelo de tu máquina:</string>
+    <string name="title_name_favorites">Añadir tu máquina a favoritos:</string>
+    <string name="title_scan_machine">Escanear máquina</string>
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
 
         <string name="change_city">Change city</string>

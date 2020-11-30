@@ -1,9 +1,11 @@
 package com.example.infinitycrop.ui.list_machine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.logmail.RegisterActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -21,12 +25,18 @@ public class MainActivityMachineList extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private RecyclerView mFirestoreList;
     private FirestoreRecyclerAdapter adapter;
+    Button addBtn;//boton añadir nueva maquina
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_machines);
         firebaseFirestore=FirebaseFirestore.getInstance();
         mFirestoreList=findViewById(R.id.firestore_list);
+
+
+
+
+
 
         //Query
         Query query=firebaseFirestore.collection("MachineNumber").orderBy("priority",Query.Direction.ASCENDING);
@@ -53,7 +63,20 @@ public class MainActivityMachineList extends AppCompatActivity {
         mFirestoreList.setHasFixedSize(true);
         mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
         mFirestoreList.setAdapter(adapter);
+
+
+        FloatingActionButton addbtn = (FloatingActionButton) findViewById(R.id.button_add_machine);
+        addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (getApplicationContext(), AddMachine.class);
+                startActivity(intent);
+
+            }
+        });
+
     }
+
 
     private class ProductsViewHolder extends RecyclerView.ViewHolder{
         private TextView list_name;
@@ -67,6 +90,8 @@ public class MainActivityMachineList extends AppCompatActivity {
             list_desc=itemView.findViewById(R.id.list_desc);
         }
     }
+
+
 
     @Override
     protected void onStop() {
