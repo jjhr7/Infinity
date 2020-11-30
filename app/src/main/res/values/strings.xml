@@ -25,7 +25,7 @@
     <string name="btn_registMachine">Añadir máquina</string>
     <string name="title_name_machine">Introduce el nombre de tu máquina:</string>
     <string name="title_name_model">Modelo de tu máquina:</string>
-    <string name="title_name_favorites">Añadir tu máquina a favoritos:</string>
+    <string name="title_name_favorites">Añadir tu máquina a favoritos</string>
     <string name="title_scan_machine">Escanear máquina</string>
 
 
