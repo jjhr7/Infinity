@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!--Permisos Qr-->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera"></uses-feature>
+    <uses-feature android:name="android.hardware.camera.autofocus"></uses-feature>
 
     <application
         android:allowBackup="true"
@@ -15,6 +19,7 @@
 
         <activity android:name=".MainActivity" android:theme="@style/SplashTheme">
         </activity>
+
         <activity android:name="com.example.infinitycrop.ui.login.LogActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,8 +33,13 @@
 
         </activity>
         <activity android:name=".ui.list_machine.MainActivityMachineList"></activity>
+        <activity android:name=".ui.list_machine.AddMachine"></activity>
         <activity android:name=".ui.logmail.RegisterActivity"></activity>
         <activity android:name=".ui.logmail.LoginActivity"></activity>
+        <activity android:name=".ui.list_machine.CaptureAct"></activity>
+
+
+
 
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

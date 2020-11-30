@@ -89,11 +89,12 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
         android:id="@+id/button_add_machine"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/icons_plus"/>
+
+        android:src="@drawable/icons_plus" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

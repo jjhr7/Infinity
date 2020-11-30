@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
-import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -118,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //invocamos al metodo
         switch (view.getId()){
-            case  R.id.btn_login:
+            case  R.id.btn_registMachine:
                 loginUsuario();
             case R.id.register_buton:
                 botonRegist();
