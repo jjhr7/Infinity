@@ -82,68 +82,6 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
         }
 
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //Root2 = Canal de senyal de luces
-
-        /*try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "luces");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "luces", Mqtt.qos);
-            client.setCallback(this);
-        } catch (MqttException e) {
-            Log.e(Mqtt.TAG, "Error al suscribir.", e);
-        }*/
-        //--------------------------------------------------------------------------------------------------------------------------------------------
-        //Root 3= Canal de senyal de  ventiladores
-
-       /* try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "ventiladores");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "ventiladores", Mqtt.qos);
-            client.setCallback(this);
-        } catch (MqttException e) {
-            Log.e(Mqtt.TAG, "Error al suscribir.", e);
-        }*/
-        //--------------------------------------------------------------------------------------------------------------------------------------
-        //Root 4= Canal de senyal riego
-
-       /* try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "riego");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "riego", Mqtt.qos);
-            client.setCallback(this);
-        } catch (MqttException e) {
-            Log.e(Mqtt.TAG, "Error al suscribir.", e);
-        }*/
-
-        //instancia con el Firestore
-        /*FirebaseFirestore db = FirebaseFirestore.getInstance();*/
-        //esto de bajo una vez acabemos con las comunicaciones de los mensajes se podrá borrar
-
-        //Datos del sensor de humedad
-        /*Map<String, Object> datosS1 = new HashMap<>();
-        datosS1.put("Porcentaje", "%");
-        datosS1.put("Estado", "Activado");*/
-
-        //Datos del sensor de iluminación
-        /*Map<String, Object> datosS2 = new HashMap<>();
-        datosS2.put("Porcentaje", "%");
-        datosS2.put("Estado", "Desactivado");*/
-        /* datosS2.put("fecha", System.currentTimeMillis());*/
-
-        //Datos del sensor de temperatura en ambiente
-        /*Map<String, Object> datosS3 = new HashMap<>();
-        datosS3.put("Medición", "ºC");
-        datosS3.put("Estado", "Desactivado");*/
-
-        //Datos del sensor de temperatura
-        /*Map<String, Object> datosS4 = new HashMap<>();
-        datosS4.put("Medición", "ºC");
-        datosS4.put("Estado:", "Activado");*/
-
-
-        /*db.collection("SensoresA-T").document("Humedad").set(datosS1);//colocamos la coleccion y luego el document para enviarse con los datos
-        db.collection("SensoresA-T").document("Iluminación").set(datosS2);//colocamos la coleccion y luego el document para enviarse con los datos
-        db.collection("SensoresA-T").document("Temperatura ambiente").set(datosS3);//colocamos la coleccion y luego el document para enviarse con los datos
-        db.collection("SensoresA-T").document("Temperatura").set(datosS4);*///colocamos la coleccion y luego el document para enviarse con los datos
-
     }
     // Se ejecuta cuando se pierde la conexión
     @Override
@@ -157,52 +95,19 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
         Log.d(Mqtt.TAG, "Recibiendo: " + topic + "->" + payload);
 
         if(topic.equals(topicRoot+"lecturaDatos")){
-            topicLectura(payload);
-        }
+            //topicLectura(payload);
+            // parts0=humedad,parts1=iluminosidad,parts2=humedadHambiente,parts3=temperatura
+            String[] parts = payload.split("-");//comprueba si los datos introducidos van referentes a cada sensor: nombre,medición, estado
+            Log.d("PRUUEBA",parts[0] + " "+parts[1] + " "+parts[2] + " "+parts[3] + " ");
+            Map<String, Object> dataTemp = new HashMap<>();
+            dataTemp.put("Estado:", "Activado");
+            dataTemp.put("Medición", parts[3]);
+            db.collection("SensoresA-T").document("Temperatura").set(dataTemp);
 
-        /*if(topic.equals(topicRoot+"luces")){
-            topicLuces(payload);
         }
-        if(topic.equals(topicRoot+"riego")){
-            topicRiego(payload);
-        }
-        if(topic.equals(topicRoot+"ventiladores")){
-            topicVentiladores(payload);
-        }*/
 
     }
-    private void topicLectura(final String payload) {
-        // parts0=humedad,parts1=iluminosidad,parts2=humedadHambiente,parts3=temperatura
-        String[] parts = payload.split("-");//comprueba si los datos introducidos van referentes a cada sensor: nombre,medición, estado
-        /*db.collection("SensoresA-T").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){// si se han introducido bien los datos exigidos
-*/
-                    db.collection("SensoresA-T")
-                            .document("Humedad")
-                            .update("Porcentaje", parts[0]);//verificar los estados y actualizarlos
-
-                    db.collection("SensoresA-T")
-                            .document("Iluminación")
-                            .update("Porcentaje", parts[1]);
-
-                    db.collection("SensoresA-T")
-                            .document("Humedad Ambiente")
-                            .update("Medicion", parts[2]);
-
-                    db.collection("SensoresA-T")
-                            .document("Temperatura")
-                            .update("Medición", parts[3]);
-
-
-             /*   }
-
-            }
-
-        });*/
-
-    }
+     private  void topicLectura(final String payload)  {}
 
     private void topicLuces(final String payload) {
     }

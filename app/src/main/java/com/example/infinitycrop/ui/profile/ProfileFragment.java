@@ -28,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.list_machine.MainActivityMachineList;
 import com.example.infinitycrop.ui.login.LogActivity;
 import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
 import com.example.infinitycrop.ui.profile.settings.HelpProfile;
@@ -101,6 +102,15 @@ public class ProfileFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
 
         //Enlaces de los botones de configuracion
+        //personalice colors
+        RelativeLayout customColors_btn =v.findViewById(R.id.relativeLayout4);
+        customColors_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainActivityMachineList.class);
+                startActivity(intent);
+            }
+        });
         //about us
         RelativeLayout aboutInfinity_btn =v.findViewById(R.id.relativeLayout6);
         aboutInfinity_btn.setOnClickListener(new View.OnClickListener() {
