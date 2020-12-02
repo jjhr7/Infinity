@@ -242,7 +242,6 @@ public class MapFragment extends Fragment implements
                                         .setCancelable(false)
                                         .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                                             public void onClick(final DialogInterface dialog, final int id) {
-                                                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 
                                                 // Hacemos que esta función se llame a si misma para que no tengamos que cerrar y abrir la app de nuevo para ver nuestra localización
                                                 EnableGPSAutoMatically();
