@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,22 +15,33 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.infinitycrop.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.Map;
 
 public class AddMachine extends AppCompatActivity implements View.OnClickListener{
     Button scanBtn;
     private EditText TextnameMachine;
     private EditText Textmodel;
     private CheckBox fav;
+    private long priorityMachine;
     private LinearLayout BtnregistMachine;
     private ProgressDialog progressDialogo;
     private ImageView backToProfile;
     private String codigo_qr;
+    private CollectionReference machineRef;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qr_scanner);
@@ -41,6 +53,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         TextnameMachine = (EditText) findViewById(R.id.editTextTextMchineName);
         Textmodel = (EditText) findViewById(R.id.editTextTextMachineModel);
         fav = (CheckBox) findViewById(R.id.btn_fav);
+        machineRef = FirebaseFirestore.getInstance().collection("MachineNumber");
         BtnregistMachine = (LinearLayout) findViewById(R.id.btn_registMachine);
         progressDialogo =new ProgressDialog(this);
 
@@ -118,8 +131,8 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         codigo_qr=result.getContents();
-                        TextView txt_model= findViewById(R.id.editTextTextMachineModel);
-                        txt_model.setText(codigo_qr);
+                        addMachine();
+
 
                     }
                 });
@@ -142,5 +155,18 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
             case R.id.btn_registMachine:
                 registMachine();
         }
+    }
+    public void addMachine(){
+        Textmodel.setText(codigo_qr);
+        if (fav.isChecked()) {
+            priorityMachine=1;
+        }else{
+            priorityMachine=2;
+        }
+
+        machineRef.add(new MachineModel(TextnameMachine.getText().toString().trim(), priorityMachine,
+                Textmodel.getText().toString().trim()));
+        Toast.makeText(this, "Maquina añadida", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }
