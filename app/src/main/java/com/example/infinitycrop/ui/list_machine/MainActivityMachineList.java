@@ -40,7 +40,7 @@ public class MainActivityMachineList extends AppCompatActivity {
         mFirestoreList=findViewById(R.id.firestore_list);
 
         //Query
-        Query query=firebaseFirestore.collection("MachineNumber").orderBy("priority",Query.Direction.ASCENDING);
+        Query query=firebaseFirestore.collection("Machine").orderBy("priority",Query.Direction.ASCENDING);
         //RecyclerView
         FirestoreRecyclerOptions<MachineModel> options=new FirestoreRecyclerOptions.Builder<MachineModel>()
                 .setQuery(query, MachineModel.class)

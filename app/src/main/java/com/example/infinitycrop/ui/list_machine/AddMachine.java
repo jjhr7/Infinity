@@ -23,6 +23,8 @@ import com.example.infinitycrop.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -53,7 +55,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         TextnameMachine = (EditText) findViewById(R.id.editTextTextMchineName);
         Textmodel = (EditText) findViewById(R.id.editTextTextMachineModel);
         fav = (CheckBox) findViewById(R.id.btn_fav);
-        machineRef = FirebaseFirestore.getInstance().collection("MachineNumber");
+        machineRef = FirebaseFirestore.getInstance().collection("Machine");
         BtnregistMachine = (LinearLayout) findViewById(R.id.btn_registMachine);
         progressDialogo =new ProgressDialog(this);
 
@@ -118,26 +120,25 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result!= null){
             if (result.getContents() !=null){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(result.getContents());
-                builder.setTitle("El código de tu máquina es");
-                builder.setPositiveButton("Escanear de nuevo", new DialogInterface.OnClickListener() {
+                codigo_qr=result.getContents();
+                FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+                DocumentReference docIdRef = rootRef.collection("Machine").document(codigo_qr);
+                docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                dialogYaExiste(result);
+                            } else {
+                                dialogAñadirmaquina(result);
+                            }
+                        } else {
 
-                        scanCode();
-                    }
-                }).setNegativeButton("Añadir", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        codigo_qr=result.getContents();
-                        addMachine();
-
-
+                        }
                     }
                 });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+
             }
             else {
                 Toast.makeText(this, "Sin resultados", Toast.LENGTH_LONG).show();
@@ -147,6 +148,44 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
             super.onActivityResult(requestCode, resultCode, data);
         }
 
+    }
+    public void dialogAñadirmaquina(IntentResult result){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(result.getContents());
+        builder.setTitle("El código de tu máquina es");
+        builder.setPositiveButton("Escanear de nuevo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                scanCode();
+            }
+        }).setNegativeButton("Añadir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                addMachine();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    public void dialogYaExiste(IntentResult result){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(result.getContents());
+        builder.setTitle("Error! El QR ya ha sido utilizado por otro usuario");
+        builder.setPositiveButton("Escanear de nuevo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                scanCode();
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
     public void onclick(View v){
 
@@ -163,9 +202,8 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         }else{
             priorityMachine=2;
         }
-
-        machineRef.add(new MachineModel(TextnameMachine.getText().toString().trim(), priorityMachine,
-                Textmodel.getText().toString().trim()));
+        final String id=Textmodel.getText().toString().trim();
+        machineRef.document(id).set(new MachineModel(TextnameMachine.getText().toString().trim(), priorityMachine, id));
         Toast.makeText(this, "Maquina añadida", Toast.LENGTH_SHORT).show();
         finish();
     }
