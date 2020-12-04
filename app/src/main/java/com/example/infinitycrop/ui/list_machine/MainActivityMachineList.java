@@ -1,15 +1,19 @@
 package com.example.infinitycrop.ui.list_machine;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,10 +25,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.text.BreakIterator;
+
 public class MainActivityMachineList extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private RecyclerView mFirestoreList;
-    private FirestoreRecyclerAdapter adapter;
+    private Adapter adapter;
     Button addBtn;//boton añadir nueva maquina
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,38 +39,30 @@ public class MainActivityMachineList extends AppCompatActivity {
         firebaseFirestore=FirebaseFirestore.getInstance();
         mFirestoreList=findViewById(R.id.firestore_list);
 
-
-
-
-
-
         //Query
-        Query query=firebaseFirestore.collection("MachineNumber").orderBy("priority",Query.Direction.ASCENDING);
+        Query query=firebaseFirestore.collection("Machine").orderBy("priority",Query.Direction.ASCENDING);
         //RecyclerView
         FirestoreRecyclerOptions<MachineModel> options=new FirestoreRecyclerOptions.Builder<MachineModel>()
                 .setQuery(query, MachineModel.class)
                 .build();
         //View Holder
-        adapter= new FirestoreRecyclerAdapter<MachineModel, ProductsViewHolder>(options) {
-            @NonNull
-            @Override
-            public ProductsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.machine_item,parent,false);
-                return new ProductsViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull ProductsViewHolder holder, int position, @NonNull MachineModel model) {
-                holder.list_name.setText(model.getName());
-                holder.list_price.setText(model.getPriority()+"");
-                holder.list_desc.setText(model.getDescription());
-            }
-        };
+        adapter= new Adapter(options);
         mFirestoreList.setHasFixedSize(true);
         mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
         mFirestoreList.setAdapter(adapter);
 
-
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                Toast.makeText(getApplicationContext(), "Maquina eliminada con éxito", Toast.LENGTH_SHORT).show();
+                adapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(mFirestoreList);
         FloatingActionButton addbtn = (FloatingActionButton) findViewById(R.id.button_add_machine);
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,12 +75,10 @@ public class MainActivityMachineList extends AppCompatActivity {
 
     }
 
-
-    private class ProductsViewHolder extends RecyclerView.ViewHolder{
-        private TextView list_name;
-        private TextView list_price;
-
-        private TextView list_desc;
+    static class ProductsViewHolder extends RecyclerView.ViewHolder{
+        protected TextView list_name;
+        protected ImageView list_price;
+        protected TextView list_desc;
         public ProductsViewHolder(@NonNull View itemView) {
             super(itemView);
             list_name=itemView.findViewById(R.id.list_name);
