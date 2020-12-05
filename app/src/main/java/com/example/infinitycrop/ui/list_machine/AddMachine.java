@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.infinitycrop.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,6 +33,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class AddMachine extends AppCompatActivity implements View.OnClickListener{
@@ -44,6 +48,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
     private ImageView backToProfile;
     private String codigo_qr;
     private CollectionReference machineRef;
+    private FirebaseAuth firebaseAuth;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qr_scanner);
@@ -56,6 +61,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         Textmodel = (EditText) findViewById(R.id.editTextTextMachineModel);
         fav = (CheckBox) findViewById(R.id.btn_fav);
         machineRef = FirebaseFirestore.getInstance().collection("Machine");
+        firebaseAuth=FirebaseAuth.getInstance();
         BtnregistMachine = (LinearLayout) findViewById(R.id.btn_registMachine);
         progressDialogo =new ProgressDialog(this);
 
@@ -86,8 +92,8 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
             Toast.makeText(this,"Debes introducir un nombre",Toast.LENGTH_LONG).show();
             return;
         }
-        if(TextUtils.isEmpty(model)){
-            Toast.makeText(this,"El modelo de registro está vacío",Toast.LENGTH_LONG).show();
+        if(model.equals("Primero escanea el QR")){
+            Toast.makeText(this,"Escanea el QR de tu maquina",Toast.LENGTH_LONG).show();
             return;
         }
         if (fav.isSelected()) {
@@ -102,8 +108,12 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        scanCode();
-
+        final String name = TextnameMachine.getText().toString().trim();
+        if(name.isEmpty()){
+            Toast.makeText(getApplicationContext(),"Debes introducir un nombre",Toast.LENGTH_LONG).show();
+        }else {
+            scanCode();
+        }
     }
 
     private void scanCode(){
@@ -122,8 +132,25 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
             if (result.getContents() !=null){
                 codigo_qr=result.getContents();
                 FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-                DocumentReference docIdRef = rootRef.collection("Machine").document(codigo_qr);
-                docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                final CollectionReference docIdRef = rootRef.collection("Machine");
+                docIdRef.whereEqualTo("description", codigo_qr)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()){
+                                    QuerySnapshot document = task.getResult();
+                                    if (document.size()>=1) {
+                                        dialogYaExiste(result);
+                                    } else {
+                                        dialogAñadirmaquina(result);
+                                    }
+                                }else {
+
+                                }
+                            }
+                        });
+                /*docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
@@ -131,13 +158,13 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
                             if (document.exists()) {
                                 dialogYaExiste(result);
                             } else {
-                                dialogAñadirmaquina(result);
+                                dialogYaExiste(result);
                             }
                         } else {
 
                         }
                     }
-                });
+                });*/
 
             }
             else {
@@ -202,8 +229,64 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         }else{
             priorityMachine=2;
         }
+        String uid=firebaseAuth.getUid();
         final String id=Textmodel.getText().toString().trim();
-        machineRef.document(id).set(new MachineModel(TextnameMachine.getText().toString().trim(), priorityMachine, id));
+        /*final Map<String, Object> data = new HashMap<>();
+        data.put("userUID", uid);*/
+        //collecion mediciones
+        final Map<String, Object> intoMediciones = new HashMap<>();
+        intoMediciones.put("machineID", id);
+        intoMediciones.put("fecha", new Timestamp(new Date()));
+        intoMediciones.put("Temperatura", 0);
+        intoMediciones.put("Humedad", 0);
+        intoMediciones.put("Humedad Ambiente", 0);
+        intoMediciones.put("Luminosidad", 0);
+        //coleccion actuadores
+        final Map<String, Object> intoActuadores = new HashMap<>();
+        intoActuadores.put("machineID", id);
+        intoActuadores.put("fecha", new Timestamp(new Date()));
+        intoActuadores.put("Bomba de agua", false);
+        intoActuadores.put("Ventiladores", false);
+        intoActuadores.put("Luces", false);
+        machineRef.add(new MachineModel(TextnameMachine.getText().toString().trim(), priorityMachine, id, uid));
+        FirebaseFirestore.getInstance().collection("Mediciones").document().set(intoMediciones);
+        FirebaseFirestore.getInstance().collection("Actuadores").document().set(intoActuadores);
+                /*.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        DocumentReference document=task.getResult();
+                        machineRef.document(document.getId()).collection("Nivel 1")
+                                .document("Mediciones")
+                                .set(data);
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        DocumentReference document=task.getResult();
+                        machineRef.document(document.getId()).collection("Nivel 1")
+                                .document("Actuadores")
+                                .set(data);
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        DocumentReference document=task.getResult();
+                        machineRef.document(document.getId()).collection("Nivel 2")
+                                .document("Mediciones")
+                                .set(data);
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        DocumentReference document=task.getResult();
+                        machineRef.document(document.getId()).collection("Nivel 2")
+                                .document("Actuadores")
+                                .set(data);
+                    }
+                });*/
         Toast.makeText(this, "Maquina añadida", Toast.LENGTH_SHORT).show();
         finish();
     }

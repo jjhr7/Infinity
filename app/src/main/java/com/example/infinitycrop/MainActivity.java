@@ -56,16 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        //Firestore:
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> datos = new HashMap<>();
-        datos.put("Nombre:", "pruebas");
-        datos.put("numero", 1);
-        datos.put("fecha", new Date());
-        db.collection("coleccion").document("documento").set(datos);
-
     }
 
     

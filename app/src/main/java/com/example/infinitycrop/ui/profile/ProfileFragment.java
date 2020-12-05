@@ -107,8 +107,7 @@ public class ProfileFragment extends Fragment {
         customColors_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MainActivityMachineList.class);
-                startActivity(intent);
+
             }
         });
         //about us

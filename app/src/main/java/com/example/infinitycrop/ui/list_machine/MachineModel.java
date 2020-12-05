@@ -5,12 +5,22 @@ public class MachineModel {
     private String name;
     private long priority;
     private String description;
+    private String userUID;
     private MachineModel(){}
 
-    public MachineModel(String name, long priority, String description) {
+    public MachineModel(String name, long priority, String description, String userUID) {
         this.name = name;
         this.priority = priority;
         this.description=description;
+        this.userUID=userUID;
+    }
+
+    public String getUserUID() {
+        return userUID;
+    }
+
+    public void setUserUID(String userUID) {
+        this.userUID = userUID;
     }
 
     public String getDescription() {

@@ -3,6 +3,7 @@ package com.example.infinitycrop.ui.list_machine;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +18,25 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.logmail.RegisterActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.text.BreakIterator;
+import java.util.Map;
 
 public class MainActivityMachineList extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private RecyclerView mFirestoreList;
     private Adapter adapter;
+    private FirebaseAuth firebaseAuth;
     Button addBtn;//boton añadir nueva maquina
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +44,13 @@ public class MainActivityMachineList extends AppCompatActivity {
         setContentView(R.layout.activity_list_machines);
         firebaseFirestore=FirebaseFirestore.getInstance();
         mFirestoreList=findViewById(R.id.firestore_list);
-
+        firebaseAuth=FirebaseAuth.getInstance();
+        String uid=firebaseAuth.getUid();
         //Query
-        Query query=firebaseFirestore.collection("Machine").orderBy("priority",Query.Direction.ASCENDING);
+        Query query=firebaseFirestore
+                .collection("Machine")
+                .whereEqualTo("userUID", uid)
+                .orderBy("priority",Query.Direction.ASCENDING);
         //RecyclerView
         FirestoreRecyclerOptions<MachineModel> options=new FirestoreRecyclerOptions.Builder<MachineModel>()
                 .setQuery(query, MachineModel.class)
@@ -63,6 +73,21 @@ public class MainActivityMachineList extends AppCompatActivity {
                 adapter.deleteItem(viewHolder.getAdapterPosition());
             }
         }).attachToRecyclerView(mFirestoreList);
+
+        adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                //documentSnapshot.getData() -> devuelve all que tiene la maquina en firebase
+                MachineModel machine = documentSnapshot.toObject(MachineModel.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath(); //devuelve ruta en firebase Machine\madara
+                /*Toast.makeText(MainActivityMachineList.this,
+                        "Position: " + position + " ID: " + id +"  algo   "+ documentSnapshot.getData(), Toast.LENGTH_SHORT).show();*/
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         FloatingActionButton addbtn = (FloatingActionButton) findViewById(R.id.button_add_machine);
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,17 +100,7 @@ public class MainActivityMachineList extends AppCompatActivity {
 
     }
 
-    static class ProductsViewHolder extends RecyclerView.ViewHolder{
-        protected TextView list_name;
-        protected ImageView list_price;
-        protected TextView list_desc;
-        public ProductsViewHolder(@NonNull View itemView) {
-            super(itemView);
-            list_name=itemView.findViewById(R.id.list_name);
-            list_price=itemView.findViewById(R.id.list_price);
-            list_desc=itemView.findViewById(R.id.list_desc);
-        }
-    }
+
 
 
 

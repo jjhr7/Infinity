@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.list_machine.MainActivityMachineList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -105,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(RegisterActivity.this, "Iniciando sesión", Toast.LENGTH_LONG).show();
-                                Intent intencion = new Intent (getApplication(), MainActivity.class);
+                                Intent intencion = new Intent (getApplication(), MainActivityMachineList.class);
                                 startActivity(intencion);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
