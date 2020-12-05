@@ -182,7 +182,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
 
      /*   //LEER DATOS FIREBASE
         //Temperatura
-        DocumentReference documentTemperatura=fStore.collection("SensoresA-T").document("Temperatura");
+       DocumentReference documentTemperatura=fStore.collection("SensoresA-T").document("Temperatura");
         documentTemperatura.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
