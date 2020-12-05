@@ -1,11 +1,13 @@
 package com.example.infinitycrop.ui.dashboard;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.example.infinitycrop.ui.recycler_control.StaticRvAdapter;
 import com.example.infinitycrop.ui.recycler_control.StaticRvModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -50,8 +53,13 @@ import static com.example.comun.Mqtt.topicRoot;
  * create an instance of this fragment.
  */
 public class DashboardFragment extends Fragment implements MqttCallback{
+
     private RecyclerView recyclerView;
     private StaticRvAdapter staticRvAdapter;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+
     public static MqttClient client = null;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -118,7 +126,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
                 }
             }
         });*/
-
+/*
         //switch methods
         Switch switchLuz = (Switch) v.findViewById(R.id.switchLuminosidad);
         switchLuz.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -132,6 +140,9 @@ public class DashboardFragment extends Fragment implements MqttCallback{
                 }
             }
         });
+
+
+ */
 
         //RECYCLER VIEW
         ArrayList<StaticRvModel> item=new ArrayList<>();
@@ -151,7 +162,25 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(staticRvAdapter);
 
-        //LEER DATOS FIREBASE
+
+        //TABS
+        tabLayout = v.findViewById(R.id.tab_layout);
+        viewPager = v.findViewById(R.id.view_pager);
+         //Array
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        //set up with viewpager
+        tabLayout.setupWithViewPager(viewPager);
+
+        TabAdapter adapter = new TabAdapter(getActivity().getSupportFragmentManager());
+        //Pestañas
+        adapter.addFrag(new GeneralFragment(),"General");
+        adapter.addFrag(new Planta1Fragment(),"Planta 1");
+        adapter.addFrag(new Planta2Fragment(),"Planta 2");
+
+        viewPager.setAdapter(adapter );
+
+     /*   //LEER DATOS FIREBASE
         //Temperatura
         DocumentReference documentTemperatura=fStore.collection("SensoresA-T").document("Temperatura");
         documentTemperatura.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -189,6 +218,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
             }
         });
 
+      */
 
         return v;
     }
