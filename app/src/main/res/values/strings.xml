@@ -51,8 +51,5 @@
         <string name="facebook_app_id">140146287567868</string>
         <string name="fb_login_protocol_scheme">fb140146287567868</string>
 
-    <string name="place_not_found">Sorry, no weather data found.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
