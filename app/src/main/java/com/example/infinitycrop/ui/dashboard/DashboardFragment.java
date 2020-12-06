@@ -182,6 +182,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
 
         viewPager.setAdapter(adapter );
 
+        /*((MainActivity)getActivity()).ola();*/
      /*   //LEER DATOS FIREBASE
         //Temperatura
        DocumentReference documentTemperatura=fStore.collection("SensoresA-T").document("Temperatura");

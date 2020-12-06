@@ -4,8 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context="com.example.infinitycrop.MainActivity">
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager11"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EFE9E9"
+        android:layout_above="@id/chipNavigation"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:animateLayoutChanges="true"
+        android:layoutDirection="locale"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/chipNavigation"
         android:layout_width="match_parent"
@@ -15,11 +27,6 @@
         android:paddingBottom="10dp"
         app:cnb_menuResource="@menu/nav_item" />
 
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/chipNavigation"
-        android:background="#EFE9E9" />
+
 
 </RelativeLayout>
