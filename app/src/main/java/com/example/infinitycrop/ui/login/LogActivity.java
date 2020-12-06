@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.dashboard.DashboardFragment;
+import com.example.infinitycrop.ui.list_machine.MainActivityMachineList;
 import com.example.infinitycrop.ui.logmail.LoginActivity;
 import com.example.infinitycrop.ui.logmail.RegisterActivity;
 import com.facebook.AccessToken;
@@ -141,7 +142,7 @@ public class LogActivity extends AppCompatActivity{
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!=null){
-                    Intent dashboardActivity = new Intent(LogActivity.this, MainActivity.class);
+                    Intent dashboardActivity = new Intent(LogActivity.this, MainActivityMachineList.class);
                     startActivity(dashboardActivity);
                 }
             }
@@ -212,7 +213,7 @@ public class LogActivity extends AppCompatActivity{
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
                             //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
-                            Intent dashboardActivity = new Intent(LogActivity.this, MainActivity.class);
+                            Intent dashboardActivity = new Intent(LogActivity.this, MainActivityMachineList.class);
                             startActivity(dashboardActivity);
                             LogActivity.this.finish();
                         } else {
@@ -228,7 +229,7 @@ public class LogActivity extends AppCompatActivity{
         FirebaseUser user = mAuth.getCurrentUser();
         if(user!=null){ //si no es null el usuario ya esta logueado
             //mover al usuario al dashboard
-            Intent dashboardActivity = new Intent(LogActivity.this, MainActivity.class);
+            Intent dashboardActivity = new Intent(LogActivity.this, MainActivityMachineList.class);
             startActivity(dashboardActivity);
         }
         super.onStart();
@@ -283,7 +284,7 @@ public class LogActivity extends AppCompatActivity{
                     Log.d(TAG2,"sing in with credential: successfully");
                     FirebaseUser user = mAuth.getCurrentUser();
                     if(user!=null){ //si no es null el usuario ya esta logueado
-                        Intent dashboardActivity = new Intent(LogActivity.this, MainActivity.class);
+                        Intent dashboardActivity = new Intent(LogActivity.this, MainActivityMachineList.class);
                         startActivity(dashboardActivity);
                     }
                 }else{
