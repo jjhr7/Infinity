@@ -176,9 +176,12 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="@color/colorSecondary"
-                app:tabIndicatorColor="@android:color/holo_blue_dark"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/back_unselected"
+                app:tabIndicatorHeight="0dp"
                 app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabBackground="@drawable/back_tabs"
                 app:tabTextColor="@android:color/black" />
 
             <androidx.constraintlayout.widget.ConstraintLayout

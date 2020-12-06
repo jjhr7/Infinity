@@ -1,6 +1,7 @@
 package com.example.infinitycrop.ui.dashboard;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -58,6 +59,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
     private StaticRvAdapter staticRvAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ColorStateList def;
 
 
     public static MqttClient client = null;
