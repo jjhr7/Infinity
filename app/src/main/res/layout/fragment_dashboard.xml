@@ -98,67 +98,17 @@
                 android:orientation="vertical"
                 android:padding="2dp">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="PONER ACA EL CONTENIDO" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="136dp"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:id="@+id/txtCountry"
-                    android:layout_width="84dp"
-                    android:layout_height="wrap_content"
-                    android:text="country"
-                    app:layout_constraintStart_toStartOf="@+id/town"
-                    app:layout_constraintTop_toBottomOf="@+id/town" />
-
-                <TextView
-                    android:id="@+id/temp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginBottom="15dp"
-                    android:text="15°C"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/town"
-                    android:layout_width="195dp"
-                    android:layout_height="31dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Krakow"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:text="Description"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/temp"
-                    app:layout_constraintStart_toEndOf="@+id/temp"
-                    app:layout_constraintTop_toTopOf="@+id/temp" />
-
-                <ImageView
-                    android:id="@+id/wheather_image"
-                    android:layout_width="102dp"
-                    android:layout_height="91dp"
-                    android:layout_marginEnd="50dp"
-                    android:src="@drawable/wheather"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
 
