@@ -4,19 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.infinitycrop.MainActivity;
+import com.example.infinitycrop.ui.LoadAnimations.IntroductoryActivity2;
 import com.example.infinitycrop.R;
-import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.example.infinitycrop.ui.list_machine.MainActivityMachineList;
 import com.example.infinitycrop.ui.logmail.LoginActivity;
-import com.example.infinitycrop.ui.logmail.RegisterActivity;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -24,16 +20,12 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -44,7 +36,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -144,6 +135,7 @@ public class LogActivity extends AppCompatActivity{
                 if(user!=null){
                     Intent dashboardActivity = new Intent(LogActivity.this, MainActivityMachineList.class);
                     startActivity(dashboardActivity);
+                    LogActivity.this.finish();
                 }
             }
         };
@@ -213,7 +205,7 @@ public class LogActivity extends AppCompatActivity{
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
                             //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
-                            Intent dashboardActivity = new Intent(LogActivity.this, MainActivityMachineList.class);
+                            Intent dashboardActivity = new Intent(LogActivity.this, IntroductoryActivity2.class);
                             startActivity(dashboardActivity);
                             LogActivity.this.finish();
                         } else {
@@ -295,12 +287,13 @@ public class LogActivity extends AppCompatActivity{
         });
 
     }
-
     @Override
     protected void onStop() {
         super.onStop();
         if(authStateListener != null){
             mAuth.removeAuthStateListener(authStateListener);
+            finish();
         }
     }
+
 }

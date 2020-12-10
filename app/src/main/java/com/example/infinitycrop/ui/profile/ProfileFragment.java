@@ -37,6 +37,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,6 +54,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
+    //atributos para confirmación de correo
+    private FirebaseUser us;
+    private TextView txtverf;
+    private Button btnconf;
 
 
 
@@ -209,7 +215,43 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //Confirmación de verificación de correo
+        TextView txtverify = (TextView) v.findViewById(R.id.txtVerif);
+        Button btnverify = (Button) v.findViewById(R.id.btnverif);
+        final FirebaseUser user = mAuth.getCurrentUser();
+        if(!user.isEmailVerified()){
+            us=user;
+            txtverf = txtverify;
+            btnconf = btnverify;
 
+            txtverify.setVisibility(View.VISIBLE);
+            btnverify.setVisibility(View.VISIBLE);
+
+            btnverify.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(final View v)
+                {
+
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getActivity(),"Enviando correo de confirmación",Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            Toast.makeText(getActivity(),"Error en el envío de correo",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+            /*}else{
+            txtverify.setVisibility(View.GONE);
+            btnverify.setVisibility(View.GONE);*/
+        }
         /*RequestQueue colaPeticiones = Volley.newRequestQueue(getActivity()
                 .getApplicationContext());
         ImageLoader lectorImagenes = new ImageLoader(colaPeticiones,

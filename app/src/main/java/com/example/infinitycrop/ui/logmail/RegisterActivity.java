@@ -12,9 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.infinitycrop.MainActivity;
+import com.example.infinitycrop.ui.LoadAnimations.IntroductoryActivity2;
 import com.example.infinitycrop.R;
-import com.example.infinitycrop.ui.list_machine.MainActivityMachineList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -93,44 +93,65 @@ public class RegisterActivity extends AppCompatActivity {
         //creando un nuevo usuario
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener( this, new OnCompleteListener<AuthResult>() {
 
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    //comprovar si el resultado ha sido resuelto correctamente
-                    if (task.isSuccessful()) {
-                        String userID= mAuth.getCurrentUser().getUid();
-                        DocumentReference documentReference=fStore.collection("Usuarios").document(userID);
-                        Map<String,Object> datauser=new HashMap<>();
-                        datauser.put("username",nombre);
-                        datauser.put("mail",email);
-                        documentReference.set(datauser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(RegisterActivity.this, "Iniciando sesión", Toast.LENGTH_LONG).show();
-                                Intent intencion = new Intent (getApplication(), MainActivityMachineList.class);
-                                startActivity(intencion);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                //comprovar si el resultado ha sido resuelto correctamente
+                if (task.isSuccessful()) {
 
-                            }
-                        });
-
-
-
-                    } else {
-                        if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si se presenta una colisión
-                            Toast.makeText(RegisterActivity.this, "Este Usuario ya existe", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "No se puede registrar este usuario", Toast.LENGTH_SHORT).show();
+                    //enviar coorreo de confirmación
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(RegisterActivity.this,"Verification has been send",Toast.LENGTH_SHORT);
                         }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
 
+                            Toast.makeText(RegisterActivity.this,"Error en el envío de correo",Toast.LENGTH_SHORT);
+                        }
+                    });
+
+                    String userID= mAuth.getCurrentUser().getUid();
+                    DocumentReference documentReference=fStore.collection("Usuarios").document(userID);
+                    Map<String,Object> datauser=new HashMap<>();
+                    datauser.put("username",nombre);
+                    datauser.put("mail",email);
+                    documentReference.set(datauser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(RegisterActivity.this, "Iniciando sesión", Toast.LENGTH_LONG).show();
+                            Intent intencion = new Intent (getApplication(), IntroductoryActivity2.class);
+                            startActivity(intencion);
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+
+
+
+                } else {
+                    if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si se presenta una colisión
+                        Toast.makeText(RegisterActivity.this, "Este Usuario ya existe", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "No se puede registrar este usuario", Toast.LENGTH_SHORT).show();
                     }
-                    progressDialog.dismiss();
+
                 }
+                progressDialog.dismiss();
+            }
 
         });
     }
 
-
+    @Override
+    public void onStop() {
+        finish();
+        super.onStop();
+    }
 }

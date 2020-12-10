@@ -21,7 +21,7 @@
         <activity android:name=".MainActivity" android:theme="@style/SplashTheme">
         </activity>
 
-        <activity android:name="com.example.infinitycrop.ui.login.LogActivity">
+        <activity android:name="com.example.infinitycrop.ui.LoadAnimations.IntroductoryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -38,6 +38,8 @@
         <activity android:name=".ui.logmail.RegisterActivity"></activity>
         <activity android:name=".ui.logmail.LoginActivity"></activity>
         <activity android:name=".ui.list_machine.CaptureAct"></activity>
+        <activity android:name="com.example.infinitycrop.ui.login.LogActivity"></activity>
+        <activity android:name=".ui.LoadAnimations.IntroductoryActivity2"></activity>
 
 
 
@@ -48,6 +50,9 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             tools:replace="android:value"
             android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
 
     </application>

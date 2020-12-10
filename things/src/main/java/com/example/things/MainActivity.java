@@ -93,16 +93,13 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         String payload = new String(message.getPayload());
         Log.d(Mqtt.TAG, "Recibiendo: " + topic + "->" + payload);
-
+        db.collection("prueba").add(payload);
         if(topic.equals(topicRoot+"lecturaDatos")){
             //topicLectura(payload);
             // parts0=humedad,parts1=iluminosidad,parts2=humedadHambiente,parts3=temperatura
             String[] parts = payload.split("-");//comprueba si los datos introducidos van referentes a cada sensor: nombre,medición, estado
             Log.d("PRUUEBA",parts[0] + " "+parts[1] + " "+parts[2] + " "+parts[3] + " ");
-            Map<String, Object> dataTemp = new HashMap<>();
-            dataTemp.put("Estado:", "Activado");
-            dataTemp.put("Medición", parts[3]);
-            db.collection("SensoresA-T").document("Temperatura").set(dataTemp);
+
 
         }
 
