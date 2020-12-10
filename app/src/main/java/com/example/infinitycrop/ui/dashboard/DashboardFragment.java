@@ -128,9 +128,9 @@ public class DashboardFragment extends Fragment implements MqttCallback{
                 }
             }
         });*/
-/*
+
         //switch methods
-        Switch switchLuz = (Switch) v.findViewById(R.id.switchLuminosidad);
+ /*     Switch switchLuz = (Switch) v.findViewById(R.id.switchLuminosidadGeneral);
         switchLuz.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -141,10 +141,10 @@ public class DashboardFragment extends Fragment implements MqttCallback{
                     enviarLucesOff();
                 }
             }
-        });
+        });*/
 
 
- */
+
 
         //RECYCLER VIEW
         ArrayList<StaticRvModel> item=new ArrayList<>();
@@ -154,10 +154,10 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         item.add(new StaticRvModel(R.drawable.icons_power_off,"Apagado"));
         item.add(new StaticRvModel(R.drawable.icons_custom,"Custom"));
 
-        final TextView medidasT=v.findViewById(R.id.medidaTemperatura);
-        final TextView medidasH=v.findViewById(R.id.medidaHumedad);
-        final TextView medidasS=v.findViewById(R.id.medidaSalinidad);
-        final TextView medidasL=v.findViewById(R.id.medidasLuminosidad);
+        final TextView medidasT=v.findViewById(R.id.medidaTemperaturaGeneral);
+        final TextView medidasH=v.findViewById(R.id.medidaHumedadGeneral);
+        final TextView medidasS=v.findViewById(R.id.medidaSalinidadGeneral);
+        final TextView medidasL=v.findViewById(R.id.medidasLuminosidadGeneral);
 
         recyclerView=v.findViewById(R.id.rv_1);
         staticRvAdapter=new StaticRvAdapter(item,medidasT,medidasH,medidasS,medidasL);

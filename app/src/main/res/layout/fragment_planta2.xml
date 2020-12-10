@@ -299,12 +299,12 @@
                             android:layout_marginTop="8dp"
                             android:text="Luminosidad"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/switchLuminosidad"
+                            app:layout_constraintBottom_toBottomOf="@+id/switchLuminosidadPlanta2"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Switch
-                            android:id="@+id/switchLuminosidad"
+                            android:id="@+id/switchLuminosidadPlanta2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"

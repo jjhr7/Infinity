@@ -20,7 +20,7 @@
             android:layout_marginRight="20dp">
 
             <TextView
-                android:id="@+id/textDashboard"
+                android:id="@+id/textDashboardGeneral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dashboard  >"
@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textDashboard"
+                android:layout_below="@+id/textDashboardGeneral"
                 android:text="4 sensores"
 
                 android:textSize="14sp" />
@@ -74,19 +74,19 @@
 
 
                         <TextView
-                            android:id="@+id/textTemperatura"
+                            android:id="@+id/textTemperaturaGeneral"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:text="Temperatura"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/switchTemperatura"
+                            app:layout_constraintBottom_toBottomOf="@+id/switchTemperaturaGeneral"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Switch
-                            android:id="@+id/switchTemperatura"
+                            android:id="@+id/switchTemperaturaGeneral"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -100,25 +100,25 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/medidaTemperatura"
+                            android:id="@+id/medidaTemperaturaGeneral"
                             android:layout_width="90dp"
                             android:layout_height="39dp"
                             android:layout_marginTop="24dp"
                             android:text="34°C"
                             android:textSize="31sp"
-                            app:layout_constraintStart_toStartOf="@+id/textTemperatura"
-                            app:layout_constraintTop_toBottomOf="@+id/textTemperatura" />
+                            app:layout_constraintStart_toStartOf="@+id/textTemperaturaGeneral"
+                            app:layout_constraintTop_toBottomOf="@+id/textTemperaturaGeneral" />
 
                         <ImageView
-                            android:id="@+id/imgTemperatura"
+                            android:id="@+id/imgTemperaturaGeneral"
                             android:layout_width="53dp"
                             android:layout_height="55dp"
                             android:layout_marginEnd="1dp"
                             android:src="@drawable/icons_temperature"
-                            app:layout_constraintBottom_toBottomOf="@+id/medidaTemperatura"
+                            app:layout_constraintBottom_toBottomOf="@+id/medidaTemperaturaGeneral"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/medidaTemperatura"
-                            app:layout_constraintTop_toTopOf="@+id/medidaTemperatura" />
+                            app:layout_constraintStart_toEndOf="@+id/medidaTemperaturaGeneral"
+                            app:layout_constraintTop_toTopOf="@+id/medidaTemperaturaGeneral" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -148,19 +148,19 @@
 
 
                         <TextView
-                            android:id="@+id/textHumedad"
+                            android:id="@+id/textHumedadGeneral"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:text="Humedad"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/switchHumedad"
+                            app:layout_constraintBottom_toBottomOf="@+id/switchHumedadGeneral"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Switch
-                            android:id="@+id/switchHumedad"
+                            android:id="@+id/switchHumedadGeneral"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -172,25 +172,25 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/medidaHumedad"
+                            android:id="@+id/medidaHumedadGeneral"
                             android:layout_width="90dp"
                             android:layout_height="39dp"
                             android:layout_marginTop="24dp"
                             android:text="68%"
                             android:textSize="31sp"
-                            app:layout_constraintStart_toStartOf="@+id/textHumedad"
-                            app:layout_constraintTop_toBottomOf="@+id/textHumedad" />
+                            app:layout_constraintStart_toStartOf="@+id/textHumedadGeneral"
+                            app:layout_constraintTop_toBottomOf="@+id/textHumedadGeneral" />
 
                         <ImageView
-                            android:id="@+id/imgHumedad"
+                            android:id="@+id/imgHumedadGeneral"
                             android:layout_width="53dp"
                             android:layout_height="55dp"
                             android:layout_marginEnd="1dp"
                             android:src="@drawable/icons_humidity"
-                            app:layout_constraintBottom_toBottomOf="@+id/medidaHumedad"
+                            app:layout_constraintBottom_toBottomOf="@+id/medidaHumedadGeneral"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/medidaHumedad"
-                            app:layout_constraintTop_toTopOf="@+id/medidaHumedad" />
+                            app:layout_constraintStart_toEndOf="@+id/medidaHumedadGeneral"
+                            app:layout_constraintTop_toTopOf="@+id/medidaHumedadGeneral" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -220,19 +220,19 @@
 
 
                         <TextView
-                            android:id="@+id/textSalinidad"
+                            android:id="@+id/textSalinidadGeneral"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:text="Salinidad"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/switchSalinidad"
+                            app:layout_constraintBottom_toBottomOf="@+id/switchSalinidadGeneral"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Switch
-                            android:id="@+id/switchSalinidad"
+                            android:id="@+id/switchSalinidadGeneral"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -244,25 +244,25 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/medidaSalinidad"
+                            android:id="@+id/medidaSalinidadGeneral"
                             android:layout_width="90dp"
                             android:layout_height="39dp"
                             android:layout_marginTop="24dp"
                             android:text="10%"
                             android:textSize="31sp"
-                            app:layout_constraintStart_toStartOf="@+id/textSalinidad"
-                            app:layout_constraintTop_toBottomOf="@+id/textSalinidad" />
+                            app:layout_constraintStart_toStartOf="@+id/textSalinidadGeneral"
+                            app:layout_constraintTop_toBottomOf="@+id/textSalinidadGeneral" />
 
                         <ImageView
-                            android:id="@+id/imgSalinidad"
+                            android:id="@+id/imgSalinidadGeneral"
                             android:layout_width="53dp"
                             android:layout_height="55dp"
                             android:layout_marginEnd="1dp"
                             android:src="@drawable/icons_salt"
-                            app:layout_constraintBottom_toBottomOf="@+id/medidaSalinidad"
+                            app:layout_constraintBottom_toBottomOf="@+id/medidaSalinidadGeneral"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/medidaSalinidad"
-                            app:layout_constraintTop_toTopOf="@+id/medidaSalinidad" />
+                            app:layout_constraintStart_toEndOf="@+id/medidaSalinidadGeneral"
+                            app:layout_constraintTop_toTopOf="@+id/medidaSalinidadGeneral" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -292,19 +292,19 @@
 
 
                         <TextView
-                            android:id="@+id/textLuminosidad"
+                            android:id="@+id/textLuminosidadGeneral"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:text="Luminosidad"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/switchLuminosidad"
+                            app:layout_constraintBottom_toBottomOf="@+id/switchLuminosidadGeneral"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Switch
-                            android:id="@+id/switchLuminosidad"
+                            android:id="@+id/switchLuminosidadGeneral"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -317,25 +317,25 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/medidasLuminosidad"
+                            android:id="@+id/medidasLuminosidadGeneral"
                             android:layout_width="90dp"
                             android:layout_height="39dp"
                             android:layout_marginTop="24dp"
                             android:text="90%"
                             android:textSize="31sp"
-                            app:layout_constraintStart_toStartOf="@+id/textLuminosidad"
-                            app:layout_constraintTop_toBottomOf="@+id/textLuminosidad" />
+                            app:layout_constraintStart_toStartOf="@+id/textLuminosidadGeneral"
+                            app:layout_constraintTop_toBottomOf="@+id/textLuminosidadGeneral" />
 
                         <ImageView
-                            android:id="@+id/imgLuminosidad"
+                            android:id="@+id/imgLuminosidadGeneral"
                             android:layout_width="53dp"
                             android:layout_height="55dp"
                             android:layout_marginEnd="1dp"
                             android:src="@drawable/icons_luminosity"
-                            app:layout_constraintBottom_toBottomOf="@+id/medidasLuminosidad"
+                            app:layout_constraintBottom_toBottomOf="@+id/medidasLuminosidadGeneral"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/medidasLuminosidad"
-                            app:layout_constraintTop_toTopOf="@+id/medidasLuminosidad" />
+                            app:layout_constraintStart_toEndOf="@+id/medidasLuminosidadGeneral"
+                            app:layout_constraintTop_toTopOf="@+id/medidasLuminosidadGeneral" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
