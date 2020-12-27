@@ -32,6 +32,7 @@ import com.example.infinitycrop.ui.list_machine.MainActivityMachineList;
 import com.example.infinitycrop.ui.login.LogActivity;
 import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
 import com.example.infinitycrop.ui.profile.settings.HelpProfile;
+import com.example.infinitycrop.ui.profile.settings.ModifyProfile;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -106,6 +107,15 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
+
+        ImageView irAPerfil =v.findViewById(R.id.irAEditarPerfil);
+        irAPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ModifyProfile.class);
+                startActivity(intent);
+            }
+        });
 
         //Enlaces de los botones de configuracion
         //personalice colors

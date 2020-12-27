@@ -42,6 +42,7 @@
         <activity android:name=".ui.list_machine.CaptureAct"></activity>
         <activity android:name="com.example.infinitycrop.ui.login.LogActivity"></activity>
         <activity android:name=".ui.LoadAnimations.IntroductoryActivity2"></activity>
+        <activity android:name=".ui.profile.settings.ModifyProfile"></activity>
 
 
 

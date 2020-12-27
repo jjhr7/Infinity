@@ -1,20 +1,34 @@
 package com.example.infinitycrop.ui.dashboard;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.StrictMode;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -30,11 +44,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -43,8 +63,13 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.comun.Mqtt.topicRoot;
 
@@ -59,7 +84,24 @@ public class DashboardFragment extends Fragment implements MqttCallback{
     private StaticRvAdapter staticRvAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ColorStateList def;
+    //WEATHER
+    private static  final int REQUEST_LOCATION=1;
+
+    double lat;
+    double longi;
+
+    TextView showLocationTxt;
+
+    LocationManager locationManager;
+    String latitude,longitude;
+
+    TextView view_city;
+    TextView view_temp;
+    TextView view_desc;
+    TextView view_country;
+
+    ImageView view_weather;
+    //
 
 
     public static MqttClient client = null;
@@ -142,6 +184,26 @@ public class DashboardFragment extends Fragment implements MqttCallback{
                 }
             }
         });*/
+
+
+        //WEATHER
+        ActivityCompat.requestPermissions(getActivity(),new String[]
+                {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        view_city =v.findViewById(R.id.town);
+        view_city.setText("");
+        view_temp =v.findViewById(R.id.temp);
+        view_temp.setText("");
+        view_desc =v.findViewById(R.id.desc);
+        view_desc.setText("");
+        view_country=v.findViewById(R.id.txtCountry);
+        view_country.setText("");
+        view_weather =v.findViewById(R.id.wheather_image);
+
+
+        locationManager=(LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        inicioGPS();
+        //
 
 
 
@@ -314,5 +376,250 @@ public class DashboardFragment extends Fragment implements MqttCallback{
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
         Log.d(Mqtt.TAG, "Entrega completa");
+    }
+
+
+    //WEATHER METHODS
+    private void api_key(final String City) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://api.openweathermap.org/data/2.5/weather?q=" + City + "&appid=a6f41d947e0542a26580bcd5c3fb90ef&units=metric")
+                .get()
+                .build();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        try {
+            Response response = client.newCall(request).execute();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    String responseData = response.body().string();
+                    try {
+                        JSONObject json = new JSONObject(responseData);
+                        JSONArray array = json.getJSONArray("weather");
+                        JSONObject object = array.getJSONObject(0);
+
+                        String description = object.getString("description");
+                        String icons = object.getString("icon");
+
+                        JSONObject temp1 = json.getJSONObject("main");
+                        Double Temperature = temp1.getDouble("temp");
+
+                        setText(view_city, City);
+
+                        String temps = Math.round(Temperature) + " °C";
+                        setText(view_temp, temps);
+                        setText(view_desc, description);
+                        setImage(view_weather, icons);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void setText(final TextView text, final String value) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                text.setText(value);
+            }
+        });
+    }
+
+    private void setImage(final ImageView imageView, final String value) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //paste switch
+                switch (value) {
+                    case "01d":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d01d));
+                        break;
+                    case "01n":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d01d));
+                        break;
+                    case "02d":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d02d));
+                        break;
+                    case "02n":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d02d));
+                        break;
+                    case "03d":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d03d));
+                        break;
+                    case "03n":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d03d));
+                        break;
+                    case "04d":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d04d));
+                        break;
+                    case "04n":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d04d));
+                        break;
+                    case "09d":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d09d));
+                        break;
+                    case "09n":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d09d));
+                        break;
+                    case "10d":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d10d));
+                        break;
+                    case "10n":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d10d));
+                        break;
+                    case "11d":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d11d));
+                        break;
+                    case "11n":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d11d));
+                        break;
+                    case "13d":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d13d));
+                        break;
+                    case "13n":
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d13d));
+                        break;
+                    default:
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.wheather));
+
+                }
+            }
+        });
+    }
+
+    //App location
+    private void getLocation() {
+
+        //Check Permissions again
+
+        if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(getActivity(),new String[]
+                    {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        }
+        else
+        {
+            Location LocationGps= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location LocationNetwork=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location LocationPassive=locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+            if (LocationGps !=null)
+            {
+                lat=LocationGps.getLatitude();
+                longi=LocationGps.getLongitude();
+
+                latitude=String.valueOf(lat);
+                longitude=String.valueOf(longi);
+
+
+                //showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+
+
+            }
+            else if (LocationNetwork !=null)
+            {
+                double lat=LocationNetwork.getLatitude();
+                double longi=LocationNetwork.getLongitude();
+
+                latitude=String.valueOf(lat);
+                longitude=String.valueOf(longi);
+
+                showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+            }
+            else if (LocationPassive !=null)
+            {
+                double lat=LocationPassive.getLatitude();
+                double longi=LocationPassive.getLongitude();
+
+                latitude=String.valueOf(lat);
+                longitude=String.valueOf(longi);
+
+                showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+            }
+            else
+            {
+                Toast.makeText(getContext(), "Can't Get Your Location", Toast.LENGTH_SHORT).show();
+            }
+
+            //Thats All Run Your App
+            Location location=locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+            loc_func(location);
+            api_key(String.valueOf(view_city.getText()));
+        }
+
+    }
+
+    private void OnGPS() {
+
+        final AlertDialog.Builder builder= new AlertDialog.Builder(getContext());
+
+        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }
+        });
+        final AlertDialog alertDialog=builder.create();
+        alertDialog.show();
+    }
+
+    private void loc_func(Location location){
+        try {
+            Geocoder geocoder=new Geocoder(getContext());
+            List<Address> addresses = geocoder.getFromLocation(lat, longi, 1);
+            String address = addresses.get(0).getSubLocality();
+            String cityName = addresses.get(0).getLocality();
+            String stateName = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            //txt_paddress.setText(address);
+            view_city.setText(cityName);
+            view_country.setText(country);
+            //txt_state.setText(stateName);*/
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error:"+e, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void inicioGPS(){
+
+
+        //Check gps is enable or not
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            //Write Function To enable gps
+
+            OnGPS();
+        }
+        else
+        {
+            //GPS is already On then
+
+            getLocation();
+        }
     }
 }

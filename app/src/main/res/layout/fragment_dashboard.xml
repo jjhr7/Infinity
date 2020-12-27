@@ -100,13 +100,81 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="153dp"
                     android:layout_marginBottom="12dp">
 
+
+                    <ImageView
+                        android:id="@+id/wheather_image"
+                        android:layout_width="158dp"
+                        android:layout_height="130dp"
+                        android:layout_marginEnd="32dp"
+                        android:src="@drawable/wheather"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.547"
+                        tools:ignore="MissingConstraints" />
+
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="PONER ACA EL CONTENIDO" />
+                        android:id="@+id/temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:text="15°C"
+                        android:textColor="#000000"
+                        android:textSize="36sp"
+                        app:layout_constraintEnd_toStartOf="@+id/wheather_image"
+                        app:layout_constraintHorizontal_bias="0.013"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/town"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Description"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="#494343"
+                        app:layout_constraintEnd_toStartOf="@+id/wheather_image"
+                        app:layout_constraintHorizontal_bias="0.012"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/temp"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/town"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Krakow"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@+id/wheather_image"
+                        app:layout_constraintHorizontal_bias="0.011"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/txtCountry"
+                        android:layout_width="84dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/wheather_image"
+                        app:layout_constraintHorizontal_bias="0.015"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/desc"
+                        app:layout_constraintVertical_bias="0.818"
+                        tools:ignore="MissingConstraints" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
