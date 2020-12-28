@@ -84,6 +84,7 @@ public class MainActivityMachineList extends AppCompatActivity {
                 /*Toast.makeText(MainActivityMachineList.this,
                         "Position: " + position + " ID: " + id +"  algo   "+ documentSnapshot.getData(), Toast.LENGTH_SHORT).show();*/
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                intent.putExtra("machine", id);
                 startActivity(intent);
             }
         });

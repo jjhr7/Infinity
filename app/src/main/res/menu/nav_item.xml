@@ -10,8 +10,8 @@
         app:cnb_textColor="#ffffff" />
     <item
         android:id="@+id/graphics"
-        android:icon="@drawable/icons_line_chart"
-        android:title="Graphics"
+        android:icon="@drawable/icons_dashboard"
+        android:title="Panel de control"
         app:cnb_backgroundColor="@color/colorPrimaryDashboard"
         app:cnb_iconColor="#ffffff"
         app:cnb_textColor="#ffffff" />

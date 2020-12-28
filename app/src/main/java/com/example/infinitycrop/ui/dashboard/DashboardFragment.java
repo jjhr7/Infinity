@@ -41,6 +41,7 @@ import com.example.infinitycrop.ui.recycler_control.StaticRvAdapter;
 import com.example.infinitycrop.ui.recycler_control.StaticRvModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -86,7 +87,6 @@ public class DashboardFragment extends Fragment implements MqttCallback{
     private ViewPager viewPager;
     //WEATHER
     private static  final int REQUEST_LOCATION=1;
-
     double lat;
     double longi;
 
@@ -199,7 +199,6 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         view_country=v.findViewById(R.id.txtCountry);
         view_country.setText("");
         view_weather =v.findViewById(R.id.wheather_image);
-
 
         locationManager=(LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         inicioGPS();
@@ -506,61 +505,25 @@ public class DashboardFragment extends Fragment implements MqttCallback{
 
         //Check Permissions again
 
-        if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+        if (ActivityCompat.checkSelfPermission(
+                getContext(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
 
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(getActivity(),new String[]
-                    {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        }
-        else
-        {
-            Location LocationGps= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Location LocationNetwork=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            Location LocationPassive=locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-            if (LocationGps !=null)
-            {
-                lat=LocationGps.getLatitude();
-                longi=LocationGps.getLongitude();
-
-                latitude=String.valueOf(lat);
-                longitude=String.valueOf(longi);
-
-
-                //showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
-
-
-            }
-            else if (LocationNetwork !=null)
+             if (LocationNetwork !=null)
             {
                 double lat=LocationNetwork.getLatitude();
                 double longi=LocationNetwork.getLongitude();
 
                 latitude=String.valueOf(lat);
                 longitude=String.valueOf(longi);
-
+                loc_func(LocationNetwork);
+                api_key(String.valueOf(view_city.getText()));
                 showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
             }
-            else if (LocationPassive !=null)
-            {
-                double lat=LocationPassive.getLatitude();
-                double longi=LocationPassive.getLongitude();
 
-                latitude=String.valueOf(lat);
-                longitude=String.valueOf(longi);
-
-                showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
-            }
-            else
-            {
-                Toast.makeText(getContext(), "Can't Get Your Location", Toast.LENGTH_SHORT).show();
-            }
-
-            //Thats All Run Your App
-            Location location=locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-            loc_func(location);
-            api_key(String.valueOf(view_city.getText()));
         }
 
     }
@@ -573,6 +536,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                getLocation();
             }
         }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
             @Override

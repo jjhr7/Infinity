@@ -1,6 +1,8 @@
 package com.example.infinitycrop;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.example.infinitycrop.ui.control_panel.Control_panelFragment;
 import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.example.infinitycrop.ui.graphic.GraphicFragment;
 import com.example.infinitycrop.ui.map.MapFragment;
@@ -32,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppThemeHome);
         super.onCreate(savedInstanceState);
 
+        Bundle extras = getIntent().getExtras();
+        String s = extras.getString("machine");
+        Toast.makeText(this, s , Toast.LENGTH_SHORT).show();
+
         setContentView(R.layout.activity_main);
         chipNavigationBar=findViewById(R.id.chipNavigation);
         viewPager = findViewById(R.id.view_pager11);
@@ -42,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         final DashboardFragment fragment_1 = new DashboardFragment();
-        final GraphicFragment fragment_2 = new GraphicFragment();
+        //final GraphicFragment fragment_2 = new GraphicFragment();
+        final Control_panelFragment fragment_2 = new Control_panelFragment();
         final MapFragment fragment_3 = new MapFragment();
         final ProfileFragment fragment_4 = new ProfileFragment();
         adapter.addFragment(fragment_1);

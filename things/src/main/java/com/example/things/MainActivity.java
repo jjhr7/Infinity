@@ -64,19 +64,16 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
         connOpts.setCleanSession(true);
         connOpts.setKeepAliveInterval(60);
         connOpts.setWill(topicRoot+"WillTopic", "App desconectada".getBytes(),Mqtt.qos, false);
-
         try {
             client.connect(connOpts);
         } catch (MqttException e) {
             e.printStackTrace();
         }
 
-
-        //conexión con el broker Root1 = Lector de datos
-        //nos subscribimos a topic lectura
+        // Nos suscribimos al topic rfid
         try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "lecturaDatos");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "lecturaDatos", Mqtt.qos);
+            Log.i(Mqtt.TAG, "Suscrito a " + topicRoot+"lecturaDatos");
+            client.subscribe(topicRoot+"lecturaDatos", qos);
             client.setCallback(this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
@@ -87,39 +84,17 @@ public class MainActivity extends AppCompatActivity implements MqttCallback {
     @Override
     public void connectionLost(Throwable cause) {
         Log.d(Mqtt.TAG, "Conexión perdida");
-
     }
+
+    // Se ejecuta cuando se publica algo en los topics subscritos
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         String payload = new String(message.getPayload());
         Log.d(Mqtt.TAG, "Recibiendo: " + topic + "->" + payload);
-        db.collection("prueba").add(payload);
-        if(topic.equals(topicRoot+"lecturaDatos")){
-            //topicLectura(payload);
-            // parts0=humedad,parts1=iluminosidad,parts2=humedadHambiente,parts3=temperatura
-            String[] parts = payload.split("-");//comprueba si los datos introducidos van referentes a cada sensor: nombre,medición, estado
-            Log.d("PRUUEBA",parts[0] + " "+parts[1] + " "+parts[2] + " "+parts[3] + " ");
 
-
-        }
+        db.collection("pruebaaaa").add(payload);
 
     }
-     private  void topicLectura(final String payload)  {}
-
-    private void topicLuces(final String payload) {
-    }
-
-    private void topicRiego(final String payload) {
-    }
-
-    private void topicVentiladores(final String payload) {
-    }
-
-
-
-
-
-
 
     @Override
     public void onDestroy() {
