@@ -19,6 +19,8 @@ import com.example.infinitycrop.ui.list_machine.MachineModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +34,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ModifyProfile extends AppCompatActivity {
 
     private CheckBox fav;
@@ -39,7 +44,7 @@ public class ModifyProfile extends AppCompatActivity {
     private TextView nombre;
     private TextView maquina;
     private FirebaseUser usuario;
-    private FirebaseFirestore machineRef;
+    private FirebaseFirestore db;
     private static final String TAG = "";
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +73,16 @@ public class ModifyProfile extends AppCompatActivity {
 
         //guardo el nombre en un textView
         usuario = FirebaseAuth.getInstance().getCurrentUser();
+
         nombre = findViewById(R.id.nombreUsario);
         nombre.setText(usuario.getDisplayName());
 
 
         //guardo el nombre de la maquina en un textView
-        machineRef = FirebaseFirestore.getInstance();
-        String uid=usuario.getUid();
+        db = FirebaseFirestore.getInstance();
+        String uid= usuario.getUid();
         //Query
-        Task<QuerySnapshot> query=machineRef
+        Task<QuerySnapshot> query=db
                 .collection("Machine")
                 .whereEqualTo("userUID", uid)
                 .get()
@@ -117,7 +123,7 @@ public class ModifyProfile extends AppCompatActivity {
         });
 
         Button btn_modifyy =findViewById(R.id.btn_modify);
-        backToProfile.setOnClickListener(new View.OnClickListener() {
+        btn_modifyy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 update(v);
@@ -127,12 +133,22 @@ public class ModifyProfile extends AppCompatActivity {
     }
 
    public void update(View view){
-        if(isNameChanged() || isMachineNameChanged()){
+        if(isNameChanged() == true || isMachineNameChanged() == true){
             Toast.makeText(this, "Los datos han sido modificados correctamente", Toast.LENGTH_SHORT).show();
         }
 
 
    }
+
+    /*private boolean isCheckBoxChanged() {
+
+        if(){
+            return true;
+
+        } else{
+            return false;
+        }
+    }*/
 
     private boolean isMachineNameChanged() {
 
@@ -147,6 +163,27 @@ public class ModifyProfile extends AppCompatActivity {
     private boolean isNameChanged() {
 
         usuario = FirebaseAuth.getInstance().getCurrentUser();
+
+        nombre = findViewById(R.id.nombreUsario);
+        nombre.setText(usuario.getDisplayName());
+
+        Map<String, Object> nombreUser = new HashMap<>();
+        nombreUser.put("username",nombre.getText());
+
+        db.collection("Usuarios").document("H173urj5gIOQpsW2e52Fc4BzH6K2")
+                .set(nombreUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
 
         if (usuario.equals(nombre.getText().toString())){
 
