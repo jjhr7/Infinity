@@ -3,6 +3,7 @@ package com.example.infinitycrop.ui.dashboard;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -10,7 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +29,8 @@ public class Planta2Fragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private String uid;
+    private FirebaseFirestore db;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -64,7 +71,43 @@ public class Planta2Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_planta2, container, false);
+        db = FirebaseFirestore.getInstance();
+        MainActivity myActivity = (MainActivity) getActivity();
+        final TextView medidaTemp=v.findViewById(R.id.medidaTemperaturaPlanta2);
+        final TextView medidaHum=v.findViewById(R.id.medidaHumedadPlanta2);
+        final TextView medidaHumAm=v.findViewById(R.id.medidaSalinidadPlanta2);
+        final TextView medidaLuz=v.findViewById(R.id.medidasLuminosidadPlanta2);
+        uid=myActivity.getMachineUID();
+        db.collection("Mediciones planta 2")
+                .document(uid)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            return;
+                        }
 
+                        if (snapshot != null && snapshot.exists()) {
+                            //Temperatura
+                            String medidaT=snapshot.getString("Temperatura");
+                            medidaTemp.setText(medidaT+"°C");
+                            //Humedad
+                            String medidaH=snapshot.getString("Humedad");
+                            medidaHum.setText(medidaH+"%");
+                            //Humedad Ambiente
+                            String medidaHA=snapshot.getString("Humedad Ambiente");
+                            medidaHumAm.setText(medidaHA+"%");
+                            //Luminosidad
+                            String medidaL=snapshot.getString("Luminosidad");
+                            medidaLuz.setText(medidaL+"%");
+
+
+                        } else {
+
+                        }
+                    }
+                });
         return v;
     }
 }

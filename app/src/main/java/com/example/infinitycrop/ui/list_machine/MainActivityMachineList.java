@@ -80,11 +80,12 @@ public class MainActivityMachineList extends AppCompatActivity {
                 //documentSnapshot.getData() -> devuelve all que tiene la maquina en firebase
                 MachineModel machine = documentSnapshot.toObject(MachineModel.class);
                 String id = documentSnapshot.getId();
-                String path = documentSnapshot.getReference().getPath(); //devuelve ruta en firebase Machine\madara
+                String path = documentSnapshot.getString("description"); //devuelve ruta en firebase Machine\madara
                 /*Toast.makeText(MainActivityMachineList.this,
                         "Position: " + position + " ID: " + id +"  algo   "+ documentSnapshot.getData(), Toast.LENGTH_SHORT).show();*/
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 intent.putExtra("machine", id);
+                intent.putExtra("description", path);
                 startActivity(intent);
             }
         });

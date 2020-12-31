@@ -2,6 +2,7 @@ package com.example.infinitycrop.ui.dashboard;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -13,7 +14,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.comun.Mqtt;
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -32,6 +41,8 @@ import static com.example.comun.Mqtt.topicRoot;
  */
 public class GeneralFragment extends Fragment implements MqttCallback{
     public static MqttClient client = null;
+    private String uid;
+    private FirebaseFirestore db;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,6 +101,44 @@ public class GeneralFragment extends Fragment implements MqttCallback{
                 }
             }
         });
+        db = FirebaseFirestore.getInstance();
+        MainActivity myActivity = (MainActivity) getActivity();
+        final TextView medidaTemp=v.findViewById(R.id.medidaTemperaturaGeneral);
+        final TextView medidaHum=v.findViewById(R.id.medidaHumedadGeneral);
+        final TextView medidaHumAm=v.findViewById(R.id.medidaSalinidadGeneral);
+        final TextView medidaLuz=v.findViewById(R.id.medidasLuminosidadGeneral);
+        uid=myActivity.getMachineUID();
+        db.collection("Mediciones general")
+                .document(uid)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            return;
+                        }
+
+                        if (snapshot != null && snapshot.exists()) {
+                            //Temperatura
+                            String medidaT=snapshot.getString("Temperatura");
+                            medidaTemp.setText(medidaT+"°C");
+                            //Humedad
+                            String medidaH=snapshot.getString("Humedad");
+                            medidaHum.setText(medidaH+"%");
+                            //Humedad Ambiente
+                            String medidaHA=snapshot.getString("Humedad Ambiente");
+                            medidaHumAm.setText(medidaHA+"%");
+                            //Luminosidad
+                            String medidaL=snapshot.getString("Luminosidad");
+                            medidaLuz.setText(medidaL+"%");
+
+
+                        } else {
+
+                        }
+                    }
+                });
+
         return v;
     }
     public void enviarLucesOff(){

@@ -24,7 +24,7 @@
 
         <activity android:name=".MainActivity" android:theme="@style/SplashTheme">
         </activity>
-
+        <service android:name="com.example.infinitycrop.ui.service.ServicioMqtt" />
         <activity android:name="com.example.infinitycrop.ui.LoadAnimations.IntroductoryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

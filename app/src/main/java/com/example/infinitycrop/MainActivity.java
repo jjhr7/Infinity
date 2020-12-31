@@ -1,4 +1,5 @@
 package com.example.infinitycrop;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -7,6 +8,7 @@ import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.example.infinitycrop.ui.graphic.GraphicFragment;
 import com.example.infinitycrop.ui.map.MapFragment;
 import com.example.infinitycrop.ui.profile.ProfileFragment;
+import com.example.infinitycrop.ui.service.ServicioMqtt;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
@@ -28,15 +30,17 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private Fragment fragment=null;
     private int index = 0;
-
+    private String s;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppThemeHome);
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        String s = extras.getString("machine");
-        Toast.makeText(this, s , Toast.LENGTH_SHORT).show();
+        s = extras.getString("description");
+        Intent intent = new Intent(MainActivity.this, ServicioMqtt.class);
+        intent.putExtra("machine", s);
+        startService(intent);
 
         setContentView(R.layout.activity_main);
         chipNavigationBar=findViewById(R.id.chipNavigation);
@@ -220,6 +224,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    public String getMachineUID(){
+        return s;
+    }
+
 
 
 }
