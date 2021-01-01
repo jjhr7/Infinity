@@ -23,6 +23,7 @@ import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.logmail.RegisterActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -79,14 +80,46 @@ public class MainActivityMachineList extends AppCompatActivity {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 //documentSnapshot.getData() -> devuelve all que tiene la maquina en firebase
                 MachineModel machine = documentSnapshot.toObject(MachineModel.class);
-                String id = documentSnapshot.getId();
-                String path = documentSnapshot.getString("description"); //devuelve ruta en firebase Machine\madara
-                /*Toast.makeText(MainActivityMachineList.this,
-                        "Position: " + position + " ID: " + id +"  algo   "+ documentSnapshot.getData(), Toast.LENGTH_SHORT).show();*/
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.putExtra("machine", id);
-                intent.putExtra("description", path);
-                startActivity(intent);
+                final String id = documentSnapshot.getId();
+                final String path = documentSnapshot.getString("description"); //devuelve ruta en firebase Machine\madara
+                //botttom sheet
+                final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(MainActivityMachineList.this);
+                bottomSheetDialog.setContentView(R.layout.machine_bottom_sheet);
+                Button btnenter=bottomSheetDialog.findViewById(R.id.enterMachineButton);
+                Button btnmodify=bottomSheetDialog.findViewById(R.id.madifyMachineButton);
+                Button btncancel=bottomSheetDialog.findViewById(R.id.cancelMachineButton);
+                btnenter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        intent.putExtra("machine", id);
+                        intent.putExtra("description", path);
+                        startActivity(intent);
+                    }
+                });
+                btnmodify.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //poner aca Intent para acceder al layout de modificar maquina
+                        //hay que pasarle un intent con extra como he hecho en el onClick de arriba
+                        //lo que necesitas para modificar es la variable id
+                        //encuentras en firebase la maquina con el id y haces la magia de modificar etc..
+                        //lo de maquina a favoritos es facil , si es 1 es favoirto si es 2 no lo es.
+                        //ejemplo
+                        /*Intent intent = new Intent(getBaseContext(), MainActivity.class);//Main por tu clase
+                        intent.putExtra("machine", id);
+                        startActivity(intent);*/
+                    }
+                });
+                btncancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialog.cancel();
+                    }
+                });
+                bottomSheetDialog.show();
+
+
             }
         });
 
