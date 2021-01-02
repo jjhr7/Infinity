@@ -17,6 +17,7 @@ public class OnBoardingFragment4 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_on_boarding4,container,false);
+
         TextView button = (TextView) root.findViewById(R.id.btn_skip);
         button.setOnClickListener(new View.OnClickListener()
         {
@@ -30,6 +31,7 @@ public class OnBoardingFragment4 extends Fragment {
 
             }
         });
+
         Button button1 = (Button) root.findViewById(R.id.btn_start);
         button1.setOnClickListener(new View.OnClickListener()
         {

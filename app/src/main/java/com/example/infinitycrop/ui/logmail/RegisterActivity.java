@@ -149,9 +149,5 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onStop() {
-        finish();
-        super.onStop();
-    }
+
 }

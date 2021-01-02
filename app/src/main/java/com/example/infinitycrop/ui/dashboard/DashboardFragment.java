@@ -201,7 +201,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         view_weather =v.findViewById(R.id.wheather_image);
 
         locationManager=(LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-        inicioGPS();
+       /* inicioGPS();*/
         //
 
 
@@ -501,7 +501,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
     }
 
     //App location
-    private void getLocation() {
+   /* private void getLocation() {
 
         //Check Permissions again
 
@@ -519,12 +519,12 @@ public class DashboardFragment extends Fragment implements MqttCallback{
 
                 latitude=String.valueOf(lat);
                 longitude=String.valueOf(longi);
-                loc_func(LocationNetwork);
-                api_key(String.valueOf(view_city.getText()));
+               /* loc_func(LocationNetwork);*/
+              /*  api_key(String.valueOf(view_city.getText()));
                 showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
             }
 
-        }*/
+        }
 
     }
 
@@ -553,8 +553,8 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         try {
             Geocoder geocoder=new Geocoder(getContext());
             List<Address> addresses = geocoder.getFromLocation(lat, longi, 1);
-            String address = addresses.get(0).getSubLocality();
-            String cityName = addresses.get(0).getLocality();
+            /*String address = addresses.get(0).getSubLocality();*/
+           /* String cityName = addresses.get(0).getLocality();
             String stateName = addresses.get(0).getAdminArea();
             String country = addresses.get(0).getCountryName();
             //txt_paddress.setText(address);
@@ -562,7 +562,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
             view_country.setText(country);
             //txt_state.setText(stateName);*/
 
-        } catch (IOException e) {
+       /* } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "Error:"+e, Toast.LENGTH_SHORT).show();
         }
@@ -583,7 +583,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         {
             //GPS is already On then
 
-            getLocation();
-        }
-    }
+            /*getLocation();*/
+ /*       }
+    }*/
 }

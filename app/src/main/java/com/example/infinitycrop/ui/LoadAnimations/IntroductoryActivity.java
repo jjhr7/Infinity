@@ -28,7 +28,7 @@ public class IntroductoryActivity extends AppCompatActivity {
 
         splashImg.animate().translationY(-4000).setDuration(1000).setStartDelay(4000);
         logo.animate().translationY(4000).setDuration(1000).setStartDelay(4000);
-        lottieAnimationView.animate().translationY(1600).setDuration(800).setStartDelay(3900);
+        lottieAnimationView.animate().translationY(1400).setDuration(800).setStartDelay(3900);
 
         if (this.equals(0)) {
             finish();
@@ -42,7 +42,7 @@ public class IntroductoryActivity extends AppCompatActivity {
 
 
             public void onFinish() {
-                Intent intent= new Intent (getApplicationContext(), LogActivity.class);
+                Intent intent= new Intent (getApplicationContext(), LogprimeraActivity.class);
                 startActivity(intent);
 
             }
