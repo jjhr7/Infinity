@@ -22,7 +22,7 @@
         android:theme="@style/AppThemeHome"
         >
 
-        <activity android:name=".MainActivity" android:theme="@style/SplashTheme">
+        <activity android:name=".MainActivity">
         </activity>
         <service android:name="com.example.infinitycrop.ui.service.ServicioMqtt" />
         <activity android:name="com.example.infinitycrop.ui.LoadAnimations.IntroductoryActivity">
