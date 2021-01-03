@@ -53,4 +53,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
+    <!-- foro -->
+        <!-- welcome user -->
+        <string name="welcome_text1">Vamos a empezar...</string>
+        <string name="welcome_text2">Bienvenido al</string>
+        <string name="welcome_text3"> <b>Foro</b> de <i>Infinity Crop</i></string>
+        <string name="welcome_text4">Continuar como</string>
+        <string name="welcome_text5">Cambiar imagen</string>
+        <string name="welcome_text6">Nombre del usuario: </string>
+        <string name="welcome_text7">Continuar </string>
+        <string name="welcome_text8">Descripción (opcional): </string>
+
 </resources>

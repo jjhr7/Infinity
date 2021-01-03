@@ -1,7 +1,9 @@
 package com.example.infinitycrop.ui.control_panel;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.forum.lets_start.welcome_forum;
+import com.example.infinitycrop.ui.profile.settings.HelpProfile;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +29,7 @@ public class Control_panelFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ConstraintLayout btn_forum;
 
     public Control_panelFragment() {
         // Required empty public constructor
@@ -61,6 +66,19 @@ public class Control_panelFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_control_panel, container, false);
+        View v= inflater.inflate(R.layout.fragment_control_panel, container, false);
+        //buttons
+        btn_forum=v.findViewById(R.id.btn_forum);
+
+        //onClick
+        btn_forum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), welcome_forum.class);
+                startActivity(intent);
+            }
+        });
+
+        return v;
     }
 }

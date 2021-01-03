@@ -28,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.LoadAnimations.IntroductoryActivity;
 import com.example.infinitycrop.ui.list_machine.MainActivityMachineList;
 import com.example.infinitycrop.ui.login.LogActivity;
 import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
@@ -201,7 +202,7 @@ public class ProfileFragment extends Fragment {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         //Abrir MainActivity con SigIn button
                                         if(task.isSuccessful()){
-                                            Intent logActivity = new Intent(getActivity().getApplicationContext(), LogActivity.class);
+                                            Intent logActivity = new Intent(getActivity().getApplicationContext(), IntroductoryActivity.class);
                                             startActivity(logActivity);
                                             getActivity().finish();
                                         }else{
