@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#EFE9E9"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.profile.ModifyProfile">
+    tools:context=".ui.profile.settings.ModifyProfile">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -50,8 +50,8 @@
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
-            android:layout_width="355dp"
-            android:layout_height="305dp"
+            android:layout_width="353dp"
+            android:layout_height="189dp"
             android:layout_marginTop="48dp"
             android:background="@drawable/bg_settings"
             android:padding="12dp"
@@ -102,60 +102,6 @@
                 android:background="#9e9e9e" />
                 -->
 
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/nombreUsario"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="176dp"
-                android:text="Datos de la máquina:" />
-
-            <EditText
-                android:id="@+id/nombreMaquina"
-                android:layout_width="294dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView15"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
-                android:maxLines="1"
-                android:paddingTop="5dp"
-                android:textColorHint="#333232"
-                android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="15sp" />
-
-            <!-- <View
-                 android:layout_width="200dp"
-                 android:layout_height="0dp"
-                 android:layout_below="@+id/editTextTextMachineName"
-                 android:layout_alignStart="@+id/editTextTextPersonName"
-                 android:layout_alignEnd="@+id/editTextTextPersonName"
-                 android:layout_alignBottom="@+id/editTextTextPersonName"
-                 android:layout_marginStart="0dp"
-                 android:layout_marginTop="2dp"
-                 android:layout_marginEnd="-1dp"
-                 android:layout_marginBottom="-83dp"
-                 android:background="#9e9e9e" />
- -->
-
-            <CheckBox
-                android:id="@+id/btn_fav_editar"
-                android:layout_width="260dp"
-                android:layout_height="28dp"
-                android:layout_below="@+id/nombreMaquina"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
-                android:text="@string/title_name_favorites"
-                android:textColor="#9E9D9D" />
 
             <Button
                 android:id="@+id/btn_modify"

@@ -246,10 +246,10 @@
                 android:layout_height="48dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/back_unselected"
+                android:background="@drawable/back_unselected_dash"
                 app:tabIndicatorHeight="0dp"
                 app:tabSelectedTextColor="@color/colorPrimary"
-                app:tabBackground="@drawable/back_tabs"
+                app:tabBackground="@drawable/back_tabs_dash"
                 app:tabTextColor="@android:color/black" />
 
             <androidx.constraintlayout.widget.ConstraintLayout

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,8 +42,8 @@ public class ModifyProfile extends AppCompatActivity {
 
     private CheckBox fav;
     private long priorityMachine;
-    private TextView nombre;
-    private TextView maquina;
+    private EditText nombre;
+    private EditText maquina;
     private FirebaseUser usuario;
     private FirebaseFirestore db;
     private static final String TAG = "";
@@ -60,63 +61,22 @@ public class ModifyProfile extends AppCompatActivity {
             }
         });
 
-        //Recojo los datos del usuario
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
 
         //firebase
         final FirebaseFirestore fStore=FirebaseFirestore.getInstance();
-        String idUser=mAuth.getCurrentUser().getUid();
-        final GoogleSignInClient mGoogleSignInClient;
-        GoogleSignInOptions gso;
-
 
         //guardo el nombre en un textView
         usuario = FirebaseAuth.getInstance().getCurrentUser();
-
+        db = FirebaseFirestore.getInstance();
         nombre = findViewById(R.id.nombreUsario);
         nombre.setText(usuario.getDisplayName());
 
 
-        //guardo el nombre de la maquina en un textView
-        db = FirebaseFirestore.getInstance();
-        String uid= usuario.getUid();
-        //Query
-        Task<QuerySnapshot> query=db
-                .collection("Machine")
-                .whereEqualTo("userUID", uid)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-        maquina = (TextView) findViewById(R.id.nombreMaquina);
-
-
-        // checkbox
-        fav = (CheckBox) findViewById(R.id.btn_fav_editar);
-        if (fav.isChecked()) {
-            priorityMachine=1;
-        }else{
-            priorityMachine=2;
-        }
-
-
-        DocumentReference documentReference=fStore.collection("Usuarios").document(idUser);
+        DocumentReference documentReference=fStore.collection("Usuarios").document(usuario.getUid());
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if(nombre.getText() == ""){
+                if(nombre.getText().toString() == ""){
                     nombre.setText(snapshot.getString("username"));
                 }
             }
@@ -126,72 +86,20 @@ public class ModifyProfile extends AppCompatActivity {
         btn_modifyy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                update(v);
+                isNameChanged();
             }
         });
 
     }
 
-   public void update(View view){
-        if(isNameChanged() == true || isMachineNameChanged() == true){
-            Toast.makeText(this, "Los datos han sido modificados correctamente", Toast.LENGTH_SHORT).show();
-        }
 
-
-   }
-
-    /*private boolean isCheckBoxChanged() {
-
-        if(){
-            return true;
-
-        } else{
-            return false;
-        }
-    }*/
-
-    private boolean isMachineNameChanged() {
-
-        if(usuario.getUid() == "1"){
-            return true;
-
-        } else{
-            return false;
-        }
-    }
-
-    private boolean isNameChanged() {
-
-        usuario = FirebaseAuth.getInstance().getCurrentUser();
-
-        nombre = findViewById(R.id.nombreUsario);
-        nombre.setText(usuario.getDisplayName());
+    private void isNameChanged() {
 
         Map<String, Object> nombreUser = new HashMap<>();
-        nombreUser.put("username",nombre.getText());
+        nombreUser.put("username",nombre.getText().toString());
 
-        db.collection("Usuarios").document("H173urj5gIOQpsW2e52Fc4BzH6K2")
-                .set(nombreUser)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
+        db.collection("Usuarios").document("H173urj5gIOQpsW2e52Fc4BzH6K2").update(nombreUser);
 
-        if (usuario.equals(nombre.getText().toString())){
-
-
-            return true;
-
-        } else{
-            return false;
-        }
+        Toast.makeText(this, "Los datos han sido modificados correctamente", Toast.LENGTH_SHORT).show();
     }
 }

@@ -34,6 +34,7 @@ import com.example.infinitycrop.ui.login.LogActivity;
 import com.example.infinitycrop.ui.profile.settings.AboutInfinityCrap;
 import com.example.infinitycrop.ui.profile.settings.HelpProfile;
 /*import com.example.infinitycrop.ui.profile.settings.ModifyProfile;*/
+import com.example.infinitycrop.ui.profile.settings.ModifyProfile;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -113,8 +114,8 @@ public class ProfileFragment extends Fragment {
         irAPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* Intent intent = new Intent(getActivity(), ModifyProfile.class);
-                startActivity(intent);*/
+               Intent intent = new Intent(getActivity(), ModifyProfile.class);
+                startActivity(intent);
             }
         });
 

@@ -19,7 +19,6 @@
 
 
 
-
     <style name="login" parent="Theme.AppCompat.Light.NoActionBar">
 
        <!-- <item name="windowActionBar">false</item>

@@ -82,7 +82,6 @@ public class ServicioMqtt extends Service implements MqttCallback {
     public int onStartCommand(Intent intenc, int flags, int idArranque) {
         getId =intenc.getStringExtra("machine");
 
-
         return START_STICKY;
     }
     @Override public void onDestroy() {
