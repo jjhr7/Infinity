@@ -11,8 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.infinitycrop.R;
-import com.example.infinitycrop.ui.forum.lets_start.welcome_forum;
-import com.example.infinitycrop.ui.profile.settings.HelpProfile;
+import com.example.infinitycrop.ui.Foro.lets_start.welcome_forum;
 
 /**
  * A simple {@link Fragment} subclass.

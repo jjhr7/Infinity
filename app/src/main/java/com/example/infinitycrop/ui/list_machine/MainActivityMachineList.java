@@ -106,9 +106,10 @@ public class MainActivityMachineList extends AppCompatActivity {
                         //encuentras en firebase la maquina con el id y haces la magia de modificar etc..
                         //lo de maquina a favoritos es facil , si es 1 es favoirto si es 2 no lo es.
                         //ejemplo
-                        /*Intent intent = new Intent(getBaseContext(), MainActivity.class);//Main por tu clase
+                        Intent intent = new Intent(getBaseContext(), ModifyMachine.class);
                         intent.putExtra("machine", id);
-                        startActivity(intent);*/
+                        intent.putExtra("description", path);
+                        startActivity(intent);
                     }
                 });
                 btncancel.setOnClickListener(new View.OnClickListener() {

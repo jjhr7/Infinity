@@ -72,5 +72,12 @@ dependencies {
 
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "androidx.viewpager2:viewpager2:1.0.0" //libreria viewpager
+
+    //plugins de subir imagen user foro
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.+'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'id.zelory:compressor:2.1.0'
+    //imageView modo circulo
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }
 apply plugin: 'com.google.gms.google-services'

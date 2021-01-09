@@ -54,14 +54,25 @@
 
 
     <!-- foro -->
-        <!-- welcome user -->
-        <string name="welcome_text1">Vamos a empezar...</string>
-        <string name="welcome_text2">Bienvenido al</string>
-        <string name="welcome_text3"> <b>Foro</b> de <i>Infinity Crop</i></string>
-        <string name="welcome_text4">Continuar como</string>
-        <string name="welcome_text5">Cambiar imagen</string>
-        <string name="welcome_text6">Nombre del usuario: </string>
-        <string name="welcome_text7">Continuar </string>
-        <string name="welcome_text8">Descripción (opcional): </string>
+    <!-- welcome user -->
+    <string name="welcome_text1">Vamos a empezar...</string>
+    <string name="welcome_text2">Bienvenido al</string>
+    <string name="welcome_text3"> <b>Foro</b> de <i>Infinity Crop</i></string>
+    <string name="welcome_text4">Continuar como</string>
+    <string name="welcome_text5">Cambiar imagen</string>
+    <string name="welcome_text6">Nombre del usuario: </string>
+    <string name="welcome_text7">Continuar </string>
+    <string name="welcome_text8">Descripción (opcional): </string>ç
+    <!-- choose community -->
+    <string name="community_text1">Uno más y hemos terminado...</string>
+    <string name="community_text2"><b>Tus comunidadades</b></string>
+    <string name="community_text3"><b>Lo más popular</b></string>
+    <!-- choose community -> bottom Sheet community -->
+    <string name="community_sheet_text1">Posts</string>
+    <string name="community_sheet_text2">Followers</string>
+    <string name="community_sheet_text3">Cancelar</string>
+    <string name="community_sheet_text4">Suscribirse</string>
+    <string name="community_sheet_text5">Dejar de seguir</string>
+    <string name="community_sheet_text6">Finalizar</string>
 
 </resources>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EFE9E9"
-    tools:context=".ui.forum.lets_start.welcome_forum">
+    tools:context=".ui.Foro.lets_start.welcome_forum">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,13 +21,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/welcome_text1"
                 android:textSize="24dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_back_welcome" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:indeterminate="false"
                 android:max="100"
@@ -74,7 +74,8 @@
                 android:layout_height="250dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="60dp"
+                android:elevation="6dp"
+                android:layout_marginBottom="90dp"
                 android:background="@drawable/bg_settings"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -87,6 +88,7 @@
                     android:layout_height="90dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:background="@drawable/circle"
                     android:src="@drawable/icons_user"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -106,7 +108,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
                 <TextView
-                    android:id="@+id/textView23"
+                    android:id="@+id/text_changeImg"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -137,10 +139,10 @@
                     android:text="@string/welcome_text8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView23" />
+                    app:layout_constraintTop_toBottomOf="@+id/text_changeImg" />
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/user_description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -169,6 +171,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+            <ImageView
+                android:id="@+id/btn_back_welcome"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/icons_arrow_left_green"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
