@@ -37,12 +37,15 @@
         <activity android:name=".ui.profile.settings.HelpProfile"></activity>
         <activity android:name=".ui.list_machine.MainActivityMachineList" />
         <activity android:name=".ui.list_machine.AddMachine" />
+        <activity android:name=".ui.profile.settings.ModifyProfile" />
         <activity android:name=".ui.logmail.RegisterActivity" />
         <activity android:name=".ui.logmail.LoginActivity" />
         <activity android:name=".ui.list_machine.CaptureAct" />
         <activity android:name=".ui.login.LogActivity" />
         <activity android:name=".ui.LoadAnimations.IntroductoryActivity2" />
         <activity android:name=".ui.LoadAnimations.LogprimeraActivity" />
+        <activity android:name=".ui.graphics.GraphicsActivity" />
+        <activity android:name=".ui.list_machine.ModifyMachine" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

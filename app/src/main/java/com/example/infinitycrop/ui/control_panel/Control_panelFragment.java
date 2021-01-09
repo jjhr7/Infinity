@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.forum.lets_start.welcome_forum;
+import com.example.infinitycrop.ui.graphics.GraphicsActivity;
 import com.example.infinitycrop.ui.profile.settings.HelpProfile;
 
 /**
@@ -30,6 +31,7 @@ public class Control_panelFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private ConstraintLayout btn_forum;
+    private ConstraintLayout btn_graphics;
 
     public Control_panelFragment() {
         // Required empty public constructor
@@ -69,12 +71,22 @@ public class Control_panelFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_control_panel, container, false);
         //buttons
         btn_forum=v.findViewById(R.id.btn_forum);
+        btn_graphics=v.findViewById(R.id.btn_graficas);
 
         //onClick
         btn_forum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), welcome_forum.class);
+                startActivity(intent);
+            }
+        });
+
+        //onClick
+        btn_graphics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), GraphicsActivity.class);
                 startActivity(intent);
             }
         });
