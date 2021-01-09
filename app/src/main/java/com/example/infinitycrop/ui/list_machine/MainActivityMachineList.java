@@ -82,6 +82,7 @@ public class MainActivityMachineList extends AppCompatActivity {
                 MachineModel machine = documentSnapshot.toObject(MachineModel.class);
                 final String id = documentSnapshot.getId();
                 final String path = documentSnapshot.getString("description"); //devuelve ruta en firebase Machine\madara
+                final String name = documentSnapshot.getString("name");
                 //botttom sheet
                 final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(MainActivityMachineList.this);
                 bottomSheetDialog.setContentView(R.layout.machine_bottom_sheet);
@@ -107,8 +108,7 @@ public class MainActivityMachineList extends AppCompatActivity {
                         //lo de maquina a favoritos es facil , si es 1 es favoirto si es 2 no lo es.
                         //ejemplo
                         Intent intent = new Intent(getBaseContext(), ModifyMachine.class);
-                        intent.putExtra("machine", id);
-                        intent.putExtra("description", path);
+                        intent.putExtra("maq", name);
                         startActivity(intent);
                     }
                 });

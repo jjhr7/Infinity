@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class GraphicsActivity  extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class GraphicsActivity  extends AppCompatActivity {
             public void onClick(View v) {
                 onStop();
                 finish();
+                //prueba
             }
         });
 

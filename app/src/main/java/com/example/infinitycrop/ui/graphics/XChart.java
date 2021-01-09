@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.control_panel.Control_panelFragment;
-import com.example.infinitycrop.ui.forum.lets_start.welcome_forum;
+
 
 public class XChart  extends Fragment {
 
