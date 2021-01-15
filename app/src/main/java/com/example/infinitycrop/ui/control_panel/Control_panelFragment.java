@@ -80,6 +80,8 @@ public class Control_panelFragment extends Fragment {
             }
         });
 
+
+
         //buttons
         btn_grafics=v.findViewById(R.id.btn_graficas);
 

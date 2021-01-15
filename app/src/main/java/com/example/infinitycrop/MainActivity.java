@@ -9,6 +9,7 @@ import com.example.infinitycrop.ui.graphic.GraphicFragment;
 import com.example.infinitycrop.ui.map.MapFragment;
 import com.example.infinitycrop.ui.profile.ProfileFragment;
 import com.example.infinitycrop.ui.service.ServicioMqtt;
+import com.example.infinitycrop.ui.service.ServicioNotificaciones;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment fragment=null;
     private int index = 0;
     private String s;
+    private String m;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppThemeHome);
@@ -38,9 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         s = extras.getString("description");
-        Intent intent = new Intent(MainActivity.this, ServicioMqtt.class);
-        intent.putExtra("machine", s);
-        startService(intent);
+        //Intent intent = new Intent(MainActivity.this, ServicioMqtt.class);
+        //intent.putExtra("machine", s);
+        //startService(intent);
+
+        Intent intent2 = new Intent(MainActivity.this, ServicioNotificaciones.class);
+        intent2.putExtra("machine", s);
+        startService(intent2);
 
         setContentView(R.layout.activity_main);
         chipNavigationBar=findViewById(R.id.chipNavigation);

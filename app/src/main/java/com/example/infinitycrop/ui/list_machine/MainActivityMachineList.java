@@ -83,6 +83,7 @@ public class MainActivityMachineList extends AppCompatActivity {
                 final String id = documentSnapshot.getId();
                 final String path = documentSnapshot.getString("description"); //devuelve ruta en firebase Machine\madara
                 final String name = documentSnapshot.getString("name");
+                final String identif = documentSnapshot.getId();
                 //botttom sheet
                 final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(MainActivityMachineList.this);
                 bottomSheetDialog.setContentView(R.layout.machine_bottom_sheet);
@@ -109,6 +110,7 @@ public class MainActivityMachineList extends AppCompatActivity {
                         //ejemplo
                         Intent intent = new Intent(getBaseContext(), ModifyMachine.class);
                         intent.putExtra("maq", name);
+                        intent.putExtra("identificator", identif);
                         startActivity(intent);
                     }
                 });

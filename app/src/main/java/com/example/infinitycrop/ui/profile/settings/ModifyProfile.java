@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,10 +41,7 @@ import java.util.Map;
 
 public class ModifyProfile extends AppCompatActivity {
 
-    private CheckBox fav;
-    private long priorityMachine;
     private EditText nombre;
-    private EditText maquina;
     private FirebaseUser usuario;
     private FirebaseFirestore db;
     private static final String TAG = "";
@@ -62,17 +60,13 @@ public class ModifyProfile extends AppCompatActivity {
         });
 
 
-        //firebase
-        final FirebaseFirestore fStore=FirebaseFirestore.getInstance();
-
         //guardo el nombre en un textView
         usuario = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
         nombre = findViewById(R.id.nombreUsario);
         nombre.setText(usuario.getDisplayName());
 
-
-        DocumentReference documentReference=fStore.collection("Usuarios").document(usuario.getUid());
+        DocumentReference documentReference=db.collection("Usuarios").document(usuario.getUid());
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
@@ -98,7 +92,7 @@ public class ModifyProfile extends AppCompatActivity {
         Map<String, Object> nombreUser = new HashMap<>();
         nombreUser.put("username",nombre.getText().toString());
 
-        db.collection("Usuarios").document("H173urj5gIOQpsW2e52Fc4BzH6K2").update(nombreUser);
+        db.collection("Usuarios").document(usuario.getUid()).update(nombreUser);
 
         Toast.makeText(this, "Los datos han sido modificados correctamente", Toast.LENGTH_SHORT).show();
     }

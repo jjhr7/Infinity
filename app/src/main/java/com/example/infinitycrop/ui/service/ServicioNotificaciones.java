@@ -3,27 +3,41 @@ package com.example.infinitycrop.ui.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.infinitycrop.MainActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class ServicioNotificaciones extends Service {
 
     private FirebaseFirestore db;
     private String getId;
-    private String uid;
+
+
+    @Override
+    public int onStartCommand(Intent intenc, int flags, int idArranque) {
+        getId =intenc.getStringExtra("machine");
+        return START_STICKY;
+    }
 
     @Override public void onCreate() {
         db = FirebaseFirestore.getInstance();
-        MainActivity myActivity = (MainActivity) getApplicationContext();
-        uid=myActivity.getMachineUID();
-        db.collection("Mediciones general")
-                .document(uid)
+
+        db.collection("Mediciones general").document(getId)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -33,22 +47,75 @@ public class ServicioNotificaciones extends Service {
                         }
 
                         if (snapshot != null && snapshot.exists()) {
+
                             //Temperatura
-                            String medidaT=snapshot.getString("Temperatura");
+
+                            Long medidaT=snapshot.getLong("Temperatura");
+                            if(medidaT > 7){
+
+                                final Map<String, Object> notificacionesTempAlerta = new HashMap<>();
+                                notificacionesTempAlerta.put("Tipo", 1);
+                                db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones temperatura").set(notificacionesTempAlerta);
+                            }
+
+
+                            if(medidaT > 5 && medidaT < 7) {
+                                //collecion notificaciones temperatura
+                                final Map<String, Object> notificacionesTempAviso = new HashMap<>();
+                                notificacionesTempAviso.put("Tipo", 2);
+                                db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones temperatura").set(notificacionesTempAviso);
+                            }
+
                             //Humedad
-                            String medidaH=snapshot.getString("Humedad");
+
+                            Long medidaH=snapshot.getLong("Humedad");
+                            if(medidaH > 7){
+                                final Map<String, Object> notificacionesHumedadAlerta = new HashMap<>();
+                                notificacionesHumedadAlerta.put("Tipo", 1);
+                                db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones humedad").set(notificacionesHumedadAlerta);
+                            }
+                            if(medidaH > 5 && medidaT < 7) {
+                                //collecion notificaciones temperatura
+                                final Map<String, Object> notificacionesHumedadAviso = new HashMap<>();
+                                notificacionesHumedadAviso.put("Tipo", 2);
+                                db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones humedad").set(notificacionesHumedadAviso);
+                            }
+
                             //Humedad Ambiente
-                            String medidaHA=snapshot.getString("Humedad Ambiente");
+
+                            Long medidaHA=snapshot.getLong("Humedad Ambiente");
+                            if(medidaHA > 7){
+                                final Map<String, Object> notificacionesHumedadAmbAlerta = new HashMap<>();
+                                notificacionesHumedadAmbAlerta.put("Tipo", 1);
+                                db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones humedad ambiente").set(notificacionesHumedadAmbAlerta);
+                            }
+                            if(medidaHA > 5 && medidaHA < 7) {
+                                //collecion notificaciones temperatura
+                                final Map<String, Object> notificacionesHumedadAmbAviso = new HashMap<>();
+                                notificacionesHumedadAmbAviso.put("Tipo", 2);
+                                db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones humedad amnbiente").set(notificacionesHumedadAmbAviso);
+                            }
+
                             //Luminosidad
-                            String medidaL=snapshot.getString("Luminosidad");
 
-
-
-                        } else {
+                            Long medidaL=snapshot.getLong("Luminosidad");
+                            if(medidaL > 7){
+                                final Map<String, Object> notificacionesLuminosidadAlerta = new HashMap<>();
+                                notificacionesLuminosidadAlerta.put("Tipo", 1);
+                                db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones luminosidad").set(notificacionesLuminosidadAlerta);
+                            }
+                            if(medidaL > 5 && medidaL < 7) {
+                                //collecion notificaciones temperatura
+                                final Map<String, Object> notificacionesLuminosidadAviso = new HashMap<>();
+                                notificacionesLuminosidadAviso.put("Tipo", 2);
+                                db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones luminosidad").set(notificacionesLuminosidadAviso);
+                            }
 
                         }
                     }
                 });
+
+
 
     }
 
@@ -59,13 +126,6 @@ public class ServicioNotificaciones extends Service {
     }
 
 
-    @Override
-    public int onStartCommand(Intent intenc, int flags, int idArranque) {
-        getId =intenc.getStringExtra("machine");
-
-
-        return START_STICKY;
-    }
     @Override public void onDestroy() {
 
     }

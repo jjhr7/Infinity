@@ -38,7 +38,7 @@
                 android:textSize="20sp" />
 
             <ImageView
-                android:id="@+id/backToProfile3"
+                android:id="@+id/backToListMachine"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentLeft="true"
