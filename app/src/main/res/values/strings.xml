@@ -74,5 +74,15 @@
     <string name="community_sheet_text4">Suscribirse</string>
     <string name="community_sheet_text5">Dejar de seguir</string>
     <string name="community_sheet_text6">Finalizar</string>
-
+    <string name="community_sheet_text7">Editar</string>
+    <!-- addCommunity  -->
+    <string name="editCommunity_text1">Crear communidad</string>
+    <string name="editCommunity_text2"><b>Cambiar imagen</b></string>
+    <string name="editCommunity_text3">Nombre (obligatorio)</string>
+    <string name="editCommunity_text4">Nombre</string>
+    <string name="editCommunity_text5">Descripción (opcional)</string>
+    <string name="editCommunity_text6">Guardar</string>
+    <!-- EditCommunity  -->
+    <string name="editCommunity_text7">Editar Communidad</string>
+    <string name="editCommunity_text8">Guardar cambios</string>
 </resources>

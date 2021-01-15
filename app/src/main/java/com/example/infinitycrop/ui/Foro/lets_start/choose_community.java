@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityAdapter;
 import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;
@@ -22,6 +23,7 @@ import com.example.infinitycrop.ui.list_machine.Adapter;
 import com.example.infinitycrop.ui.list_machine.MachineModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -46,6 +48,7 @@ public class choose_community extends AppCompatActivity {
     private CommunityAdapter communitiesAdapter;
     //variables del layout
     private ImageView btn_back;
+    private FloatingActionButton btn_addCommunity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +64,19 @@ public class choose_community extends AppCompatActivity {
         uid=firebaseAuth.getUid();
         //variables del layout
         btn_back=findViewById(R.id.btn_back_welcome2);
+        btn_addCommunity=findViewById(R.id.button_add_community);
         //onClick
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        btn_addCommunity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddCommunity.class);
+                startActivity(intent);
             }
         });
 
@@ -149,7 +160,7 @@ public class choose_community extends AppCompatActivity {
     private void bottomSheetCommunity(final CommunityModel communityModel, final String uiDocument, final int position){
         final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(choose_community.this,R.style.BottomSheetDialogTheme);
         bottomSheetDialog.setContentView(R.layout.bottom_sheet_community);
-        if(communityModel.getCreator().equals("pepe")){ //cuando haces click sobre tu comunidad
+        if(communityModel.getCreator().equals(uid)){ //cuando haces click sobre tu comunidad
             //variables from the botomSheet layout
             TextView name=bottomSheetDialog.findViewById(R.id.name_bS_community);
             TextView name2=bottomSheetDialog.findViewById(R.id.name_bS_community2);
@@ -167,35 +178,16 @@ public class choose_community extends AppCompatActivity {
             followers.setText(followersString);
             //button follow , unfollow
             final Button button=bottomSheetDialog.findViewById(R.id.btn_follow);
-            firebaseFirestore.collection("Foro user").document(uid)
-                    .collection("Following").document(uiDocument)
-                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                            if(value.exists()){
-                                button.setText(R.string.community_sheet_text5);
-                                button.setBackgroundResource(R.drawable.button_unfollow);
-                                button.setTextColor(getResources().getColor(R.color.black));
-                            }else{
-                                button.setText(R.string.community_sheet_text4);
-                            }
-                        }
-                    });
+            button.setText(R.string.community_sheet_text7);
+            button.setBackgroundResource(R.drawable.button_action_machine);
+            button.setTextColor(getResources().getColor(R.color.colorPrimaryDashboard));
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //ya es suscrito
-                    String textButton=button.getText().toString();
-                    String ifText=getResources().getString(R.string.community_sheet_text5);
-                    if(textButton.equals(ifText)){
-                        //eliminar de la coleccion following de Foro user
-                        communitiesAdapter.unFollow(position,uiDocument);
-                        communityAdapter.unFollow(position,uiDocument);
-                    }else{ //no esta suscrito
-                        //añadir comunidad a la coleccion Following
-                        communitiesAdapter.follow(position,uiDocument);
-                        communityAdapter.follow(position,uiDocument);
-                    }
+                    //Intent modificar community
+                    Intent intent = new Intent(getBaseContext(), EditCommunity.class);
+                    intent.putExtra("community", uiDocument);
+                    startActivity(intent);
                     bottomSheetDialog.dismiss();
                 }
             });
@@ -206,8 +198,9 @@ public class choose_community extends AppCompatActivity {
                 }
             });
 
-        }else if(communityModel.getCreator().equals("asfa")){ //cuando hago click en otra comunidad
+        }else{ //cuando hago click en otra comunidad
             //variables from the botomSheet layout
+            final int suscriptores=communityModel.getFollowers();
             TextView name=bottomSheetDialog.findViewById(R.id.name_bS_community);
             TextView name2=bottomSheetDialog.findViewById(R.id.name_bS_community2);
             name.setText(communityModel.getName());
@@ -246,12 +239,10 @@ public class choose_community extends AppCompatActivity {
                     String ifText=getResources().getString(R.string.community_sheet_text5);
                     if(textButton.equals(ifText)){
                         //eliminar de la coleccion following de Foro user
-                        communitiesAdapter.unFollow(position,uiDocument);
-                        communityAdapter.unFollow(position,uiDocument);
+                        communitiesAdapter.unFollow(position,uiDocument,suscriptores);
                     }else{ //no esta suscrito
                         //añadir comunidad a la coleccion Following
-                        communitiesAdapter.follow(position,uiDocument);
-                        communityAdapter.follow(position,uiDocument);
+                        communitiesAdapter.follow(position,uiDocument,suscriptores);
                     }
                     bottomSheetDialog.dismiss();
                 }

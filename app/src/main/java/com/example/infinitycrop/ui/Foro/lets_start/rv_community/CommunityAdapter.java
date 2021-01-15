@@ -38,7 +38,7 @@ public class CommunityAdapter extends FirestoreRecyclerAdapter<CommunityModel, C
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final CommunityViewHolder holder, int position, @NonNull CommunityModel model) {
+    protected void onBindViewHolder(@NonNull final CommunityViewHolder holder, int position, @NonNull final CommunityModel model) {
         holder.name_community.setText(model.getName());
         Picasso.get().load(model.getImg()).into(holder.img_community);
         DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
@@ -54,6 +54,8 @@ public class CommunityAdapter extends FirestoreRecyclerAdapter<CommunityModel, C
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         holder.cardView_community.setBackgroundResource(R.color.colorPrimaryDashboard);
+                    }else{
+                        holder.cardView_community.setBackgroundResource(R.color.white);
                     }
                 } else {
 
@@ -64,16 +66,20 @@ public class CommunityAdapter extends FirestoreRecyclerAdapter<CommunityModel, C
 
     }
 
-    public void unFollow(int posicion,String uiDocument){
+    public void unFollow(int posicion,String uiDocument,int followers){
         db=FirebaseFirestore.getInstance();
         firebaseAuth=FirebaseAuth.getInstance();
         String id=firebaseAuth.getUid();
         db.collection("Foro user").document(id)
                 .collection("Following").document(uiDocument).delete();
+        db.collection("Community").document(uiDocument)
+                .collection("Following").document(id).delete();
+        followers--;
+        db.collection("Community").document(uiDocument).update("followers",followers);
         //actualizar RV
         notifyItemChanged(posicion);
     }
-    public void follow(int posicion,String uiDocument){
+    public void follow(int posicion,String uiDocument,int followers){
         db=FirebaseFirestore.getInstance();
         firebaseAuth=FirebaseAuth.getInstance();
         String id=firebaseAuth.getUid();
@@ -81,6 +87,10 @@ public class CommunityAdapter extends FirestoreRecyclerAdapter<CommunityModel, C
         data.put("user id", id);
         db.collection("Foro user").document(id)
                 .collection("Following").document(uiDocument).set(data);
+        db.collection("Community").document(uiDocument)
+                .collection("Following").document(id).set(data);
+        followers++;
+        db.collection("Community").document(uiDocument).update("followers",followers);
         //actualizar RV
         notifyItemChanged(posicion);
     }

@@ -26,8 +26,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -39,18 +41,16 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 
-public class AddCommunity extends AppCompatActivity {
+public class EditCommunity extends AppCompatActivity {
 
     //layout variables
     private EditText input_name;
     private TextView change_img;
     private EditText input_desc;
-    private ImageView img_addCommunity;
+    private ImageView img_editCommunity;
     private ImageView btn_back;
     private Button btn_create;
     private String name;
@@ -60,22 +60,32 @@ public class AddCommunity extends AppCompatActivity {
     private DocumentReference documentReference;
     private StorageReference mStorageRef;
     private String id;
+    private String names;
+    private String uidDocument;
     //change image variables
     private String image_url;
     private Bitmap thumb_bitmap;
     private byte[] thumb_byte;
+    //community class
+    private CommunityModel community;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_community);
+        setContentView(R.layout.activity_edit_community);
+
+        //get the id of the docuemnt in the extra of the intent
+        Bundle extras = getIntent().getExtras();
+        uidDocument = extras.getString("community");
 
         //layout variables
-        input_name=findViewById(R.id.input_name_addCommunity);
-        input_desc=findViewById(R.id.input_desc_addCommunity);
-        change_img=findViewById(R.id.changeImg_addCommunity);
-        img_addCommunity=findViewById(R.id.img_bS_Addcommunity);
-        btn_back=findViewById(R.id.backToChooseCommunity);
-        btn_create=findViewById(R.id.btn_createCommunity);
+        input_name=findViewById(R.id.input_name_EditCommunity);
+        input_desc=findViewById(R.id.input_desc_EditCommunity);
+        change_img=findViewById(R.id.changeImg_EditCommunity);
+        img_editCommunity=findViewById(R.id.img_bS_Editcommunity);
+        btn_back=findViewById(R.id.backEditCommunity);
+        btn_create=findViewById(R.id.btn_EditCommunity);
         //change img variables
         thumb_bitmap=null;
         image_url="";
@@ -84,17 +94,21 @@ public class AddCommunity extends AppCompatActivity {
         db= FirebaseFirestore.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
         id=usuario.getUid();
-        mStorageRef.child("foro/user/Default/default.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+        //get all the data of the document
+        db.collection("Community").document(uidDocument).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(Uri uri) {
-                // Got the download URL for 'users/me/profile.png'
-                Picasso.get().load(uri).into(img_addCommunity);
-                image_url=uri.toString();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                community=new CommunityModel();
+                community.setName(value.get("name").toString());
+                community.setDescription(value.get("description").toString());
+                community.setCreator(value.get("creator").toString());
+                community.setImg(value.get("img").toString());
+                //set values
+                input_name.setText(community.getName());
+                input_desc.setText(community.getDescription());
+                Picasso.get().load(community.getImg()).into(img_editCommunity);
+                image_url=community.getImg();
             }
         });
         //Onclick
@@ -104,50 +118,52 @@ public class AddCommunity extends AppCompatActivity {
                 finish();
             }
         });
-        change_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(input_name.getText().toString().equals("")){
-                    Toast.makeText(getApplicationContext(),"Indique un nombre valido",Toast.LENGTH_LONG).show();
-                }else{
-                    CropImage.startPickImageActivity(AddCommunity.this);
-                }
-            }
-        });
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name=input_name.getText().toString();
-                if(name.equals("")){
+                names=input_name.getText().toString();
+                if(names.equals("")){
                     Toast.makeText(getApplicationContext(),"Indique un nombre valido",Toast.LENGTH_LONG).show();
                 }else{
                     NameIsUsed();
                 }
             }
         });
+        change_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(input_name.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(),"Indique un nombre valido",Toast.LENGTH_LONG).show();
+                }else{
+                    CropImage.startPickImageActivity(EditCommunity.this);
+                }
+            }
+        });
     }
-
     public void NameIsUsed(){
-        db.collection("Community")
-                .whereEqualTo("name", name)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot document = task.getResult();
-                            if (document.size()>=1) {
-                                Toast.makeText(getApplicationContext(),"El nombre ya existe",Toast.LENGTH_LONG).show();
+        if(names.equals(community.getName())){
+            saveCommunity();
+        }else{
+            db.collection("Community")
+                    .whereEqualTo("name", names)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot document = task.getResult();
+                                if (document.size()>=1) {
+                                    Toast.makeText(getApplicationContext(),"El nombre ya existe",Toast.LENGTH_LONG).show();
+                                } else {
+                                    saveCommunity();
+                                }
                             } else {
-                                saveCommunity();
+
                             }
-                        } else {
-
                         }
-                    }
-                });
+                    });
+        }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -157,14 +173,14 @@ public class AddCommunity extends AppCompatActivity {
             //recortar imagen
             CropImage.activity(imageuri)
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .start(AddCommunity.this);
+                    .start(EditCommunity.this);
         }
         if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
             CropImage.ActivityResult result=CropImage.getActivityResult(data);
             if(resultCode==RESULT_OK){
                 Uri resultUri=result.getUri();
                 File url=new File(resultUri.getPath());
-                Picasso.get().load(url).into(img_addCommunity);
+                Picasso.get().load(url).into(img_editCommunity);
                 //comprimir imagen
                 try{
                     thumb_bitmap=new Compressor(this)
@@ -175,10 +191,10 @@ public class AddCommunity extends AppCompatActivity {
                 }
                 ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
                 thumb_bitmap.compress(Bitmap.CompressFormat.JPEG,90,byteArrayOutputStream);
-                 thumb_byte= byteArrayOutputStream.toByteArray();
+                thumb_byte= byteArrayOutputStream.toByteArray();
+                String urlStorage="foro/user/"+id+"/community";
                 //save img in storage
                 name=input_name.getText().toString();
-                String urlStorage="foro/user/"+id+"/community";
                 final StorageReference ref = mStorageRef.child(urlStorage).child(name);
                 UploadTask uploadTask=ref.putBytes(thumb_byte);
                 //subit imagen storage
@@ -197,15 +213,17 @@ public class AddCommunity extends AppCompatActivity {
             }
         }
     }
-
-
     public void saveCommunity(){
-        name=input_name.getText().toString();
         //create the community document
-        CommunityModel communityModel=
-                new CommunityModel(image_url,name,input_desc.getText().toString(),id,0,false,0);
-        db.collection("Community").add(communityModel);
-
+        if(!image_url.equals(community.getImg())){
+            db.collection("Community").document(uidDocument).update("img",image_url);
+        }
+        if(!input_name.getText().toString().equals(community.getName())){
+            db.collection("Community").document(uidDocument).update("name",input_name.getText().toString());
+        }
+        if(!input_desc.getText().toString().equals(community.getDescription())){
+            db.collection("Community").document(uidDocument).update("description",input_desc.getText().toString());
+        }
         finish();
     }
 }

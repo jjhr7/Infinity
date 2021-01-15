@@ -40,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         s = extras.getString("description");
-        //Intent intent = new Intent(MainActivity.this, ServicioMqtt.class);
-        //intent.putExtra("machine", s);
-        //startService(intent);
+        Intent intent = new Intent(MainActivity.this, ServicioMqtt.class);
+        intent.putExtra("machine", s);
+        startService(intent);
 
-        Intent intent2 = new Intent(MainActivity.this, ServicioNotificaciones.class);
+        /*Intent intent2 = new Intent(MainActivity.this, ServicioNotificaciones.class);
         intent2.putExtra("machine", s);
-        startService(intent2);
+        startService(intent2);*/
 
         setContentView(R.layout.activity_main);
         chipNavigationBar=findViewById(R.id.chipNavigation);

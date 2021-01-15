@@ -123,6 +123,7 @@ public class ModifyMachine extends AppCompatActivity {
             public void onClick(View v) {
                 isMachineNameChanged();
                 isCheckBoxChanged();
+                finish();
             }
         });
 
