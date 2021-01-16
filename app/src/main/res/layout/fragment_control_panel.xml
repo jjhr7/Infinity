@@ -249,6 +249,7 @@
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_notificaciones"
                     android:layout_width="0dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="8dp"
@@ -274,11 +275,11 @@
                     <TextView
                         android:id="@+id/textView_notificacion"
                         android:layout_width="0dp"
-                        android:gravity="center"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="10dp"
                         android:layout_toRightOf="@id/icon_notificacion"
+                        android:gravity="center"
                         android:text="Notificaciones"
                         android:textColor="#202020"
                         android:textSize="15sp"

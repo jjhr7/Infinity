@@ -1,11 +1,6 @@
-package rvstd.iso.com.recyclerviewswipetodelete;
+package com.example.infinitycrop.ui.notifications;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +9,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
+import com.example.infinitycrop.R;
 
 import java.util.ArrayList;
 
@@ -62,7 +61,7 @@ public class RViewAdapter extends RecyclerView.Adapter<RViewAdapter.DataObjectHo
     @Override
     public DataObjectHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(
-                R.layout.item_list, viewGroup, false);
+                R.layout.item_list_notificaciones, viewGroup, false);
         return new DataObjectHolder(view);
     }
 

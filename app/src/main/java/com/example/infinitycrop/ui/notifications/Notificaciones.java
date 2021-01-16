@@ -1,4 +1,4 @@
-package rvstd.iso.com.recyclerviewswipetodelete;
+package com.example.infinitycrop.ui.notifications;
 
 public class Notificaciones {
     //recycler bueno

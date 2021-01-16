@@ -1,14 +1,12 @@
-package rvstd.iso.com.recyclerviewswipetodelete;
+package com.example.infinitycrop.ui.notifications;
 
 import android.graphics.Canvas;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.View;
 
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
