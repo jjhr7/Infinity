@@ -85,4 +85,5 @@
     <!-- EditCommunity  -->
     <string name="editCommunity_text7">Editar Communidad</string>
     <string name="editCommunity_text8">Guardar cambios</string>
+    <string name="editCommunity_text9">Eliminar comunidad</string>
 </resources>
