@@ -81,5 +81,7 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' // libreria graficas
+    //libreria wheelview
+    implementation'com.github.psuzn:wheelView:1.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

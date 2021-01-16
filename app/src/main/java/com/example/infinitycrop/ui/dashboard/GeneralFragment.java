@@ -1,14 +1,17 @@
 package com.example.infinitycrop.ui.dashboard;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -16,13 +19,12 @@ import android.widget.TextView;
 import com.example.comun.Mqtt;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.MachineControl.planta1;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -139,8 +141,43 @@ public class GeneralFragment extends Fragment implements MqttCallback{
                     }
                 });
 
+        //Boton para acceder a la maquina para sus parcelas
+        Button btnmymachine = (Button) v.findViewById(R.id.btnMyMachine);
+        btnmymachine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                        getContext()
+                );
+                bottomSheetDialog.setContentView(R.layout.plantamaquina_bottom_sheet);
+                Button btnp1=bottomSheetDialog.findViewById(R.id.enterPlant2);
+                Button btn2=bottomSheetDialog.findViewById(R.id.enterPlant1);
+                bottomSheetDialog.show();
+                btnp1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent (getContext(), planta1.class);
+                        startActivity(intent);
+
+                    }
+                });
+            }
+        });
+
         return v;
     }
+        /*btnmymachine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (getContext(), MiMaquina.class);
+                startActivity(intent);
+
+            }
+        });*/
+
+
+
     public void enviarLucesOff(){
         try {
             client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
