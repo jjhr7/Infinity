@@ -158,6 +158,7 @@ public class GeneralFragment extends Fragment implements MqttCallback{
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent (getContext(), planta1.class);
+                        intent.putExtra("idMachine", uid);
                         startActivity(intent);
 
                     }

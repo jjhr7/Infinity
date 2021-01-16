@@ -2,6 +2,7 @@ package com.example.infinitycrop.ui.MachineControl;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -43,12 +44,11 @@ public class planta1 extends AppCompatActivity {
     private Button editInfo, saveChanges;
     private TextView mDisplayDate,mDisplayHour,infoTitle;
     private EditText nameplant;
-    private static final String[] idArray={"planta1", "plata2", "planta3"};
     private FirebaseFirestore db;
     private List<String> nombres;
-    private List<String> nombres2;
-    private List<String> activas;
-    private List<String> desactivas;
+    private List<String> estado;
+    private String id;
+    private String idDocument;
     //Reloj
     int t2Hour, t2Minute;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -57,55 +57,48 @@ public class planta1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planta1);
         db=FirebaseFirestore.getInstance();
+        //bungle get extra
+        Bundle extras = getIntent().getExtras();
+        id = extras.getString("idMachine");
         //arrays
         nombres=new ArrayList<>();
-        nombres2=new ArrayList<String>();
-        nombres2.add("puta");
-        nombres2.add("madre");
-        activas=new ArrayList<>();
-        final List<String> cities=new ArrayList<>();
-        desactivas=new ArrayList<>();
+        estado=new ArrayList<>();
         //firestore
-        db.collection("Mediciones planta 1").document("54356").collection("DatosPiso")
-                .whereEqualTo("piso", "1")
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots,
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            System.err.println("Listen failed:" + e);
                             return;
                         }
-
-
                         for (DocumentSnapshot doc : snapshots) {
-                            if (doc.get("name") != null) {
-                                cities.add(doc.getString("name"));
-                            }
+                                nombres.add(doc.getString("name"));
+                                estado.add(doc.getId());
                         }
-                        System.out.println("Current cites in CA: " + cities);
+                        Toast.makeText(getApplicationContext(),nombres.toString(), Toast.LENGTH_LONG).show();
+
+                        final WheelView wheelView = (WheelView) findViewById(R.id.wheelview);
+                        wheelView.setTitles(nombres);
+                        wheelView.setSelectListener(new Function1<Integer, Unit>() {
+                            @Override
+                            public Unit invoke(Integer integer) {
+                                showToast(integer);
+                                return Unit.INSTANCE;
+                            }
+                            private final  void showToast(Integer index) {
+                               // Toast.makeText(planta1.this,""+wheelView.getTitles().get(index),Toast.LENGTH_SHORT).show();
+                                idDocument=estado.get(index);
+                                Toast.makeText(planta1.this,""+idDocument,Toast.LENGTH_SHORT).show();
+                                itenInfo(idDocument);
+                            }
+                        });
                     }
                 });
-        Toast.makeText(this,cities.toString(), Toast.LENGTH_LONG).show();
-        //wheelview
-        if(nombres.size()==3){
-            final WheelView wheelView = (WheelView) findViewById(R.id.wheelview);
-            wheelView.setTitles(nombres);
-        }
-
-       /* wheelView.setSelectListener(new Function1<Integer, Unit>() {
-            @Override
-            public Unit invoke(Integer integer) {
-                showToast(integer);
-                return Unit.INSTANCE;
-            }
-            private final  void showToast(Integer index) {
-                Toast.makeText(planta1.this,""+wheelView.getTitles().get(index),Toast.LENGTH_SHORT).show();
-
-            }
 
 
-        });*/
+
+
 
         //Nombre de la planta
         nameplant = (EditText)findViewById(R.id.editTextNobrep);
@@ -202,6 +195,11 @@ public class planta1 extends AppCompatActivity {
             }
         };
 
+    }
+
+    private void itenInfo(String uiDoc){
+        //hacer consulta a ese documento con uiDOc y sacar su info
+        //luego set Text a all
     }
 
 }
