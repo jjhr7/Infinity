@@ -91,35 +91,12 @@ public class PiChart extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_pie_chart, container, false);
-        //db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
-        //chart = v.findViewById(R.id.chartPie);
-
-        //db = FirebaseFirestore.getInstance();
-
-
-        final FirebaseFirestore fStore=FirebaseFirestore.getInstance();
-        MainActivity myActivity = (MainActivity) getActivity();
-
-        uid=myActivity.getMachineUID();
-
-        namemachine = v.findViewById(R.id.textView23);
-        namemachine.setText(uid);
-
-        /*DocumentReference docRef=fStore.collection("Mediciones").document(uid);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if(snapshot.getLong("priority") == 1){
-
-                }
-            }
-        });
+        chart = v.findViewById(R.id.pieChart);
 
         initPieChart();
         showPieChart();
-
-         */
 
         return v;
 
@@ -130,13 +107,47 @@ public class PiChart extends Fragment {
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
         String label = "type";
 
+        /*
+        db = FirebaseFirestore.getInstance();
+
+        db.collection("prueba gráficas").document("LXwoY5WvOFIzybnDJWOI")
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            return;
+                        }
+
+                        if (snapshot != null && snapshot.exists()) {
+
+                            Long medidaA=snapshot.getLong("agua");
+                            Long medidaL=snapshot.getLong("luz");
+                            //initializing data
+                            Map<String, Integer> typeAmountMap = new HashMap<>();
+                            typeAmountMap.put("Luminosidad", Math.toIntExact(medidaL));
+                            typeAmountMap.put("Agua", Math.toIntExact(medidaA));
+
+
+                            //input data and fit data into pie chart entry
+                            for(String type: typeAmountMap.keySet()){
+                                pieEntries.add(new PieEntry(typeAmountMap.get(type).floatValue(), type));
+                            }
+
+
+                        }
+                    }
+                });
+
+         */
+
         //initializing data
         Map<String, Integer> typeAmountMap = new HashMap<>();
-        typeAmountMap.put("Toys",200);
-        typeAmountMap.put("Snacks",230);
-        typeAmountMap.put("Clothes",100);
-        typeAmountMap.put("Stationary",500);
-        typeAmountMap.put("Phone",50);
+        typeAmountMap.put("Luminosidad",200);
+        typeAmountMap.put("Temperatura",230);
+        typeAmountMap.put("Humedad",100);
+        typeAmountMap.put("Humedad ambiente",500);
 
         //initializing colors for the entries
         ArrayList<Integer> colors = new ArrayList<>();
