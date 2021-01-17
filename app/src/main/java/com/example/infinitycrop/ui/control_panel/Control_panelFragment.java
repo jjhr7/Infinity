@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.lets_start.welcome_forum;
 import com.example.infinitycrop.ui.graphics.GraphicsActivity;
+import com.example.infinitycrop.ui.notifications.NotificacionesActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +32,7 @@ public class Control_panelFragment extends Fragment {
     private String mParam2;
     private ConstraintLayout btn_forum;
     private ConstraintLayout btn_grafics;
+    private ConstraintLayout btn_notificaciones;
 
     public Control_panelFragment() {
         // Required empty public constructor
@@ -90,6 +92,19 @@ public class Control_panelFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), GraphicsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //buttons
+        btn_notificaciones=v.findViewById(R.id.btn_notificaciones);
+
+        //onClick
+        btn_notificaciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NotificacionesActivity.class);
                 startActivity(intent);
             }
         });

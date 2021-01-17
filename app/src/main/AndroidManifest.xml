@@ -53,6 +53,7 @@
         <activity android:name=".ui.LoadAnimations.LogprimeraActivity" />
         <activity android:name=".ui.graphics.GraphicsActivity" />
         <activity android:name=".ui.MachineControl.planta1" />
+        <activity android:name=".ui.notifications.NotificacionesActivity" />
 
 
         <meta-data
