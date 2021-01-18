@@ -86,4 +86,29 @@
     <string name="editCommunity_text7">Editar Communidad</string>
     <string name="editCommunity_text8">Guardar cambios</string>
     <string name="editCommunity_text9">Eliminar comunidad</string>
+    <!-- main foro menu  -->
+    <string name="menu_foro1">Buscar</string>
+    <string name="menu_foro2">Inicio</string>
+    <string name="menu_foro3">Suscripciones</string>
+    <string name="menu_foro4">Perfil</string>
+    <!-- foro home  -->
+    <string name="home_foro1"><b>Comunidades que sigues > </b></string>
+    <!-- foro home > bottom sheet community  -->
+    <string name="home_foro2"><b>Ir a la communidad </b></string>
+    <!-- community menu  -->
+    <string name="community_menu_foro1">Posts</string>
+    <string name="community_menu_foro2">Nuevo post</string>
+    <string name="community_menu_foro3">Información</string>
+    <!--post fragment -->
+    <string name="posts_text1"><b>Posts de la comunidad</b></string>
+    <!--post fragment -> new post -->
+    <string name="posts_text2"><b>Nuevo post</b></string>
+    <string name="posts_text3"><b>Tu galería de posts ></b></string>
+    <!--create post -->
+    <string name="posts_text4"><b>Título</b></string>
+    <string name="posts_text5"><b>Nuevo post</b></string>
+    <string name="posts_text6"><b>Descripción</b></string>
+    <string name="posts_text7"><b>Elegir clima a añadir al post ></b></string>
+    <string name="posts_text8">Cambiar foto</string>
+    <string name="posts_text9">Crear clima</string>
 </resources>

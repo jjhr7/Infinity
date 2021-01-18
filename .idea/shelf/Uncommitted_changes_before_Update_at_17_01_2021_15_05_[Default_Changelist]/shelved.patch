@@ -1,0 +1,1205 @@
+Index: app/src/main/java/com/example/infinitycrop/ui/Foro/lets_start/choose_community.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.infinitycrop.ui.Foro.lets_start;\r\n\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AlertDialog;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.GridLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.content.DialogInterface;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.infinitycrop.MainActivity;\r\nimport com.example.infinitycrop.R;\r\nimport com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityAdapter;\r\nimport com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;\r\nimport com.example.infinitycrop.ui.list_machine.Adapter;\r\nimport com.example.infinitycrop.ui.list_machine.MachineModel;\r\nimport com.firebase.ui.firestore.FirestoreRecyclerOptions;\r\nimport com.google.android.material.bottomsheet.BottomSheetDialog;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.EventListener;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.FirebaseFirestoreException;\r\nimport com.google.firebase.firestore.Query;\r\nimport com.google.firebase.firestore.ThrowOnExtraProperties;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageReference;\r\nimport com.makeramen.roundedimageview.RoundedImageView;\r\nimport com.squareup.picasso.Picasso;\r\n\r\npublic class choose_community extends AppCompatActivity {\r\n\r\n    //1. declaro la variable del recyclerView\r\n    private RecyclerView mFirestoreList;\r\n    private RecyclerView communitiesRv;\r\n    //2. Firebase variables\r\n    private FirebaseFirestore firebaseFirestore;\r\n    private FirebaseAuth firebaseAuth;\r\n    private StorageReference firebaseStorage;\r\n    private String uid;\r\n    //5. declaro viewHolder\r\n    private CommunityAdapter communityAdapter;\r\n    private CommunityAdapter communitiesAdapter;\r\n    //variables del layout\r\n    private ImageView btn_back;\r\n    private FloatingActionButton btn_addCommunity;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_choose_community);\r\n\r\n        //1. initialice the ETE SETCH recyclerView\r\n        mFirestoreList=findViewById(R.id.myCommunity_list);\r\n        communitiesRv=findViewById(R.id.communities_list);\r\n        //2. firebase variables\r\n        firebaseFirestore=FirebaseFirestore.getInstance();\r\n        firebaseStorage=FirebaseStorage.getInstance().getReference();\r\n        firebaseAuth=FirebaseAuth.getInstance();\r\n        uid=firebaseAuth.getUid();\r\n        //variables del layout\r\n        btn_back=findViewById(R.id.btn_back_welcome2);\r\n        btn_addCommunity=findViewById(R.id.button_add_community);\r\n        //onClick\r\n        btn_back.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n            }\r\n        });\r\n        btn_addCommunity.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(getApplicationContext(), AddCommunity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        //RV my communities\r\n\r\n        //3.Query\r\n        //3.1 saco todos los documentos\r\n        Query query= firebaseFirestore.collection(\"Community\")\r\n                .whereEqualTo(\"creator\",uid);\r\n\r\n        //4.Recycler optiones\r\n        FirestoreRecyclerOptions<CommunityModel> options=new FirestoreRecyclerOptions.Builder<CommunityModel>()\r\n                .setQuery(query,CommunityModel.class)\r\n                .build();\r\n\r\n        //5. View holder\r\n        communityAdapter=new CommunityAdapter(options);\r\n        mFirestoreList.setHasFixedSize(false);\r\n        mFirestoreList.setLayoutManager(new GridLayoutManager(this,4,GridLayoutManager.VERTICAL,false));\r\n        mFirestoreList.setAdapter(communityAdapter);\r\n\r\n       communityAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {\r\n           @Override\r\n           public void onItemClick(DocumentSnapshot documentSnapshot, int position) {\r\n               CommunityModel communityModel = documentSnapshot.toObject(CommunityModel.class);\r\n               final String id = documentSnapshot.getId();\r\n               //final String path = documentSnapshot.getString(\"name\");\r\n               //Toast.makeText(getApplicationContext(),id, Toast.LENGTH_LONG).show();\r\n               bottomSheetCommunity(communityModel,id,position);\r\n\r\n           }\r\n       });\r\n\r\n       //RV most popular communities\r\n\r\n        //3.Query\r\n        //3.1 saco todos los documentos\r\n        Query queryCommunities= firebaseFirestore.collection(\"Community\")\r\n                .orderBy(\"followers\",Query.Direction.DESCENDING)\r\n                .limit(30);\r\n\r\n        //4.Recycler optiones\r\n        FirestoreRecyclerOptions<CommunityModel> optionsCommunities=new FirestoreRecyclerOptions.Builder<CommunityModel>()\r\n                .setQuery(queryCommunities,CommunityModel.class)\r\n                .build();\r\n\r\n        //5. View holder\r\n        communitiesAdapter=new CommunityAdapter(optionsCommunities);\r\n        communitiesRv.setHasFixedSize(false);\r\n        communitiesRv.setLayoutManager(new GridLayoutManager(this,4,GridLayoutManager.VERTICAL,false));\r\n        communitiesRv.setAdapter(communitiesAdapter);\r\n\r\n        communitiesAdapter.setOnItemClickListener(new CommunityAdapter.OnItemClickListener() {\r\n            @Override\r\n            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {\r\n                CommunityModel communityModel = documentSnapshot.toObject(CommunityModel.class);\r\n                final String id = documentSnapshot.getId();\r\n                //final String path = documentSnapshot.getString(\"name\");\r\n                //Toast.makeText(getApplicationContext(),id, Toast.LENGTH_LONG).show();\r\n                bottomSheetCommunity(communityModel,id,position);\r\n\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    @Override\r\n    protected void onStart() {\r\n        super.onStart();\r\n        communityAdapter.startListening();\r\n        communitiesAdapter.startListening();\r\n    }\r\n\r\n    @Override\r\n    protected void onStop() {\r\n        super.onStop();\r\n        communityAdapter.stopListening();\r\n        communitiesAdapter.startListening();\r\n    }\r\n\r\n    private void bottomSheetCommunity(final CommunityModel communityModel, final String uiDocument, final int position){\r\n        final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(choose_community.this,R.style.BottomSheetDialogTheme);\r\n        bottomSheetDialog.setContentView(R.layout.bottom_sheet_community);\r\n        final AlertDialog.Builder builder = new AlertDialog.Builder(this);\r\n        if(communityModel.getCreator().equals(uid)){ //cuando haces click sobre tu comunidad\r\n            //variables from the botomSheet layout\r\n            TextView name=bottomSheetDialog.findViewById(R.id.name_bS_community);\r\n            TextView name2=bottomSheetDialog.findViewById(R.id.name_bS_community2);\r\n            name.setText(R.string.editCommunity_text9);\r\n            name.setTextSize(14);\r\n            name.setTextColor(getResources().getColor(R.color.red));\r\n            name2.setText(communityModel.getName());\r\n            RoundedImageView img=bottomSheetDialog.findViewById(R.id.img_bS_community);\r\n            Picasso.get().load(communityModel.getImg()).into(img);\r\n            TextView desc=bottomSheetDialog.findViewById(R.id.desc_bS_community);\r\n            desc.setText(communityModel.getDescription());\r\n            TextView posts=bottomSheetDialog.findViewById(R.id.num_posts);\r\n            String post= String.valueOf(communityModel.getPosts());\r\n            posts.setText(post);\r\n            TextView followers=bottomSheetDialog.findViewById(R.id.num_followers);\r\n            String followersString= String.valueOf(communityModel.getFollowers());\r\n            followers.setText(followersString);\r\n            //button editar , eliminar\r\n            final Button button=bottomSheetDialog.findViewById(R.id.btn_follow);\r\n            button.setText(R.string.community_sheet_text7);\r\n            button.setBackgroundResource(R.drawable.button_action_machine);\r\n            button.setTextColor(getResources().getColor(R.color.colorPrimaryDashboard));\r\n            button.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    //Intent modificar community\r\n                    Intent intent = new Intent(getBaseContext(), EditCommunity.class);\r\n                    intent.putExtra(\"community\", uiDocument);\r\n                    startActivity(intent);\r\n                    bottomSheetDialog.dismiss();\r\n                }\r\n            });\r\n            name.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    builder.setMessage(\"Seguro que quieres eliminar esta comunidad?\");\r\n                    builder.setTitle(\"Eliminar comunidad\");\r\n                    builder.setPositiveButton(\"Eliminar\", new DialogInterface.OnClickListener() {\r\n                        @Override\r\n                        public void onClick(DialogInterface dialog, int which) {\r\n                            communityAdapter.deleteItem(position);\r\n                            firebaseStorage.child(\"foro/user/\"+uid+\"/community/\"+communityModel.getName()).delete();\r\n                            dialog.cancel();\r\n                        }\r\n                    }).setNegativeButton(\"Cancelar\", new DialogInterface.OnClickListener() {\r\n                        @Override\r\n                        public void onClick(DialogInterface dialog, int which) {\r\n                            dialog.cancel();\r\n                        }\r\n                    });\r\n                    AlertDialog dialog = builder.create();\r\n                    dialog.show();\r\n                    bottomSheetDialog.dismiss();\r\n                }\r\n            });\r\n            bottomSheetDialog.findViewById(R.id.btn_cancelBottomSheet).setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    bottomSheetDialog.dismiss();\r\n                }\r\n            });\r\n\r\n        }else{ //cuando hago click en otra comunidad\r\n            //variables from the botomSheet layout\r\n            final int suscriptores=communityModel.getFollowers();\r\n            TextView name=bottomSheetDialog.findViewById(R.id.name_bS_community);\r\n            TextView name2=bottomSheetDialog.findViewById(R.id.name_bS_community2);\r\n            name.setText(communityModel.getName());\r\n            name2.setText(communityModel.getName());\r\n            RoundedImageView img=bottomSheetDialog.findViewById(R.id.img_bS_community);\r\n            Picasso.get().load(communityModel.getImg()).into(img);\r\n            TextView desc=bottomSheetDialog.findViewById(R.id.desc_bS_community);\r\n            desc.setText(communityModel.getDescription());\r\n            TextView posts=bottomSheetDialog.findViewById(R.id.num_posts);\r\n            String post= String.valueOf(communityModel.getPosts());\r\n            posts.setText(post);\r\n            TextView followers=bottomSheetDialog.findViewById(R.id.num_followers);\r\n            String followersString= String.valueOf(communityModel.getFollowers());\r\n            followers.setText(followersString);\r\n            //button follow , unfollow\r\n            final Button button=bottomSheetDialog.findViewById(R.id.btn_follow);\r\n            firebaseFirestore.collection(\"Foro user\").document(uid)\r\n                    .collection(\"Following\").document(uiDocument)\r\n                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {\r\n                        @Override\r\n                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {\r\n                            if(value.exists()){\r\n                                button.setText(R.string.community_sheet_text5);\r\n                                button.setBackgroundResource(R.drawable.button_unfollow);\r\n                                button.setTextColor(getResources().getColor(R.color.black));\r\n                            }else{\r\n                                button.setText(R.string.community_sheet_text4);\r\n                            }\r\n                        }\r\n                    });\r\n            button.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    //ya es suscrito\r\n                    String textButton=button.getText().toString();\r\n                    String ifText=getResources().getString(R.string.community_sheet_text5);\r\n                    if(textButton.equals(ifText)){\r\n                        //eliminar de la coleccion following de Foro user\r\n                        communitiesAdapter.unFollow(position,uiDocument,suscriptores);\r\n                    }else{ //no esta suscrito\r\n                        //añadir comunidad a la coleccion Following\r\n                        communitiesAdapter.follow(position,uiDocument,suscriptores);\r\n                    }\r\n                    bottomSheetDialog.dismiss();\r\n                }\r\n            });\r\n            bottomSheetDialog.findViewById(R.id.btn_cancelBottomSheet).setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    bottomSheetDialog.dismiss();\r\n                }\r\n            });\r\n        }\r\n        bottomSheetDialog.show();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/Foro/lets_start/choose_community.java	(revision fb41fa8845742d9402871b245cb4033bf7a31cf1)
++++ app/src/main/java/com/example/infinitycrop/ui/Foro/lets_start/choose_community.java	(date 1610831917307)
+@@ -21,6 +21,7 @@
+ import com.example.infinitycrop.R;
+ import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityAdapter;
+ import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;
++import com.example.infinitycrop.ui.Foro.main.ForoMain;
+ import com.example.infinitycrop.ui.list_machine.Adapter;
+ import com.example.infinitycrop.ui.list_machine.MachineModel;
+ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+@@ -54,6 +55,7 @@
+     //variables del layout
+     private ImageView btn_back;
+     private FloatingActionButton btn_addCommunity;
++    private Button btn_over;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -71,6 +73,7 @@
+         //variables del layout
+         btn_back=findViewById(R.id.btn_back_welcome2);
+         btn_addCommunity=findViewById(R.id.button_add_community);
++        btn_over=findViewById(R.id.btn_continue_2);
+         //onClick
+         btn_back.setOnClickListener(new View.OnClickListener() {
+             @Override
+@@ -85,6 +88,13 @@
+                 startActivity(intent);
+             }
+         });
++        btn_over.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                Intent intent = new Intent(getApplicationContext(), ForoMain.class);
++                startActivity(intent);
++            }
++        });
+ 
+         //RV my communities
+ 
+Index: app/src/main/res/layout/activity_foro_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ui.Foro.main.ForoMain\">\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_foro_main.xml	(revision fb41fa8845742d9402871b245cb4033bf7a31cf1)
++++ app/src/main/res/layout/activity_foro_main.xml	(date 1610832572137)
+@@ -1,9 +1,33 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
++    android:id="@+id/menu_foro_container"
+     tools:context=".ui.Foro.main.ForoMain">
++    <androidx.viewpager.widget.ViewPager
++        android:id="@+id/view_pagerForo"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:background="#EFE9E9"
++        android:layout_alignParentStart="true"
++        android:layout_centerVertical="true"
++        android:animateLayoutChanges="true"
++        android:layoutDirection="locale"
++        />
++    <com.ismaeldivita.chipnavigation.ChipNavigationBar
++        android:id="@+id/botton_nav_foro"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        app:cnb_menuResource="@menu/foro_nav_item"
++        android:layout_alignParentBottom="true"
++        android:background="@drawable/round_corners_foro_menu"
++        app:cnb_unselectedColor="@color/black"
++        android:paddingTop="10dp"
++        android:paddingBottom="10dp"
++        app:cnb_radius="8dp"
++        android:layout_margin="10dp"
++        android:elevation="8dp"/>
+ 
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\n    <string name=\"app_name\">Infinity Crop</string>\n    <string name=\"title_home\">Infinity Crop</string>\n    <string name=\"title_inicio\">Inicio</string>\n    <string name=\"title_dashboard\">Panel de control</string>\n    <string name=\"title_notifications\">Notificaciones</string>\n    <string name=\"title_wellcome_login\">¡Te damos la bienvenida!</string>\n    <string name=\"title_orderLog\">Inicia sesión</string>\n    <string name=\"title_cont_faceboock\">Iniciar sesión con Facebook</string>\n    <string name=\"title_cont_google\">Iniciar sesión con Google</string>\n    <string name=\"title_cont_mail\">Iniciar sesión con Email</string>\n\n    <string name=\"title_register\">Registrate</string>\n    <string name=\"title_bienv\">Hola de nuevo!</string>\n    <string name=\"title_bienvR\">¡Hola, es un placer!</string>\n    <string name=\"title_userR\">Introduce un correo:</string>\n    <string name=\"title_nameR\">Introduce un nombre:</string>\n    <string name=\"title_passwordR\">Introduce una contraseña:</string>\n    <string name=\"title_registrar\">Acceder</string>\n    <string name=\"btn_newuser\">Si no tienes una cuenta, puedes registarte <u>Aquí</u> </string>\n    <string name=\"title_olvidado\">He olvidado mi contraseña</string>\n    <!-- ANYADIR UNA NUEVA MAQUINA STRINGS -->\n    <string name=\"title_register_machine\">Registra una nueva máquina</string>\n    <string name=\"title_infoMachine\">Completa estos campos</string>\n    <string name=\"btn_registMachine\">Añadir máquina</string>\n    <string name=\"title_name_machine\">Introduce el nombre de tu máquina:</string>\n    <string name=\"title_name_model\">Modelo de tu máquina:</string>\n    <string name=\"title_name_favorites\">Añadir tu máquina a favoritos</string>\n    <string name=\"title_scan_machine\">Escanear máquina</string>\n\n\n    <!-- TODO: Remove or change this placeholder text -->\n\n    <string name=\"change_city\">Change city</string>\n\n    <!-- Put your own APP ID here -->\n    <string name=\"open_weather_maps_app_id\">11111</string>\n\n    <string name=\"weather_sunny\">&#xf00d;</string>\n    <string name=\"weather_clear_night\">&#xf02e;</string>\n\n    <string name=\"weather_foggy\">&#xf014;</string>\n    <string name=\"weather_cloudy\">&#xf013;</string>\n    <string name=\"weather_rainy\">&#xf019;</string>\n    <string name=\"weather_snowy\">&#xf01b;</string>\n    <string name=\"weather_thunder\">&#xf01e;</string>\n    <string name=\"weather_drizzle\">&#xf01c;</string>\n\n    <string name=\"place_not_found\">Sorry, no weather data found.</string>\n    <string name=\"facebook_app_id\">140146287567868</string>\n    <string name=\"fb_login_protocol_scheme\">fb140146287567868</string>\n    <!-- TODO: Remove or change this placeholder text -->\n    <string name=\"hello_blank_fragment\">Hello blank fragment</string>\n\n\n    <!-- foro -->\n    <!-- welcome user -->\n    <string name=\"welcome_text1\">Vamos a empezar...</string>\n    <string name=\"welcome_text2\">Bienvenido al</string>\n    <string name=\"welcome_text3\"> <b>Foro</b> de <i>Infinity Crop</i></string>\n    <string name=\"welcome_text4\">Continuar como</string>\n    <string name=\"welcome_text5\">Cambiar imagen</string>\n    <string name=\"welcome_text6\">Nombre del usuario: </string>\n    <string name=\"welcome_text7\">Continuar </string>\n    <string name=\"welcome_text8\">Descripción (opcional): </string>ç\n    <!-- choose community -->\n    <string name=\"community_text1\">Uno más y hemos terminado...</string>\n    <string name=\"community_text2\"><b>Tus comunidadades</b></string>\n    <string name=\"community_text3\"><b>Lo más popular</b></string>\n    <!-- choose community -> bottom Sheet community -->\n    <string name=\"community_sheet_text1\">Posts</string>\n    <string name=\"community_sheet_text2\">Followers</string>\n    <string name=\"community_sheet_text3\">Cancelar</string>\n    <string name=\"community_sheet_text4\">Suscribirse</string>\n    <string name=\"community_sheet_text5\">Dejar de seguir</string>\n    <string name=\"community_sheet_text6\">Finalizar</string>\n    <string name=\"community_sheet_text7\">Editar</string>\n    <!-- addCommunity  -->\n    <string name=\"editCommunity_text1\">Crear communidad</string>\n    <string name=\"editCommunity_text2\"><b>Cambiar imagen</b></string>\n    <string name=\"editCommunity_text3\">Nombre (obligatorio)</string>\n    <string name=\"editCommunity_text4\">Nombre</string>\n    <string name=\"editCommunity_text5\">Descripción (opcional)</string>\n    <string name=\"editCommunity_text6\">Guardar</string>\n    <!-- EditCommunity  -->\n    <string name=\"editCommunity_text7\">Editar Communidad</string>\n    <string name=\"editCommunity_text8\">Guardar cambios</string>\n    <string name=\"editCommunity_text9\">Eliminar comunidad</string>\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision fb41fa8845742d9402871b245cb4033bf7a31cf1)
++++ app/src/main/res/values/strings.xml	(date 1610837107639)
+@@ -86,4 +86,11 @@
+     <string name="editCommunity_text7">Editar Communidad</string>
+     <string name="editCommunity_text8">Guardar cambios</string>
+     <string name="editCommunity_text9">Eliminar comunidad</string>
++    <!-- main foro menu  -->
++    <string name="menu_foro1">Buscar</string>
++    <string name="menu_foro2">Inicio</string>
++    <string name="menu_foro3">Suscripciones</string>
++    <string name="menu_foro4">Perfil</string>
++    <!-- foro home  -->
++    <string name="home_foro1"><b>Comunidades que sigues > </b></string>
+ </resources>
+\ No newline at end of file
+Index: github.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>gpr.usr = 61469172\ngpr.key = 72a0f63b7097b413e8ff78a7dd6ca9412aaf232c
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1252
+===================================================================
+--- github.properties	(revision fb41fa8845742d9402871b245cb4033bf7a31cf1)
++++ github.properties	(date 1610820456596)
+@@ -1,2 +1,2 @@
+-gpr.usr = 61469172
+-gpr.key = 72a0f63b7097b413e8ff78a7dd6ca9412aaf232c
+\ No newline at end of file
++gpr.usr = 61473165
++gpr.key = 9671a8c2e26934b214e49dd99b96077296ee2aca
+\ No newline at end of file
+Index: app/src/main/java/com/example/infinitycrop/ui/Foro/main/ForoMain.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.infinitycrop.ui.Foro.main;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport com.example.infinitycrop.R;\r\n\r\npublic class ForoMain extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_foro_main);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/Foro/main/ForoMain.java	(revision fb41fa8845742d9402871b245cb4033bf7a31cf1)
++++ app/src/main/java/com/example/infinitycrop/ui/Foro/main/ForoMain.java	(date 1610836329788)
+@@ -1,16 +1,208 @@
+ package com.example.infinitycrop.ui.Foro.main;
+ 
++import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
++import androidx.fragment.app.Fragment;
++import androidx.fragment.app.FragmentManager;
++import androidx.fragment.app.FragmentPagerAdapter;
++import androidx.viewpager.widget.ViewPager;
+ 
+ import android.os.Bundle;
+ 
+ import com.example.infinitycrop.R;
++import com.example.infinitycrop.ui.Foro.main.Home.HomeForoFragment;
++import com.example.infinitycrop.ui.Foro.main.Profile.ProfileForoFragment;
++import com.example.infinitycrop.ui.Foro.main.Search.SearchForoFragment;
++import com.example.infinitycrop.ui.Foro.main.Subscription.PanelForoFragment;
++import com.ismaeldivita.chipnavigation.ChipNavigationBar;
++
++import java.util.ArrayList;
+ 
+ public class ForoMain extends AppCompatActivity {
+ 
++    ChipNavigationBar chipNavigationBar;
++    private ViewPager viewPager;
++    private int index = 0;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_foro_main);
++
++        chipNavigationBar=findViewById(R.id.botton_nav_foro);
++        viewPager = findViewById(R.id.view_pagerForo);
++        chipNavigationBar.setItemSelected(R.id.foro_home,true);
++
++        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
++        viewPager.setAdapter(viewPagerAdapter);
++
++        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
++        final HomeForoFragment fragment_1 = new HomeForoFragment();
++        final SearchForoFragment fragment_2 = new SearchForoFragment();
++        final PanelForoFragment fragment_3 = new PanelForoFragment();
++        final ProfileForoFragment fragment_4 = new ProfileForoFragment();
++        adapter.addFragment(fragment_1);
++        adapter.addFragment(fragment_2);
++        adapter.addFragment(fragment_3);
++        adapter.addFragment(fragment_4);
++        viewPager.setAdapter(adapter);
++        viewPager.setOffscreenPageLimit(4);
++        index = 1;
++        chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
++            @Override
++            public void onItemSelected(int i) {
++                switch(i){
++                    case R.id.foro_home:
++                        viewPager.setCurrentItem(0);
++                        break;
++                    case R.id.foro_search:
++                        viewPager.setCurrentItem(1);
++                        break;
++                    case R.id.foro_panel:
++                        viewPager.setCurrentItem(2);
++                        break;
++                    case R.id.foro_profile:
++                        viewPager.setCurrentItem(3);
++                        break;
++                }
++
++
++            }
++        });
++        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
++            @Override
++            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
++
++            }
++
++            @Override
++            public void onPageSelected(int position) {
++
++                if (position == 0){
++
++                    chipNavigationBar.setItemSelected(R.id.foro_home, true);
++                    chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
++                        @Override
++                        public void onItemSelected(int id) {
++
++                            switch(id){
++                                case R.id.foro_home:
++                                    viewPager.setCurrentItem(0);
++                                    break;
++                                case R.id.foro_search:
++                                    viewPager.setCurrentItem(1);
++                                    break;
++                                case R.id.foro_panel:
++                                    viewPager.setCurrentItem(2);
++                                    break;
++                                case R.id.foro_profile:
++                                    viewPager.setCurrentItem(3);
++                                    break;
++                            }
++                        }
++                    });
++
++                    index = 0;
++
++                }else if (position == 1){
++
++                    chipNavigationBar.setItemSelected(R.id.foro_search, true);
++
++                    if(index == 0 || index == 2){
++
++                        //fragment_2.downloadPlates_2();
++                    }
++                    index = 1;
++                    //Toast.makeText(Home.this, ""+index, Toast.LENGTH_SHORT).show();
++                }else if (position == 2){
++
++                    chipNavigationBar.setItemSelected(R.id.foro_panel, true);
++                    chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
++                        @Override
++                        public void onItemSelected(int id) {
++
++                            switch(id){
++                                case R.id.foro_home:
++                                    viewPager.setCurrentItem(0);
++                                    break;
++                                case R.id.foro_search:
++                                    viewPager.setCurrentItem(1);
++                                    break;
++                                case R.id.foro_panel:
++                                    viewPager.setCurrentItem(2);
++                                    break;
++                                case R.id.foro_profile:
++                                    viewPager.setCurrentItem(3);
++                                    break;
++                            }
++                        }
++                    });
++
++                    index = 2;
++
++                }else if (position == 3){
++
++                    chipNavigationBar.setItemSelected(R.id.foro_profile, true);
++                    chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
++                        @Override
++                        public void onItemSelected(int id) {
++
++                            switch(id){
++                                case R.id.foro_home:
++                                    viewPager.setCurrentItem(0);
++                                    break;
++                                case R.id.foro_search:
++                                    viewPager.setCurrentItem(1);
++                                    break;
++                                case R.id.foro_panel:
++                                    viewPager.setCurrentItem(2);
++                                    break;
++                                case R.id.foro_profile:
++                                    viewPager.setCurrentItem(3);
++                                    break;
++                            }
++                        }
++                    });
++
++                    index = 3;
++                }
++            }
++
++            @Override
++            public void onPageScrollStateChanged(int state) {
++
++            }
++        });
++    }
++
++    class ViewPagerAdapter extends FragmentPagerAdapter {
++
++
++
++        private ArrayList<Fragment> fragments;
++        private ArrayList<String> titles;
++
++        ViewPagerAdapter (FragmentManager fm){
++            super(fm);
++            this.fragments = new ArrayList<>();
++            this.titles = new ArrayList<>();
++
++        }
++
++        @NonNull
++        @Override
++        public Fragment getItem(int position) {
++            return fragments.get(position);
++        }
++
++        @Override
++        public int getCount() {
++            return fragments.size();
++        }
++
++        public void addFragment(Fragment fragment){
++            fragments.add(fragment);
++
++        }
++
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/infinitycrop/ui/Foro/lets_start/rv_community/CommunityModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.infinitycrop.ui.Foro.lets_start.rv_community;\r\n\r\npublic class CommunityModel {\r\n\r\n    //IMPORTANTE : los nombres tienen que ser iguales a los del documento del firebase\r\n\r\n    private String img;\r\n    private String name;\r\n    private String description;\r\n    private String creator;\r\n    private int followers;\r\n    private Boolean following;\r\n    private int posts;\r\n\r\n    //IMPORTANTE: tiene que haber un constructor vacío, si no, no funcionaría\r\n    public CommunityModel() {}\r\n\r\n    //Constructor que usare para añadir una communidad\r\n\r\n    public CommunityModel(String img, String name, String description, String creator, int followers, Boolean following, int posts) {\r\n        this.img = img;\r\n        this.name = name;\r\n        this.description = description;\r\n        this.creator = creator;\r\n        this.followers = followers;\r\n        this.following = following;\r\n        this.posts = posts;\r\n    }\r\n\r\n\r\n\r\n\r\n    /*        GETTERS & SETTERS            */\r\n\r\n    public String getImg() {\r\n        return img;\r\n    }\r\n\r\n    public void setImg(String img) {\r\n        this.img = img;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n\r\n    public String getDescription() {\r\n        return description;\r\n    }\r\n\r\n    public void setDescription(String description) {\r\n        this.description = description;\r\n    }\r\n\r\n    public String getCreator() {\r\n        return creator;\r\n    }\r\n\r\n    public void setCreator(String creator) {\r\n        this.creator = creator;\r\n    }\r\n\r\n    public int getFollowers() {\r\n        return followers;\r\n    }\r\n\r\n    public void setFollowers(int followers) {\r\n        this.followers = followers;\r\n    }\r\n\r\n    public Boolean getFollowing() {\r\n        return following;\r\n    }\r\n\r\n    public void setFollowing(Boolean following) {\r\n        this.following = following;\r\n    }\r\n\r\n    public int getPosts() {\r\n        return posts;\r\n    }\r\n\r\n    public void setPosts(int posts) {\r\n        this.posts = posts;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/Foro/lets_start/rv_community/CommunityModel.java	(revision fb41fa8845742d9402871b245cb4033bf7a31cf1)
++++ app/src/main/java/com/example/infinitycrop/ui/Foro/lets_start/rv_community/CommunityModel.java	(date 1610889481112)
+@@ -11,6 +11,7 @@
+     private int followers;
+     private Boolean following;
+     private int posts;
++    private String uid;
+ 
+     //IMPORTANTE: tiene que haber un constructor vacío, si no, no funcionaría
+     public CommunityModel() {}
+@@ -26,9 +27,17 @@
+         this.following = following;
+         this.posts = posts;
+     }
+-
+-
+-
++    //constructor para el foro
++    public CommunityModel(String img, String name, String description, String creator, int followers, Boolean following, int posts, String uid) {
++        this.img = img;
++        this.name = name;
++        this.description = description;
++        this.creator = creator;
++        this.followers = followers;
++        this.following = following;
++        this.posts = posts;
++        this.uid = uid;
++    }
+ 
+     /*        GETTERS & SETTERS            */
+ 
+@@ -87,4 +96,12 @@
+     public void setPosts(int posts) {
+         this.posts = posts;
+     }
++
++    public String getUid() {
++        return uid;
++    }
++
++    public void setUid(String uid) {
++        this.uid = uid;
++    }
+ }
+Index: app/src/main/res/drawable/round_corners_foro_menu.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/drawable/round_corners_foro_menu.xml	(date 1610830591259)
++++ app/src/main/res/drawable/round_corners_foro_menu.xml	(date 1610830591259)
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<shape xmlns:android="http://schemas.android.com/apk/res/android">
++    <corners android:radius="8dp"/>
++    <solid android:color="@color/white"/>
++</shape>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_home_foro.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_home_foro.xml	(date 1610887305389)
++++ app/src/main/res/layout/fragment_home_foro.xml	(date 1610887305389)
+@@ -0,0 +1,71 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".ui.Foro.main.Home.HomeForoFragment">
++
++
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++        <androidx.constraintlayout.widget.ConstraintLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content">
++
++
++            <TextView
++                android:id="@+id/textView28"
++                android:layout_width="0dp"
++                android:layout_height="wrap_content"
++                android:layout_marginStart="20dp"
++                android:layout_marginTop="20dp"
++                android:layout_marginEnd="20dp"
++                android:text="@string/home_foro1"
++                android:textSize="15sp"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="parent" />
++
++            <androidx.recyclerview.widget.RecyclerView
++                android:id="@+id/followed_communities"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginStart="20dp"
++                android:layout_marginTop="8dp"
++                android:layout_marginEnd="20dp"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@+id/textView28" />
++
++            <View
++                android:id="@+id/view4"
++                android:layout_width="match_parent"
++                android:layout_height="1dp"
++                android:layout_marginTop="10dp"
++                android:background="@color/colorPrimaryDark"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintHorizontal_bias="0.0"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@+id/followed_communities" />
++
++            <androidx.recyclerview.widget.RecyclerView
++                android:id="@+id/followed_posts"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="10dp"
++                android:layout_marginBottom="70dp"
++                android:isScrollContainer="false"
++                android:nestedScrollingEnabled="false"
++                app:layout_constraintBottom_toBottomOf="parent"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toBottomOf="@+id/view4" />
++        </androidx.constraintlayout.widget.ConstraintLayout>
++
++    </ScrollView>
++
++
++
++</FrameLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/infinitycrop/ui/Foro/main/Search/SearchForoFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/Foro/main/Search/SearchForoFragment.java	(date 1610836297670)
++++ app/src/main/java/com/example/infinitycrop/ui/Foro/main/Search/SearchForoFragment.java	(date 1610836297670)
+@@ -0,0 +1,66 @@
++package com.example.infinitycrop.ui.Foro.main.Search;
++
++import android.os.Bundle;
++
++import androidx.fragment.app.Fragment;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import com.example.infinitycrop.R;
++
++/**
++ * A simple {@link Fragment} subclass.
++ * Use the {@link SearchForoFragment#newInstance} factory method to
++ * create an instance of this fragment.
++ */
++public class SearchForoFragment extends Fragment {
++
++    // TODO: Rename parameter arguments, choose names that match
++    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
++    private static final String ARG_PARAM1 = "param1";
++    private static final String ARG_PARAM2 = "param2";
++
++    // TODO: Rename and change types of parameters
++    private String mParam1;
++    private String mParam2;
++
++    public SearchForoFragment() {
++        // Required empty public constructor
++    }
++
++    /**
++     * Use this factory method to create a new instance of
++     * this fragment using the provided parameters.
++     *
++     * @param param1 Parameter 1.
++     * @param param2 Parameter 2.
++     * @return A new instance of fragment SearchForoFragment.
++     */
++    // TODO: Rename and change types and number of parameters
++    public static SearchForoFragment newInstance(String param1, String param2) {
++        SearchForoFragment fragment = new SearchForoFragment();
++        Bundle args = new Bundle();
++        args.putString(ARG_PARAM1, param1);
++        args.putString(ARG_PARAM2, param2);
++        fragment.setArguments(args);
++        return fragment;
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        if (getArguments() != null) {
++            mParam1 = getArguments().getString(ARG_PARAM1);
++            mParam2 = getArguments().getString(ARG_PARAM2);
++        }
++    }
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        // Inflate the layout for this fragment
++        return inflater.inflate(R.layout.fragment_search_foro, container, false);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_panel_foro.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_panel_foro.xml	(date 1610836328953)
++++ app/src/main/res/layout/fragment_panel_foro.xml	(date 1610836328953)
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".ui.Foro.main.Subscription.PanelForoFragment">
++
++    <!-- TODO: Update blank fragment layout -->
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:gravity="center"
++        android:text="panel" />
++
++</FrameLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/infinitycrop/ui/Foro/main/Home/HomeForoFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/Foro/main/Home/HomeForoFragment.java	(date 1610891991560)
++++ app/src/main/java/com/example/infinitycrop/ui/Foro/main/Home/HomeForoFragment.java	(date 1610891991560)
+@@ -0,0 +1,361 @@
++package com.example.infinitycrop.ui.Foro.main.Home;
++
++import android.content.DialogInterface;
++import android.content.Intent;
++import android.os.Bundle;
++
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
++import androidx.appcompat.app.AlertDialog;
++import androidx.fragment.app.Fragment;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.Button;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import com.example.infinitycrop.R;
++import com.example.infinitycrop.ui.Foro.lets_start.EditCommunity;
++import com.example.infinitycrop.ui.Foro.lets_start.choose_community;
++import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;
++import com.example.infinitycrop.ui.Foro.main.Home.RVs.PostModel;
++import com.example.infinitycrop.ui.Foro.main.Home.RVs.RVFollowed.AdapterFollowedCmty;
++import com.example.infinitycrop.ui.Foro.main.Home.RVs.RvPost.AdapterPost;
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.Task;
++import com.google.android.material.bottomsheet.BottomSheetDialog;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.firestore.DocumentSnapshot;
++import com.google.firebase.firestore.EventListener;
++import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.firestore.FirebaseFirestoreException;
++import com.google.firebase.firestore.QueryDocumentSnapshot;
++import com.google.firebase.firestore.QuerySnapshot;
++import com.google.firebase.storage.FirebaseStorage;
++import com.makeramen.roundedimageview.RoundedImageView;
++import com.squareup.picasso.Picasso;
++
++import java.util.ArrayList;
++import java.util.List;
++import java.util.zip.CheckedOutputStream;
++
++/**
++ * A simple {@link Fragment} subclass.
++ * Use the {@link HomeForoFragment#newInstance} factory method to
++ * create an instance of this fragment.
++ */
++public class HomeForoFragment extends Fragment {
++
++    // TODO: Rename parameter arguments, choose names that match
++    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
++    private static final String ARG_PARAM1 = "param1";
++    private static final String ARG_PARAM2 = "param2";
++
++    // TODO: Rename and change types of parameters
++    private String mParam1;
++    private String mParam2;
++
++    public HomeForoFragment() {
++        // Required empty public constructor
++    }
++
++    /**
++     * Use this factory method to create a new instance of
++     * this fragment using the provided parameters.
++     *
++     * @param param1 Parameter 1.
++     * @param param2 Parameter 2.
++     * @return A new instance of fragment HomeForoFragment.
++     */
++    // TODO: Rename and change types and number of parameters
++    public static HomeForoFragment newInstance(String param1, String param2) {
++        HomeForoFragment fragment = new HomeForoFragment();
++        Bundle args = new Bundle();
++        args.putString(ARG_PARAM1, param1);
++        args.putString(ARG_PARAM2, param2);
++        fragment.setArguments(args);
++        return fragment;
++    }
++
++
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        if (getArguments() != null) {
++            mParam1 = getArguments().getString(ARG_PARAM1);
++            mParam2 = getArguments().getString(ARG_PARAM2);
++        }
++    }
++
++    //attributes
++    //Rv
++    private RecyclerView followed_comunities;
++    private AdapterFollowedCmty adapterFollowedCmty;
++    private RecyclerView followed_posts;
++    private AdapterPost adapterPost;
++    //firebase
++    private FirebaseFirestore db;
++    private FirebaseAuth firebaseAuth;
++    private String uid;
++
++    //List
++    private List<CommunityModel> communityModels= new ArrayList<>();
++    private List<String> cimmunitiesId= new ArrayList<>();
++    private List<PostModel> posts= new ArrayList<>();
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        // Inflate the layout for this fragment
++        View v= inflater.inflate(R.layout.fragment_home_foro, container, false);
++        //firebase
++        db=FirebaseFirestore.getInstance();
++        firebaseAuth=FirebaseAuth.getInstance();
++        uid=firebaseAuth.getUid();
++        //rv declaration
++        followed_comunities=v.findViewById(R.id.followed_communities);
++        followed_posts=v.findViewById(R.id.followed_posts);
++        initRvFollowedCommunities();
++        initRvFollowedPosts();
++        getIdFollowedCommunities();
++        return v;
++    }
++    private void initRvFollowedCommunities(){
++        followed_comunities.setHasFixedSize(true);
++        followed_comunities.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
++    }
++    private void getIdFollowedCommunities(){
++        db.collection("Foro user").document(uid).collection("Following")
++                .addSnapshotListener(new EventListener<QuerySnapshot>() {
++                    @Override
++                    public void onEvent(@Nullable QuerySnapshot value,
++                                        @Nullable FirebaseFirestoreException e) {
++                        if (e != null) {
++                            return;
++                        }
++                        cimmunitiesId.clear();
++                        for (QueryDocumentSnapshot doc : value) {
++                            cimmunitiesId.add(doc.getId());
++                        }
++                        //guardo en la lista todas las comunidades que ha creado el user logged
++                        db.collection("Community")
++                                .whereEqualTo("creator",uid)
++                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
++                                    @Override
++                                    public void onEvent(@Nullable QuerySnapshot value,
++                                                        @Nullable FirebaseFirestoreException e) {
++                                        if (e != null) {
++                                            return;
++                                        }
++
++                                        for (QueryDocumentSnapshot doc : value) {
++                                            cimmunitiesId.add(doc.getId());
++                                        }
++                                        getFollowedCommunities();
++                                        getFollowedPosts();
++
++                                    }
++                                });
++                    }
++                });
++    }
++    private void getFollowedCommunities(){
++        //guardo en la lista todos los comunidades que se ha suscrito
++        db.collection("Community")
++                .addSnapshotListener(new EventListener<QuerySnapshot>() {
++                    @Override
++                    public void onEvent(@Nullable QuerySnapshot value,
++                                        @Nullable FirebaseFirestoreException e) {
++                        if (e != null) {
++                            return;
++                        }
++                        communityModels.clear();
++                        for (QueryDocumentSnapshot doc : value) {
++                            for(String id: cimmunitiesId){
++                                if(id.equals(doc.getId())){
++                                    CommunityModel communityModel=doc.toObject(CommunityModel.class);
++                                    communityModel.setUid(doc.getId());
++                                    communityModels.add(communityModel);
++                                }
++                            }
++                        }
++                        adapterFollowedCmty= new AdapterFollowedCmty(communityModels,getContext());
++                        onclickAdapterFollowedCmty();
++                        followed_comunities.setAdapter(adapterFollowedCmty);
++                    }
++                });
++
++    }
++    private void onclickAdapterFollowedCmty(){
++        adapterFollowedCmty.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                int position=followed_comunities.getChildLayoutPosition(v);
++                CommunityModel community=communityModels.get(position);
++                bottomSheetCommunity(community,position);
++            }
++        });
++    }
++    //posts rv
++    private void initRvFollowedPosts(){
++        followed_posts.setHasFixedSize(false);
++        followed_posts.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
++    }
++    private void getFollowedPosts(){
++        posts.clear();
++        //get all the post where i was subscribed.
++        db.collection("Posts")
++                .get()
++                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
++                    @Override
++                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
++                        if (task.isSuccessful()) {
++                            for (QueryDocumentSnapshot document : task.getResult()) {
++                                for(String id: cimmunitiesId){
++                                    if(document.getString("community").equals(id)){
++                                        PostModel postModel=document.toObject(PostModel.class);
++                                        postModel.setUid(document.getId().toString());
++                                        posts.add(postModel);
++                                    }
++                                }
++                            }
++                            adapterPost=new AdapterPost(posts,getContext());
++                            followed_posts.setAdapter(adapterPost);
++                        } else {
++
++                        }
++                    }
++                });
++
++    }
++
++    //bottom sheet community
++    private void bottomSheetCommunity(CommunityModel communityModel, final int position){
++        final String uiDocument=communityModel.getUid();
++        final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
++        bottomSheetDialog.setContentView(R.layout.bottom_sheet_community);
++        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
++        if(communityModel.getCreator().equals(uid)){ //cuando haces click sobre tu comunidad
++            //variables from the botomSheet layout
++            TextView name=bottomSheetDialog.findViewById(R.id.name_bS_community);
++            TextView name2=bottomSheetDialog.findViewById(R.id.name_bS_community2);
++            name.setText(R.string.editCommunity_text9);
++            name.setTextSize(14);
++            name.setTextColor(getResources().getColor(R.color.red));
++            name2.setText(communityModel.getName());
++            RoundedImageView img=bottomSheetDialog.findViewById(R.id.img_bS_community);
++            Picasso.get().load(communityModel.getImg()).into(img);
++            TextView desc=bottomSheetDialog.findViewById(R.id.desc_bS_community);
++            desc.setText(communityModel.getDescription());
++            TextView posts=bottomSheetDialog.findViewById(R.id.num_posts);
++            String post= String.valueOf(communityModel.getPosts());
++            posts.setText(post);
++            TextView followers=bottomSheetDialog.findViewById(R.id.num_followers);
++            String followersString= String.valueOf(communityModel.getFollowers());
++            followers.setText(followersString);
++            //button editar , eliminar
++            final Button button=bottomSheetDialog.findViewById(R.id.btn_follow);
++            button.setText(R.string.community_sheet_text7);
++            button.setBackgroundResource(R.drawable.button_action_machine);
++            button.setTextColor(getResources().getColor(R.color.colorPrimaryDashboard));
++            button.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    //Intent
++
++                    bottomSheetDialog.dismiss();
++                }
++            });
++            name.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    builder.setMessage("Seguro que quieres eliminar esta comunidad?");
++                    builder.setTitle("Eliminar comunidad");
++                    builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
++                        @Override
++                        public void onClick(DialogInterface dialog, int which) {
++
++                            dialog.cancel();
++                        }
++                    }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
++                        @Override
++                        public void onClick(DialogInterface dialog, int which) {
++                            dialog.cancel();
++                        }
++                    });
++                    AlertDialog dialog = builder.create();
++                    dialog.show();
++                    bottomSheetDialog.dismiss();
++                }
++            });
++            bottomSheetDialog.findViewById(R.id.btn_cancelBottomSheet).setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    bottomSheetDialog.dismiss();
++                }
++            });
++
++        }else{ //cuando hago click en otra comunidad
++            //variables from the botomSheet layout
++            final int suscriptores=communityModel.getFollowers();
++            TextView name=bottomSheetDialog.findViewById(R.id.name_bS_community);
++            TextView name2=bottomSheetDialog.findViewById(R.id.name_bS_community2);
++            name.setText(communityModel.getName());
++            name2.setText(communityModel.getName());
++            RoundedImageView img=bottomSheetDialog.findViewById(R.id.img_bS_community);
++            Picasso.get().load(communityModel.getImg()).into(img);
++            TextView desc=bottomSheetDialog.findViewById(R.id.desc_bS_community);
++            desc.setText(communityModel.getDescription());
++            TextView posts=bottomSheetDialog.findViewById(R.id.num_posts);
++            String post= String.valueOf(communityModel.getPosts());
++            posts.setText(post);
++            TextView followers=bottomSheetDialog.findViewById(R.id.num_followers);
++            String followersString= String.valueOf(communityModel.getFollowers());
++            followers.setText(followersString);
++            //button follow , unfollow
++            final Button button=bottomSheetDialog.findViewById(R.id.btn_follow);
++            db.collection("Foro user").document(uid)
++                    .collection("Following").document(uiDocument)
++                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
++                        @Override
++                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
++                            if(value.exists()){
++                                button.setText(R.string.community_sheet_text5);
++                                button.setBackgroundResource(R.drawable.button_unfollow);
++                                button.setTextColor(getResources().getColor(R.color.black));
++                            }else{
++                                button.setText(R.string.community_sheet_text4);
++                            }
++                        }
++                    });
++            button.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    //ya es suscrito
++                    String textButton=button.getText().toString();
++                    String ifText=getResources().getString(R.string.community_sheet_text5);
++                    if(textButton.equals(ifText)){
++                        //eliminar de la coleccion following de Foro user
++                        adapterFollowedCmty.unFollow(position,uiDocument,suscriptores);
++                    }else{ //no esta suscrito
++                        //añadir comunidad a la coleccion Following
++                        //communitiesAdapter.follow(position,uiDocument,suscriptores);
++                    }
++                    bottomSheetDialog.dismiss();
++                }
++            });
++            bottomSheetDialog.findViewById(R.id.btn_cancelBottomSheet).setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    bottomSheetDialog.dismiss();
++                }
++            });
++        }
++        bottomSheetDialog.show();
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_search_foro.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_search_foro.xml	(date 1610836298074)
++++ app/src/main/res/layout/fragment_search_foro.xml	(date 1610836298074)
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".ui.Foro.main.Search.SearchForoFragment">
++
++    <!-- TODO: Update blank fragment layout -->
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:gravity="center"
++        android:text="seacrh" />
++
++</FrameLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/infinitycrop/ui/Foro/main/Profile/ProfileForoFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/Foro/main/Profile/ProfileForoFragment.java	(date 1610836297814)
++++ app/src/main/java/com/example/infinitycrop/ui/Foro/main/Profile/ProfileForoFragment.java	(date 1610836297814)
+@@ -0,0 +1,66 @@
++package com.example.infinitycrop.ui.Foro.main.Profile;
++
++import android.os.Bundle;
++
++import androidx.fragment.app.Fragment;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import com.example.infinitycrop.R;
++
++/**
++ * A simple {@link Fragment} subclass.
++ * Use the {@link ProfileForoFragment#newInstance} factory method to
++ * create an instance of this fragment.
++ */
++public class ProfileForoFragment extends Fragment {
++
++    // TODO: Rename parameter arguments, choose names that match
++    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
++    private static final String ARG_PARAM1 = "param1";
++    private static final String ARG_PARAM2 = "param2";
++
++    // TODO: Rename and change types of parameters
++    private String mParam1;
++    private String mParam2;
++
++    public ProfileForoFragment() {
++        // Required empty public constructor
++    }
++
++    /**
++     * Use this factory method to create a new instance of
++     * this fragment using the provided parameters.
++     *
++     * @param param1 Parameter 1.
++     * @param param2 Parameter 2.
++     * @return A new instance of fragment ProfileForoFragment.
++     */
++    // TODO: Rename and change types and number of parameters
++    public static ProfileForoFragment newInstance(String param1, String param2) {
++        ProfileForoFragment fragment = new ProfileForoFragment();
++        Bundle args = new Bundle();
++        args.putString(ARG_PARAM1, param1);
++        args.putString(ARG_PARAM2, param2);
++        fragment.setArguments(args);
++        return fragment;
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        if (getArguments() != null) {
++            mParam1 = getArguments().getString(ARG_PARAM1);
++            mParam2 = getArguments().getString(ARG_PARAM2);
++        }
++    }
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        // Inflate the layout for this fragment
++        return inflater.inflate(R.layout.fragment_profile_foro, container, false);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/menu/foro_nav_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/menu/foro_nav_item.xml	(date 1610830213128)
++++ app/src/main/res/menu/foro_nav_item.xml	(date 1610830213128)
+@@ -0,0 +1,33 @@
++<?xml version="1.0" encoding="utf-8"?>
++<menu xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto">
++    <!-- home, buscar, panel de comunidades, pefil -->
++    <item
++        android:id="@+id/foro_home"
++        android:icon="@drawable/icons_foro_home"
++        android:title="@string/menu_foro2"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/foro_search"
++        android:icon="@drawable/icons_foro_infinity"
++        android:title="@string/menu_foro1"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/foro_panel"
++        android:icon="@drawable/icons_foro_panel"
++        android:title="@string/menu_foro3"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/foro_profile"
++        android:icon="@drawable/icons_foro_profile"
++        android:title="@string/menu_foro4"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++</menu>
+\ No newline at end of file
+Index: app/src/main/java/com/example/infinitycrop/ui/Foro/main/Subscription/PanelForoFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/Foro/main/Subscription/PanelForoFragment.java	(date 1610836328733)
++++ app/src/main/java/com/example/infinitycrop/ui/Foro/main/Subscription/PanelForoFragment.java	(date 1610836328733)
+@@ -0,0 +1,66 @@
++package com.example.infinitycrop.ui.Foro.main.Subscription;
++
++import android.os.Bundle;
++
++import androidx.fragment.app.Fragment;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import com.example.infinitycrop.R;
++
++/**
++ * A simple {@link Fragment} subclass.
++ * Use the {@link PanelForoFragment#newInstance} factory method to
++ * create an instance of this fragment.
++ */
++public class PanelForoFragment extends Fragment {
++
++    // TODO: Rename parameter arguments, choose names that match
++    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
++    private static final String ARG_PARAM1 = "param1";
++    private static final String ARG_PARAM2 = "param2";
++
++    // TODO: Rename and change types of parameters
++    private String mParam1;
++    private String mParam2;
++
++    public PanelForoFragment() {
++        // Required empty public constructor
++    }
++
++    /**
++     * Use this factory method to create a new instance of
++     * this fragment using the provided parameters.
++     *
++     * @param param1 Parameter 1.
++     * @param param2 Parameter 2.
++     * @return A new instance of fragment PanelForoFragment.
++     */
++    // TODO: Rename and change types and number of parameters
++    public static PanelForoFragment newInstance(String param1, String param2) {
++        PanelForoFragment fragment = new PanelForoFragment();
++        Bundle args = new Bundle();
++        args.putString(ARG_PARAM1, param1);
++        args.putString(ARG_PARAM2, param2);
++        fragment.setArguments(args);
++        return fragment;
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        if (getArguments() != null) {
++            mParam1 = getArguments().getString(ARG_PARAM1);
++            mParam2 = getArguments().getString(ARG_PARAM2);
++        }
++    }
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        // Inflate the layout for this fragment
++        return inflater.inflate(R.layout.fragment_panel_foro, container, false);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_profile_foro.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_profile_foro.xml	(date 1610836298096)
++++ app/src/main/res/layout/fragment_profile_foro.xml	(date 1610836298096)
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".ui.Foro.main.Profile.ProfileForoFragment">
++
++    <!-- TODO: Update blank fragment layout -->
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:gravity="center"
++        android:text="profile" />
++
++</FrameLayout>
+\ No newline at end of file

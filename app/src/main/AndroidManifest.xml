@@ -21,8 +21,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:theme="@style/AppThemeHome">
-        <activity android:name=".ui.Foro.lets_start.EditCommunity"></activity>
-        <activity android:name=".ui.list_machine.ModifyMachine"></activity>
+        <activity android:name=".ui.Foro.main.Community.NewPost.CreatePost.CreatePost"></activity>
+        <activity android:name=".ui.Foro.main.Community.CommunityMain" />
+        <activity android:name=".ui.Foro.lets_start.EditCommunity" />
+        <activity android:name=".ui.list_machine.ModifyMachine" />
         <activity android:name=".ui.Foro.main.ForoMain" />
         <activity android:name=".ui.Foro.lets_start.AddCommunity" />
         <activity android:name=".ui.Foro.lets_start.choose_community" />
@@ -30,7 +32,6 @@
         <activity android:name=".MainActivity" />
 
         <service android:name=".ui.service.ServicioMqtt" />
-
         <service android:name=".ui.service.ServicioNotificaciones" />
 
         <activity android:name=".ui.LoadAnimations.IntroductoryActivity">
@@ -54,7 +55,6 @@
         <activity android:name=".ui.graphics.GraphicsActivity" />
         <activity android:name=".ui.MachineControl.planta1" />
         <activity android:name=".ui.notifications.NotificacionesActivity" />
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

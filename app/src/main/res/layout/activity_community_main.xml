@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/menu_foro_container"
-    tools:context=".ui.Foro.main.ForoMain">
+    tools:context=".ui.Foro.main.Community.CommunityMain">
+
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pagerForo"
+        android:id="@+id/view_pagerCommunity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#EFE9E9"
@@ -17,10 +17,10 @@
         android:layoutDirection="locale"
         />
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
-        android:id="@+id/botton_nav_foro"
+        android:id="@+id/botton_nav_community"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cnb_menuResource="@menu/foro_nav_item"
+        app:cnb_menuResource="@menu/community_nav_item"
         android:layout_alignParentBottom="true"
         android:background="@drawable/round_corners_foro_menu"
         app:cnb_unselectedColor="@color/black"
@@ -30,4 +30,17 @@
         android:layout_margin="10dp"
         android:elevation="8dp"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_back_to_foro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="start|top"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/icons_back_foro"
+        app:backgroundTint="@color/white" />
 </RelativeLayout>

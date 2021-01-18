@@ -1,0 +1,85 @@
+Index: github.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>gpr.usr = 61469172\ngpr.key = 72a0f63b7097b413e8ff78a7dd6ca9412aaf232c
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1252
+===================================================================
+--- github.properties	(revision 7642a63b1487ac3b4a14d644ddb96d86b57b1345)
++++ github.properties	(date 1610713458354)
+@@ -1,2 +1,2 @@
+-gpr.usr = 61469172
+-gpr.key = 72a0f63b7097b413e8ff78a7dd6ca9412aaf232c
+\ No newline at end of file
++gpr.usr = 61473165
++gpr.key = 9671a8c2e26934b214e49dd99b96077296ee2aca
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_foro_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ui.Foro.main.ForoMain\">\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_foro_main.xml	(revision 7642a63b1487ac3b4a14d644ddb96d86b57b1345)
++++ app/src/main/res/layout/activity_foro_main.xml	(date 1610813155168)
+@@ -1,9 +1,13 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context=".ui.Foro.main.ForoMain">
+ 
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++    <com.ismaeldivita.chipnavigation.ChipNavigationBar
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"></com.ismaeldivita.chipnavigation.ChipNavigationBar>
++
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/menu/foro_nav_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/menu/foro_nav_item.xml	(date 1610813155220)
++++ app/src/main/res/menu/foro_nav_item.xml	(date 1610813155220)
+@@ -0,0 +1,33 @@
++<?xml version="1.0" encoding="utf-8"?>
++<menu xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto">
++    <!-- home, buscar, panel de comunidades, pefil -->
++    <item
++        android:id="@+id/home"
++        android:icon="@drawable/ic_home"
++        android:title="Inicio"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/graphics"
++        android:icon="@drawable/icons_dashboard"
++        android:title="Panel de control"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/notifications"
++        android:icon="@drawable/ic_baseline_map"
++        android:title="Mapa"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/profile"
++        android:icon="@drawable/ic_profile"
++        android:title="Perfil"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++</menu>
+\ No newline at end of file

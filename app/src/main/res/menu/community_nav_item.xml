@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- home, foto, info community -->
+    <item
+        android:id="@+id/community_home"
+        android:icon="@drawable/icons_community_home"
+        android:title="@string/community_menu_foro1"
+        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff" />
+    <item
+        android:id="@+id/community_addpost"
+        android:icon="@drawable/icons_community_add_post"
+        android:title="@string/community_menu_foro2"
+        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff" />
+    <item
+        android:id="@+id/community_info"
+        android:icon="@drawable/icons_community_info"
+        android:title="@string/community_menu_foro3"
+        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff" />
+</menu>
