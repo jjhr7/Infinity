@@ -40,7 +40,7 @@ public class RViewAdapter extends RecyclerView.Adapter<RViewAdapter.DataObjectHo
             super(itemView);
             this.img = itemView.findViewById(R.id.idImagen);
             this.txtNombre = itemView.findViewById(R.id.idNombre);
-            this.txtDescripcion = itemView.findViewById(R.id.idDescripcion);
+            //this.txtDescripcion = itemView.findViewById(R.id.idPrueba);
             this.layoutABorrar = itemView.findViewById(R.id.layoutABorrar);
             this.txtFecha=itemView.findViewById(R.id.idFecha);
         }
@@ -69,7 +69,7 @@ public class RViewAdapter extends RecyclerView.Adapter<RViewAdapter.DataObjectHo
     public void onBindViewHolder(@NonNull final DataObjectHolder holder, int position) {
 
         holder.txtNombre.setText(listaNotificaciones.get(position).getNombre());
-        holder.txtDescripcion.setText(listaNotificaciones.get(position).getInfo());
+        //holder.txtDescripcion.setText(listaNotificaciones.get(position).getInfo());
         holder.txtFecha.setText(listaNotificaciones.get(position).getFecha());
 
         Glide.with(context).load(listaNotificaciones.get(position).getFoto()).into(holder.img);

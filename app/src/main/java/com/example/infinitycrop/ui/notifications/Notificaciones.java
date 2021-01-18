@@ -3,13 +3,13 @@ package com.example.infinitycrop.ui.notifications;
 public class Notificaciones {
     //recycler bueno
     private String nombre;
-    private String info;
+    //private String info;
     private String foto;
     private String fecha;
 
-    public Notificaciones(String nombre, String info, String foto, String fecha) {
+    public Notificaciones(String nombre, String foto, String fecha) {
         this.nombre = nombre;
-        this.info = info;
+        //this.info = info;
         this.foto = foto;
         this.fecha = fecha;
     }
@@ -24,13 +24,13 @@ public class Notificaciones {
         this.nombre = nombre;
     }
 
-    public String getInfo() {
+    /*public String getInfo() {
         return info;
     }
 
     public void setInfo(String info) {
         this.info = info;
-    }
+    }*/
 
     public String getFoto() {
         return foto;
