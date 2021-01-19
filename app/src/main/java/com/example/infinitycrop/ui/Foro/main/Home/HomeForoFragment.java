@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -113,11 +115,16 @@ public class HomeForoFragment extends Fragment {
     private Set<String> cimmunitiesId = new HashSet<>();
     private List<PostModel> posts= new ArrayList<>();
 
+    //swipe to refresh
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_home_foro, container, false);
+        //refresh
+        swipeRefreshLayout=v.findViewById(R.id.swipeToRefreshHomeForo);
         //firebase
         db=FirebaseFirestore.getInstance();
         firebaseAuth=FirebaseAuth.getInstance();
@@ -128,6 +135,15 @@ public class HomeForoFragment extends Fragment {
         initRvFollowedCommunities();
         initRvFollowedPosts();
         getIdFollowedCommunities();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getIdFollowedCommunities();
+                adapterFollowedCmty.notifyDataSetChanged();
+                adapterPost.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return v;
     }
     private void initRvFollowedCommunities(){

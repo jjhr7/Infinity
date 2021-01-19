@@ -1,5 +1,7 @@
 package com.example.infinitycrop.ui.Foro.main.Home.RVs;
 
+import com.google.firebase.Timestamp;
+
 public class PostModel {
     private String creator;
     private String community;
@@ -7,14 +9,14 @@ public class PostModel {
     private String desc;
     private int likes;
     private String img;
-    private String date;
+    private Timestamp date;
     private String comments;
     private String uid;
 
     public PostModel() {
     }
 
-    public PostModel(String creator, String community, String tittle, String desc, int likes, String img, String date, String comments, String uid) {
+    public PostModel(String creator, String community, String tittle, String desc, int likes, String img, Timestamp date, String comments, String uid) {
         this.creator = creator;
         this.community = community;
         this.tittle = tittle;
@@ -74,11 +76,11 @@ public class PostModel {
         this.img = img;
     }
 
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

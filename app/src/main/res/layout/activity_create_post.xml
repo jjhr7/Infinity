@@ -17,14 +17,12 @@
             android:layout_height="150dp"
             android:layout_marginTop="30dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_back_to_foro"
-             />
+            app:layout_constraintTop_toBottomOf="@+id/textView32" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
+            android:id="@+id/input_tittlePost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -35,39 +33,29 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_changeImgPost">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_editText_Createpost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/posts_text4" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btn_back_to_foro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="start|top"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/icons_back_foro"
-            app:backgroundTint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="30dp"
             android:text="@string/posts_text5"
             android:textColor="@color/black"
             android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_back_to_foro"
+            app:layout_constraintBottom_toTopOf="@+id/img_CreatePost"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_back_to_foro" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
+            android:id="@+id/inputDescriptionCreatePost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -75,9 +63,10 @@
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/input_tittlePost">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_desc_editText_Createpost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/posts_text6" />
@@ -91,12 +80,12 @@
             android:layout_marginTop="18dp"
             android:text="@string/posts_text7"
             android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
+            app:layout_constraintEnd_toStartOf="@+id/btn_createClimaCreatePost"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/inputDescriptionCreatePost" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout4"
+            android:id="@+id/btn_createClimaCreatePost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -132,13 +121,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView33" />
@@ -154,6 +142,35 @@
             app:layout_constraintEnd_toEndOf="@+id/img_CreatePost"
             app:layout_constraintStart_toStartOf="@+id/img_CreatePost"
             app:layout_constraintTop_toBottomOf="@+id/img_CreatePost" />
+
+        <Button
+            android:id="@+id/btnBackCreatePost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_action_machine"
+            android:padding="10dp"
+            android:text="@string/posts_text11"
+            android:textColor="@color/colorPrimaryDashboard"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_createButtonPost"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+        <Button
+            android:id="@+id/btn_createButtonPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/button_enter_machine"
+            android:padding="10dp"
+            android:text="@string/posts_text10"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

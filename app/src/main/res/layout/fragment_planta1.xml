@@ -75,17 +75,21 @@
 
                         <TextView
                             android:id="@+id/textTemperatura"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
                             android:text="Temperatura"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/switchTemperatura"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                            <!--app:layout_constraintBottom_toBottomOf="@+id/switchTemperatura"-->
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <Switch
+                        <!--<Switch
                             android:id="@+id/switchTemperatura"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -97,7 +101,7 @@
                             android:textColorLink="#a0c63e"
                             android:textSize="8sp"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent" />-->
 
                         <TextView
                             android:id="@+id/medidaTemperatura"
@@ -149,17 +153,21 @@
 
                         <TextView
                             android:id="@+id/textHumedad"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
                             android:text="Humedad"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/switchHumedad"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                            <!--app:layout_constraintBottom_toBottomOf="@+id/switchHumedad"-->
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <Switch
+                        <!--<Switch
                             android:id="@+id/switchHumedad"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -169,7 +177,7 @@
                             android:textColorLink="#a0c63e"
                             android:textSize="8sp"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent" />-->
 
                         <TextView
                             android:id="@+id/medidaHumedad"
@@ -221,17 +229,21 @@
 
                         <TextView
                             android:id="@+id/textSalinidad"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
-                            android:text="H. Ambiente"
+                            android:layout_marginEnd="8dp"
+                            android:text="Humedad Ambiente"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/switchSalinidad"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                            <!--app:layout_constraintBottom_toBottomOf="@+id/switchSalinidad"-->
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <Switch
+                        <!--<Switch
                             android:id="@+id/switchSalinidad"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -241,7 +253,7 @@
                             android:textColorLink="#a0c63e"
                             android:textSize="8sp"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent" />-->
 
                         <TextView
                             android:id="@+id/medidaSalinidad"

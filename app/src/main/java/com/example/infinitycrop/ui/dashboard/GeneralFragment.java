@@ -3,8 +3,8 @@ package com.example.infinitycrop.ui.dashboard;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -21,6 +21,12 @@ import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.MachineControl.planta1;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.Timestamp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,6 +39,10 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.comun.Mqtt.topicRoot;
 
@@ -200,18 +210,18 @@ public class GeneralFragment extends Fragment implements MqttCallback{
         //conexión con el broker Root1 = Lector de datos
         //nos subscribimos a topic lectura
         try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "luces");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "luces", Mqtt.qos);
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones", Mqtt.qos);
             client.setCallback((MqttCallback) this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
         }
         try {
             Log.i(Mqtt.TAG, "Publicando mensaje: " + "mensaje");
-            MqttMessage message = new MqttMessage("Superior OFF".getBytes());
+            MqttMessage message = new MqttMessage("1-OFF".getBytes());
             message.setQos(Mqtt.qos);
             message.setRetained(false);
-            client.publish(topicRoot+"luces", message);
+            client.publish(topicRoot+"operaciones", message);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al publicar.", e);
         }
@@ -237,18 +247,18 @@ public class GeneralFragment extends Fragment implements MqttCallback{
         //conexión con el broker Root1 = Lector de datos
         //nos subscribimos a topic lectura
         try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "luces");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "luces", Mqtt.qos);
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones", Mqtt.qos);
             client.setCallback((MqttCallback) this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
         }
         try {
             Log.i(Mqtt.TAG, "Publicando mensaje: " + "mensaje");
-            MqttMessage message = new MqttMessage("Superior ON".getBytes());
+            MqttMessage message = new MqttMessage("1-ON".getBytes());
             message.setQos(Mqtt.qos);
             message.setRetained(false);
-            client.publish(topicRoot+"luces", message);
+            client.publish(topicRoot+"operaciones", message);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al publicar.", e);
         }

@@ -49,6 +49,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
     private String codigo_qr;
     private CollectionReference machineRef;
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore db;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qr_scanner);
@@ -61,6 +62,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         Textmodel = (EditText) findViewById(R.id.editTextTextMachineModel);
         fav = (CheckBox) findViewById(R.id.btn_fav);
         machineRef = FirebaseFirestore.getInstance().collection("Machine");
+        db=FirebaseFirestore.getInstance();
         firebaseAuth=FirebaseAuth.getInstance();
         BtnregistMachine = (LinearLayout) findViewById(R.id.btn_registMachine);
         progressDialogo =new ProgressDialog(this);
@@ -233,60 +235,88 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         final String id=Textmodel.getText().toString().trim();
         /*final Map<String, Object> data = new HashMap<>();
         data.put("userUID", uid);*/
-        //collecion mediciones
-        final Map<String, Object> intoMediciones = new HashMap<>();
-        intoMediciones.put("machineID", id);
-        intoMediciones.put("fecha", new Timestamp(new Date()));
-        intoMediciones.put("Temperatura", 0);
-        intoMediciones.put("Humedad", 0);
-        intoMediciones.put("Humedad Ambiente", 0);
-        intoMediciones.put("Luminosidad", 0);
-        //coleccion actuadores
-        final Map<String, Object> intoActuadores = new HashMap<>();
-        intoActuadores.put("machineID", id);
-        intoActuadores.put("fecha", new Timestamp(new Date()));
-        intoActuadores.put("Bomba de agua", false);
-        intoActuadores.put("Ventiladores", false);
-        intoActuadores.put("Luces", false);
+        //collecion mediciones general
+        final Map<String, Object> a = new HashMap<>();
+        a.put("Humedad", "0");
+        a.put("Luminosidad", "0");
+        a.put("Temperatura", "0");
+        a.put("Fecha", new Timestamp(new Date()));
+        a.put("machineId", id);
+        //collecion mediciones planta 1
+        final Map<String, Object> a1 = new HashMap<>();
+        a1.put("Humedad", "0");
+        a1.put("Humedad Ambiente", "0");
+        a1.put("Temperatura", "0");
+        a1.put("Fecha", new Timestamp(new Date()));
+        a1.put("machineId", id);
+        //collecion mediciones planta 2
+        final Map<String, Object> a2 = new HashMap<>();
+        a2.put("Humedad Ambiente", "0");
+        a2.put("Temperatura", "0");
+        a2.put("Fecha", new Timestamp(new Date()));
+        a2.put("machineId", id);
         machineRef.add(new MachineModel(TextnameMachine.getText().toString().trim(), priorityMachine, id, uid));
-        FirebaseFirestore.getInstance().collection("Mediciones").document().set(intoMediciones);
-        FirebaseFirestore.getInstance().collection("Actuadores").document().set(intoActuadores);
-                /*.addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        DocumentReference document=task.getResult();
-                        machineRef.document(document.getId()).collection("Nivel 1")
-                                .document("Mediciones")
-                                .set(data);
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        DocumentReference document=task.getResult();
-                        machineRef.document(document.getId()).collection("Nivel 1")
-                                .document("Actuadores")
-                                .set(data);
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        DocumentReference document=task.getResult();
-                        machineRef.document(document.getId()).collection("Nivel 2")
-                                .document("Mediciones")
-                                .set(data);
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        DocumentReference document=task.getResult();
-                        machineRef.document(document.getId()).collection("Nivel 2")
-                                .document("Actuadores")
-                                .set(data);
-                    }
-                });*/
+        db.collection("Mediciones general").document(id).set(a);
+        db.collection("Mediciones planta 1").document(id).set(a1);
+        db.collection("Mediciones planta 2").document(id).set(a2);
+        //añadir subCollecion datos piso
+        final Map<String, Object> planta1 = new HashMap<>();
+        planta1.put("fecha", "00/00/0000");
+        planta1.put("hora", "00:00 a. m.");
+        planta1.put("name", "Planta 1");
+        planta1.put("piso", 1);
+        planta1.put("estacion","Esta planta se encuentra en la estación número 1");
+        planta1.put("estado",0);
+        final Map<String, Object> planta2 = new HashMap<>();
+        planta2.put("fecha", "00/00/0000");
+        planta2.put("hora", "00:00 a. m.");
+        planta2.put("name", "Planta 2");
+        planta2.put("piso", 1);
+        planta2.put("estado",0);
+        planta2.put("estacion","Esta planta se encuentra en la estación número 2");
+        final Map<String, Object> planta3 = new HashMap<>();
+        planta3.put("fecha", "00/00/0000");
+        planta3.put("hora", "00:00 a. m.");
+        planta3.put("name", "Planta 3");
+        planta3.put("piso", 1);
+        planta3.put("estado",0);
+        planta3.put("estacion","Esta planta se encuentra en la estación número 3");
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+                .document("planta1").set(planta1);
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+                .document("planta2").set(planta2);
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+                .document("planta3").set(planta3);
+        //añadir subCollecion datos piso 2
+        final Map<String, Object> planta4 = new HashMap<>();
+        planta4.put("fecha", "00/00/0000");
+        planta4.put("hora", "00:00 a. m.");
+        planta4.put("name", "Planta 1");
+        planta4.put("piso", 2);
+        planta4.put("estacion","Esta planta se encuentra en la estación número 4");
+        planta4.put("estado",0);
+        final Map<String, Object> planta5 = new HashMap<>();
+        planta5.put("fecha", "00/00/0000");
+        planta5.put("hora", "00:00 a. m.");
+        planta5.put("name", "Planta 2");
+        planta5.put("piso", 2);
+        planta5.put("estado",0);
+        planta5.put("estacion","Esta planta se encuentra en la estación número 5");
+        final Map<String, Object> planta6 = new HashMap<>();
+        planta6.put("fecha", "00/00/0000");
+        planta6.put("hora", "00:00 a. m.");
+        planta6.put("name", "Planta 3");
+        planta6.put("piso", 2);
+        planta6.put("estado",0);
+        planta6.put("estacion","Esta planta se encuentra en la estación número 6");
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
+                .document("planta1").set(planta4);
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
+                .document("planta2").set(planta5);
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
+                .document("planta3").set(planta6);
+
+
         Toast.makeText(this, "Maquina añadida", Toast.LENGTH_SHORT).show();
         finish();
     }

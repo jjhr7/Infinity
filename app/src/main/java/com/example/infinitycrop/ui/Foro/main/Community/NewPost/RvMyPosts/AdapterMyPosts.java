@@ -1,0 +1,53 @@
+package com.example.infinitycrop.ui.Foro.main.Community.NewPost.RvMyPosts;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.Foro.main.Home.RVs.PostModel;
+
+import java.util.List;
+
+public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyPostsHolder> {
+
+    private List<PostModel> postModels;
+    private Context context;
+
+    public AdapterMyPosts(List<PostModel> postModels, Context context) {
+        this.postModels = postModels;
+        this.context = context;
+    }
+
+    @NonNull
+    @Override
+    public MyPostsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.post_item,parent,false);
+        return new MyPostsHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyPostsHolder holder, int position) {
+        PostModel postModel=postModels.get(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return postModels.size();
+    }
+
+    public static class MyPostsHolder extends RecyclerView.ViewHolder{
+    protected ImageView imag_post;
+
+    public MyPostsHolder(@NonNull View itemView) {
+        super(itemView);
+    }
+}
+
+}

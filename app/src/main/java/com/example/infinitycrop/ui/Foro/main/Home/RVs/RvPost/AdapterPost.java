@@ -1,6 +1,8 @@
 package com.example.infinitycrop.ui.Foro.main.Home.RVs.RvPost;
 
 import android.content.Context;
+import android.content.Intent;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.Foro.lets_start.EditCommunity;
+import com.example.infinitycrop.ui.Foro.main.Community.CommunityMain;
 import com.example.infinitycrop.ui.Foro.main.Home.RVs.PostModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,6 +56,11 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.PostHolder>{
         //desc
         String desc=postModel.getDesc();
         holder.desc_post.setText(desc);
+        //time
+        CharSequence prettyTime = DateUtils.getRelativeDateTimeString(
+                context, postModel.getDate().toDate().getTime(), DateUtils.SECOND_IN_MILLIS,
+                DateUtils.WEEK_IN_MILLIS, 0);
+        holder.time_post.setText(prettyTime);
         //num likes
         int likes=postModel.getLikes();
         String resLikes=likes+" Likes";
@@ -74,6 +83,15 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.PostHolder>{
                 } else {
 
                 }
+            }
+        });
+        //onclick on community
+        holder.name_community_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(holder.name_community_post.getContext(), CommunityMain.class);
+                intent.putExtra("community", postModel.getCommunity());
+                holder.name_community_post.getContext().startActivity(intent);
             }
         });
         db.collection("Foro user").document(postModel.getCreator())

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,8 @@ public class NewPostFragment extends Fragment {
 
     private String comunityID;
     private ConstraintLayout btn_create;
+    private RecyclerView rv_myPost;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,6 +74,9 @@ public class NewPostFragment extends Fragment {
 
         CommunityMain communityMain= (CommunityMain) getActivity();
         comunityID=communityMain.getCommunityUid();
+
+        //rv, adapter
+        rv_myPost=v.findViewById(R.id.rv_myGalleryPosts);
 
         btn_create=v.findViewById(R.id.btn_layoutCreatePost);
         btn_create.setOnClickListener(new View.OnClickListener() {
