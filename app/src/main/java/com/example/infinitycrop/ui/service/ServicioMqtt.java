@@ -133,6 +133,9 @@ public class ServicioMqtt extends Service implements MqttCallback {
                     String pres1=snapshot.child("Presencia1").getValue().toString();
                     String pres2=snapshot.child("Presencia2").getValue().toString();
                     String pres3=snapshot.child("Presencia3").getValue().toString();
+                    int pr1=Integer.parseInt(pres1);
+                    int pr2=Integer.parseInt(pres2);
+                    int pr3=Integer.parseInt(pres3);
                     final Map<String, Object> a = new HashMap<>();
                     a.put("Humedad", humedad);
                     a.put("Humedad Ambiente", humedadAmbiente);
@@ -141,6 +144,16 @@ public class ServicioMqtt extends Service implements MqttCallback {
                     a.put("machineId", getId);
                     db.collection("Mediciones planta 1").document(getId)
                             .set(a);
+                    //estados presencia
+                    db.collection("Mediciones planta 1").document(getId)
+                            .collection("DatosPiso").document("planta1")
+                            .update("estado",pr1);
+                    db.collection("Mediciones planta 1").document(getId)
+                            .collection("DatosPiso").document("planta2")
+                            .update("estado",pr2);
+                    db.collection("Mediciones planta 1").document(getId)
+                            .collection("DatosPiso").document("planta3")
+                            .update("estado",pr3);
                 }
             }
             @Override
@@ -158,6 +171,9 @@ public class ServicioMqtt extends Service implements MqttCallback {
                     String pres1=snapshot.child("Presencia1").getValue().toString();
                     String pres2=snapshot.child("Presencia2").getValue().toString();
                     String pres3=snapshot.child("Presencia3").getValue().toString();
+                    int pr1=Integer.parseInt(pres1);
+                    int pr2=Integer.parseInt(pres2);
+                    int pr3=Integer.parseInt(pres3);
                     final Map<String, Object> a = new HashMap<>();
                     a.put("Humedad Ambiente", humedadAmbiente);
                     a.put("Temperatura", temper);
@@ -165,11 +181,126 @@ public class ServicioMqtt extends Service implements MqttCallback {
                     a.put("machineId", getId);
                     db.collection("Mediciones planta 2").document(getId)
                             .set(a);
+                    //estados presencia
+                    db.collection("Mediciones planta 2").document(getId)
+                            .collection("DatosPiso").document("planta1")
+                            .update("estado",pr1);
+                    db.collection("Mediciones planta 2").document(getId)
+                            .collection("DatosPiso").document("planta2")
+                            .update("estado",pr2);
+                    db.collection("Mediciones planta 2").document(getId)
+                            .collection("DatosPiso").document("planta3")
+                            .update("estado",pr3);
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        db.collection("Mediciones general").document(getId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(value.exists()){
+                    //Temperatura
+                    String temperatura = value.getString("Temperatura");
+                    Double tempValue = Double.parseDouble(temperatura);
+                    if (tempValue > 7) {
+                        final Map<String, Object> notificacionesTempAlerta = new HashMap<>();
+                        notificacionesTempAlerta.put("Tipo", "1");
+                        notificacionesTempAlerta.put("MachineID", getId);
+                        notificacionesTempAlerta.put("Fecha", new Timestamp(new Date()));
+                        notificacionesTempAlerta.put("Medicion", "temperatura");
+
+                        db.collection("Notificaciones").add(notificacionesTempAlerta);
+                    }
+
+                    if (tempValue > 3 && tempValue < 6) {
+
+                        final Map<String, Object> notificacionesTempAviso = new HashMap<>();
+                        notificacionesTempAviso.put("Tipo", "2");
+                        notificacionesTempAviso.put("MachineID", getId);
+                        notificacionesTempAviso.put("Fecha", new Timestamp(new Date()));
+                        notificacionesTempAviso.put("Medicion", "temperatura");
+
+                        db.collection("Notificaciones").add(notificacionesTempAviso);
+                    }
+
+
+                    //Humedad
+                    String humedad = value.getString("Humedad");
+                    Double humedadValue = Double.parseDouble(humedad);
+                    if (humedadValue > 13) {
+                        final Map<String, Object> notificacionesHumedadAlerta = new HashMap<>();
+                        notificacionesHumedadAlerta.put("Tipo", "1");
+                        notificacionesHumedadAlerta.put("MachineID", getId);
+                        notificacionesHumedadAlerta.put("Fecha", new Timestamp(new Date()));
+                        notificacionesHumedadAlerta.put("Medicion", "humedad");
+
+                        db.collection("Notificaciones").add(notificacionesHumedadAlerta);
+                    }
+
+                    if (humedadValue > 5 && humedadValue < 8) {
+                        final Map<String, Object> notificacionesHumedadAviso = new HashMap<>();
+                        notificacionesHumedadAviso.put("Tipo", "2");
+                        notificacionesHumedadAviso.put("MachineID", getId);
+                        notificacionesHumedadAviso.put("Fecha", new Timestamp(new Date()));
+                        notificacionesHumedadAviso.put("Medicion", "humedad");
+
+                        db.collection("Notificaciones").add(notificacionesHumedadAviso);
+
+                    }
+
+
+                    /*//Humedad Ambiente
+                    String humedadAmb = value.getString("Humedad Ambiente");
+                    Double humedadAmbValue = Double.parseDouble(humedadAmb);
+                    if (humedadAmbValue > 13) {
+                        final Map<String, Object> notificacionesHumedadAmbAlerta = new HashMap<>();
+                        notificacionesHumedadAmbAlerta.put("Tipo", "1");
+                        notificacionesHumedadAmbAlerta.put("MachineID", getId);
+                        notificacionesHumedadAmbAlerta.put("Fecha", new Timestamp(new Date()));
+                        notificacionesHumedadAmbAlerta.put("Medicion", "humedad ambiente");
+
+                        db.collection("Notificaciones").add(notificacionesHumedadAmbAlerta);
+
+                    }
+                    if (humedadAmbValue > 5 && humedadAmbValue < 12) {
+                        final Map<String, Object> notificacionesHumedadAmbAviso = new HashMap<>();
+                        notificacionesHumedadAmbAviso.put("Tipo", "2");
+                        notificacionesHumedadAmbAviso.put("MachineID", getId);
+                        notificacionesHumedadAmbAviso.put("Fecha", new Timestamp(new Date()));
+                        notificacionesHumedadAmbAviso.put("Medicion", "humedad ambiente");
+
+
+                        db.collection("Notificaciones").add(notificacionesHumedadAmbAviso);
+                    }*/
+
+
+                    //Luminosidad
+                    String luminosidad = value.getString("Luminosidad");
+                    Double luminosidadValue = Double.parseDouble(luminosidad);
+
+                    if (luminosidadValue > 54) {
+                        final Map<String, Object> notificacionesLuminosidadAlerta = new HashMap<>();
+                        notificacionesLuminosidadAlerta.put("Tipo", "1");
+                        notificacionesLuminosidadAlerta.put("MachineID", getId);
+                        notificacionesLuminosidadAlerta.put("Fecha", new Timestamp(new Date()));
+                        notificacionesLuminosidadAlerta.put("Medicion", "luminosidad");
+
+                        db.collection("Notificaciones").add(notificacionesLuminosidadAlerta);
+                    }
+                    if (luminosidadValue > 36 && luminosidadValue < 47) {
+                        final Map<String, Object> notificacionesLuminosidadAviso = new HashMap<>();
+                        notificacionesLuminosidadAviso.put("Tipo", "2");
+                        notificacionesLuminosidadAviso.put("MachineID", getId);
+                        notificacionesLuminosidadAviso.put("Fecha", new Timestamp(new Date()));
+                        notificacionesLuminosidadAviso.put("Medicion", "luminosidad");
+
+                        db.collection("Notificaciones").add(notificacionesLuminosidadAviso);
+                    }
+                }
             }
         });
 
@@ -233,109 +364,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
             }
         }*/
 
-        db.collection("Mediciones general").document(getId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                //Temperatura
-                String temperatura = value.getString("Temperatura");
-                Double tempValue = Double.parseDouble(temperatura);
-                if (tempValue > 7) {
-                    final Map<String, Object> notificacionesTempAlerta = new HashMap<>();
-                    notificacionesTempAlerta.put("Tipo", "1");
-                    notificacionesTempAlerta.put("MachineID", getId);
-                    notificacionesTempAlerta.put("Fecha", new Timestamp(new Date()));
-                    notificacionesTempAlerta.put("Medicion", "temperatura");
-
-                    db.collection("Notificaciones").add(notificacionesTempAlerta);
-                }
-
-                if (tempValue > 3 && tempValue < 6) {
-
-                    final Map<String, Object> notificacionesTempAviso = new HashMap<>();
-                    notificacionesTempAviso.put("Tipo", "2");
-                    notificacionesTempAviso.put("MachineID", getId);
-                    notificacionesTempAviso.put("Fecha", new Timestamp(new Date()));
-                    notificacionesTempAviso.put("Medicion", "temperatura");
-
-                    db.collection("Notificaciones").add(notificacionesTempAviso);
-                }
-
-
-                //Humedad
-                String humedad = value.getString("Humedad");
-                Double humedadValue = Double.parseDouble(humedad);
-                if (humedadValue > 13) {
-                    final Map<String, Object> notificacionesHumedadAlerta = new HashMap<>();
-                    notificacionesHumedadAlerta.put("Tipo", "1");
-                    notificacionesHumedadAlerta.put("MachineID", getId);
-                    notificacionesHumedadAlerta.put("Fecha", new Timestamp(new Date()));
-                    notificacionesHumedadAlerta.put("Medicion", "humedad");
-
-                    db.collection("Notificaciones").add(notificacionesHumedadAlerta);
-                }
-
-                if (humedadValue > 5 && humedadValue < 8) {
-                    final Map<String, Object> notificacionesHumedadAviso = new HashMap<>();
-                    notificacionesHumedadAviso.put("Tipo", "2");
-                    notificacionesHumedadAviso.put("MachineID", getId);
-                    notificacionesHumedadAviso.put("Fecha", new Timestamp(new Date()));
-                    notificacionesHumedadAviso.put("Medicion", "humedad");
-
-                    db.collection("Notificaciones").add(notificacionesHumedadAviso);
-
-                }
-
-
-                //Humedad Ambiente
-                String humedadAmb = value.getString("Humedad Ambiente");
-                Double humedadAmbValue = Double.parseDouble(humedadAmb);
-                if (humedadAmbValue > 13) {
-                    final Map<String, Object> notificacionesHumedadAmbAlerta = new HashMap<>();
-                    notificacionesHumedadAmbAlerta.put("Tipo", "1");
-                    notificacionesHumedadAmbAlerta.put("MachineID", getId);
-                    notificacionesHumedadAmbAlerta.put("Fecha", new Timestamp(new Date()));
-                    notificacionesHumedadAmbAlerta.put("Medicion", "humedad ambiente");
-
-                    db.collection("Notificaciones").add(notificacionesHumedadAmbAlerta);
-
-                }
-                if (humedadAmbValue > 5 && humedadAmbValue < 12) {
-                    final Map<String, Object> notificacionesHumedadAmbAviso = new HashMap<>();
-                    notificacionesHumedadAmbAviso.put("Tipo", "2");
-                    notificacionesHumedadAmbAviso.put("MachineID", getId);
-                    notificacionesHumedadAmbAviso.put("Fecha", new Timestamp(new Date()));
-                    notificacionesHumedadAmbAviso.put("Medicion", "humedad ambiente");
-
-
-                    db.collection("Notificaciones").add(notificacionesHumedadAmbAviso);
-                }
-
-
-                //Luminosidad
-                String luminosidad = value.getString("Luminosidad");
-                Double luminosidadValue = Double.parseDouble(luminosidad);
-
-                if (luminosidadValue > 54) {
-                    final Map<String, Object> notificacionesLuminosidadAlerta = new HashMap<>();
-                    notificacionesLuminosidadAlerta.put("Tipo", "1");
-                    notificacionesLuminosidadAlerta.put("MachineID", getId);
-                    notificacionesLuminosidadAlerta.put("Fecha", new Timestamp(new Date()));
-                    notificacionesLuminosidadAlerta.put("Medicion", "luminosidad");
-
-                    db.collection("Notificaciones").add(notificacionesLuminosidadAlerta);
-                }
-                if (luminosidadValue > 36 && luminosidadValue < 47) {
-                    final Map<String, Object> notificacionesLuminosidadAviso = new HashMap<>();
-                    notificacionesLuminosidadAviso.put("Tipo", "2");
-                    notificacionesLuminosidadAviso.put("MachineID", getId);
-                    notificacionesLuminosidadAviso.put("Fecha", new Timestamp(new Date()));
-                    notificacionesLuminosidadAviso.put("Medicion", "luminosidad");
-
-                    db.collection("Notificaciones").add(notificacionesLuminosidadAviso);
-                }
-            }
-        });
     }
 
     @Override

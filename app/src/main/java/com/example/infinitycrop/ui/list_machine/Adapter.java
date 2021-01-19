@@ -51,7 +51,7 @@ public class Adapter extends FirestoreRecyclerAdapter<MachineModel, Adapter.Prod
         //eliminar de la coleccion Mediciones
         FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
         final CollectionReference itemsRef = rootRef.collection("Mediciones");
-        Query query = itemsRef.whereEqualTo("machineID", qrScan);
+        Query query = itemsRef.whereEqualTo("machineId", qrScan);
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -64,15 +64,57 @@ public class Adapter extends FirestoreRecyclerAdapter<MachineModel, Adapter.Prod
                 }
             }
         });
-        //eliminar de la coleccion Actuadores
-        final CollectionReference itemsRef1 = rootRef.collection("Actuadores");
-        Query query1 = itemsRef1.whereEqualTo("machineID", qrScan);
+        //eliminar de la coleccion mediciones general
+        final CollectionReference itemsRef1 = rootRef.collection("Mediciones general");
+        Query query1 = itemsRef1.whereEqualTo("machineId", qrScan);
         query1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
                         itemsRef1.document(document.getId()).delete();
+                    }
+                } else {
+
+                }
+            }
+        });
+        //eliminar de la coleccion mediciones planta 1
+        final CollectionReference itemsRef2 = rootRef.collection("Mediciones planta 1");
+        Query query2 = itemsRef2.whereEqualTo("machineId", qrScan);
+        query2.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        itemsRef2.document(document.getId()).collection("DatosPiso")
+                                .document("planta1").delete();
+                        itemsRef2.document(document.getId()).collection("DatosPiso")
+                                .document("planta2").delete();
+                        itemsRef2.document(document.getId()).collection("DatosPiso")
+                                .document("planta3").delete();
+                        itemsRef2.document(document.getId()).delete();
+                    }
+                } else {
+
+                }
+            }
+        });
+        //eliminar de la coleccion mediciones planta 2
+        final CollectionReference itemsRef3 = rootRef.collection("Mediciones planta 2");
+        Query query3 = itemsRef3.whereEqualTo("machineId", qrScan);
+        query3.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        itemsRef3.document(document.getId()).collection("DatosPiso")
+                                .document("planta1").delete();
+                        itemsRef3.document(document.getId()).collection("DatosPiso")
+                                .document("planta2").delete();
+                        itemsRef3.document(document.getId()).collection("DatosPiso")
+                                .document("planta3").delete();
+                        itemsRef3.document(document.getId()).delete();
                     }
                 } else {
 
