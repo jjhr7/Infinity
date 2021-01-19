@@ -86,4 +86,33 @@
     <string name="editCommunity_text7">Editar Communidad</string>
     <string name="editCommunity_text8">Guardar cambios</string>
     <string name="editCommunity_text9">Eliminar comunidad</string>
+    <!-- main foro menu  -->
+    <string name="menu_foro1">Buscar</string>
+    <string name="menu_foro2">Inicio</string>
+    <string name="menu_foro3">Suscripciones</string>
+    <string name="menu_foro4">Perfil</string>
+    <!-- foro home  -->
+    <string name="home_foro1"><b>Comunidades que sigues > </b></string>
+    <!-- foro home > bottom sheet community  -->
+    <string name="home_foro2"><b>Ir a la communidad </b></string>
+    <!-- community menu  -->
+    <string name="community_menu_foro1">Posts</string>
+    <string name="community_menu_foro2">Nuevo post</string>
+    <string name="community_menu_foro3">Información</string>
+    <!--post fragment -->
+    <string name="posts_text1"><b>Posts de la comunidad</b></string>
+    <!--post fragment -> new post -->
+    <string name="posts_text2"><b>Nuevo post</b></string>
+    <string name="posts_text3"><b>Tu galería de posts ></b></string>
+    <!--create post -->
+    <string name="posts_text4"><b>Título</b></string>
+    <string name="posts_text5"><b>Nuevo post</b></string>
+    <string name="posts_text6"><b>Descripción</b></string>
+    <string name="posts_text7"><b>Elegir clima a añadir al post ></b></string>
+    <string name="posts_text8">Cambiar foto</string>
+    <string name="posts_text9">Crear clima</string>
+
+    <!-- Notificaciones -->
+    <string name="alerta">data:image/png;base64,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</string>
+    <string name="aviso">https://w7.pngwing.com/pngs/893/420/png-transparent-symbol-computer-icons-unicode-notice-miscellaneous-angle-triangle-thumbnail.png</string>
 </resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- home, buscar, panel de comunidades, pefil -->
+    <item
+        android:id="@+id/foro_home"
+        android:icon="@drawable/icons_foro_home"
+        android:title="@string/menu_foro2"
+        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff" />
+    <item
+        android:id="@+id/foro_search"
+        android:icon="@drawable/icons_foro_infinity"
+        android:title="@string/menu_foro1"
+        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff" />
+    <item
+        android:id="@+id/foro_panel"
+        android:icon="@drawable/icons_foro_panel"
+        android:title="@string/menu_foro3"
+        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff" />
+    <item
+        android:id="@+id/foro_profile"
+        android:icon="@drawable/icons_foro_profile"
+        android:title="@string/menu_foro4"
+        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
+        app:cnb_iconColor="#ffffff"
+        app:cnb_textColor="#ffffff" />
+</menu>

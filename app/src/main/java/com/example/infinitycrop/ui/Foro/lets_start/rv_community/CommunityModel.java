@@ -11,6 +11,7 @@ public class CommunityModel {
     private int followers;
     private Boolean following;
     private int posts;
+    private String uid;
 
     //IMPORTANTE: tiene que haber un constructor vacío, si no, no funcionaría
     public CommunityModel() {}
@@ -26,9 +27,17 @@ public class CommunityModel {
         this.following = following;
         this.posts = posts;
     }
-
-
-
+    //constructor para el foro
+    public CommunityModel(String img, String name, String description, String creator, int followers, Boolean following, int posts, String uid) {
+        this.img = img;
+        this.name = name;
+        this.description = description;
+        this.creator = creator;
+        this.followers = followers;
+        this.following = following;
+        this.posts = posts;
+        this.uid = uid;
+    }
 
     /*        GETTERS & SETTERS            */
 
@@ -86,5 +95,13 @@ public class CommunityModel {
 
     public void setPosts(int posts) {
         this.posts = posts;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

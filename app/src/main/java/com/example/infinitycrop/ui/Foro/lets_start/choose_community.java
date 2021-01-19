@@ -21,6 +21,7 @@ import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityAdapter;
 import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;
+import com.example.infinitycrop.ui.Foro.main.ForoMain;
 import com.example.infinitycrop.ui.list_machine.Adapter;
 import com.example.infinitycrop.ui.list_machine.MachineModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -54,6 +55,7 @@ public class choose_community extends AppCompatActivity {
     //variables del layout
     private ImageView btn_back;
     private FloatingActionButton btn_addCommunity;
+    private Button btn_over;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class choose_community extends AppCompatActivity {
         //variables del layout
         btn_back=findViewById(R.id.btn_back_welcome2);
         btn_addCommunity=findViewById(R.id.button_add_community);
+        btn_over=findViewById(R.id.btn_continue_2);
         //onClick
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +85,13 @@ public class choose_community extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AddCommunity.class);
+                startActivity(intent);
+            }
+        });
+        btn_over.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ForoMain.class);
                 startActivity(intent);
             }
         });

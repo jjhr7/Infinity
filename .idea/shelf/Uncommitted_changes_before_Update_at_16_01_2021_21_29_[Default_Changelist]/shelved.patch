@@ -1,0 +1,142 @@
+Index: github.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>gpr.usr = 61469172\ngpr.key = 72a0f63b7097b413e8ff78a7dd6ca9412aaf232c
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1252
+===================================================================
+--- github.properties	(revision 4351a1340cd0727c0788e6d1087924a0b2c06713)
++++ github.properties	(date 1610820456596)
+@@ -1,2 +1,2 @@
+-gpr.usr = 61469172
+-gpr.key = 72a0f63b7097b413e8ff78a7dd6ca9412aaf232c
+\ No newline at end of file
++gpr.usr = 61473165
++gpr.key = 9671a8c2e26934b214e49dd99b96077296ee2aca
+\ No newline at end of file
+Index: app/src/main/java/com/example/infinitycrop/ui/notifications/RecyclerItemTouchHelper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package rvstd.iso.com.recyclerviewswipetodelete;\n\nimport android.graphics.Canvas;\n\nimport androidx.annotation.NonNull;\nimport androidx.annotation.Nullable;\nimport androidx.cardview.widget.CardView;\nimport androidx.recyclerview.widget.ItemTouchHelper;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport android.view.View;\n\npublic class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {\n\n    private RecyclerItemTouchHelperListener listener;\n\n    public RecyclerItemTouchHelper(int dragDirs, int swipeDirs,\n                                   RecyclerItemTouchHelperListener listener) {\n        super(dragDirs, swipeDirs);\n        this.listener = listener;\n    }\n\n    @Override\n    public boolean onMove(@NonNull RecyclerView recyclerView,\n                          @NonNull RecyclerView.ViewHolder viewHolder,\n                          @NonNull RecyclerView.ViewHolder viewHolder1) {\n        return true;\n    }\n\n    @Override\n    public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {\n        if(viewHolder != null){\n            View foregroundView = ((RViewAdapter.DataObjectHolder) viewHolder).layoutABorrar;\n            getDefaultUIUtil().onSelected(foregroundView);\n        }\n    }\n\n    @Override\n    public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView,\n                                RecyclerView.ViewHolder viewHolder, float dX, float dY,\n                                int actionState, boolean isCurrentlyActive) {\n\n        View foregroundView = ((RViewAdapter.DataObjectHolder) viewHolder).layoutABorrar;\n\n        getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX,dY,\n                actionState,isCurrentlyActive);\n\n    }\n\n    @Override\n    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {\n        View foregroundView = ((RViewAdapter.DataObjectHolder) viewHolder).layoutABorrar;\n        getDefaultUIUtil().clearView(foregroundView);\n    }\n\n    @Override\n    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,\n                            @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,\n                            int actionState, boolean isCurrentlyActive) {\n\n        View foregroundView = ((RViewAdapter.DataObjectHolder) viewHolder).layoutABorrar;\n\n        getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,\n                actionState, isCurrentlyActive);\n\n    }\n\n\n    @Override\n    public int convertToAbsoluteDirection(int flags, int layoutDirection) {\n        return super.convertToAbsoluteDirection(flags, layoutDirection);\n    }\n\n    @Override\n    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {\n        listener.onSwipe(viewHolder, direction, viewHolder.getAdapterPosition());\n    }\n\n    public interface RecyclerItemTouchHelperListener {\n        void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position);\n    }\n\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/notifications/RecyclerItemTouchHelper.java	(revision 4351a1340cd0727c0788e6d1087924a0b2c06713)
++++ app/src/main/java/com/example/infinitycrop/ui/notifications/RecyclerItemTouchHelper.java	(date 1610824539436)
+@@ -1,4 +1,5 @@
+-package rvstd.iso.com.recyclerviewswipetodelete;
++/*
++package com.example.infinitycrop.ui.notifications;
+ 
+ import android.graphics.Canvas;
+ 
+@@ -82,3 +83,4 @@
+ 
+ 
+ }
++*/
+Index: app/src/main/java/com/example/infinitycrop/ui/notifications/RViewAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package rvstd.iso.com.recyclerviewswipetodelete;\n\nimport android.content.Context;\n\nimport androidx.annotation.NonNull;\nimport androidx.cardview.widget.CardView;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.ImageView;\nimport android.widget.RelativeLayout;\nimport android.widget.TextView;\nimport android.widget.Toast;\n\nimport com.bumptech.glide.Glide;\n\nimport java.util.ArrayList;\n\npublic class RViewAdapter extends RecyclerView.Adapter<RViewAdapter.DataObjectHolder> {\n\n    private Context context;\n    private ArrayList<Notificaciones> listaNotificaciones;\n\n    public RViewAdapter(Context context, ArrayList<Notificaciones> listaNotificaciones) {\n        this.context = context;\n        this.listaNotificaciones = listaNotificaciones;\n    }\n\n\n    public class DataObjectHolder extends RecyclerView.ViewHolder {\n\n        private ImageView img;\n        private TextView txtNombre;\n        private TextView txtDescripcion;\n        private TextView txtFecha;\n        public RelativeLayout layoutABorrar;\n\n        public DataObjectHolder(@NonNull View itemView) {\n            super(itemView);\n            this.img = itemView.findViewById(R.id.idImagen);\n            this.txtNombre = itemView.findViewById(R.id.idNombre);\n            this.txtDescripcion = itemView.findViewById(R.id.idDescripcion);\n            this.layoutABorrar = itemView.findViewById(R.id.layoutABorrar);\n            this.txtFecha=itemView.findViewById(R.id.idFecha);\n        }\n    }\n\n    public void removeItem(int position){\n        listaNotificaciones.remove(position);\n        notifyItemRemoved(position);\n    }\n\n    public void restoreItem(Notificaciones coche,int position){\n        listaNotificaciones.add(position, coche);\n        notifyItemInserted(position);\n    }\n\n\n    @NonNull\n    @Override\n    public DataObjectHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {\n        View view = LayoutInflater.from(viewGroup.getContext()).inflate(\n                R.layout.item_list, viewGroup, false);\n        return new DataObjectHolder(view);\n    }\n\n    @Override\n    public void onBindViewHolder(@NonNull final DataObjectHolder holder, int position) {\n\n        holder.txtNombre.setText(listaNotificaciones.get(position).getNombre());\n        holder.txtDescripcion.setText(listaNotificaciones.get(position).getInfo());\n        holder.txtFecha.setText(listaNotificaciones.get(position).getFecha());\n\n        Glide.with(context).load(listaNotificaciones.get(position).getFoto()).into(holder.img);\n\n        holder.img.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                Toast.makeText(v.getContext(), \"Position: \" +\n                        holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();\n            }\n        });\n    }\n\n    @Override\n    public int getItemCount() {\n        return listaNotificaciones.size();\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/notifications/RViewAdapter.java	(revision 4351a1340cd0727c0788e6d1087924a0b2c06713)
++++ app/src/main/java/com/example/infinitycrop/ui/notifications/RViewAdapter.java	(date 1610824512384)
+@@ -1,4 +1,5 @@
+-package rvstd.iso.com.recyclerviewswipetodelete;
++/*
++package com.example.infinitycrop.ui.notifications;
+ 
+ import android.content.Context;
+ 
+@@ -90,3 +91,4 @@
+     }
+ 
+ }
++*/
+Index: app/src/main/java/com/example/infinitycrop/ui/notifications/Notificaciones.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package rvstd.iso.com.recyclerviewswipetodelete;\n\npublic class Notificaciones {\n    //recycler bueno\n    private String nombre;\n    private String info;\n    private String foto;\n    private String fecha;\n\n    public Notificaciones(String nombre, String info, String foto, String fecha) {\n        this.nombre = nombre;\n        this.info = info;\n        this.foto = foto;\n        this.fecha = fecha;\n    }\n\n    public Notificaciones(){}\n\n    public String getNombre() {\n        return nombre;\n    }\n\n    public void setNombre(String nombre) {\n        this.nombre = nombre;\n    }\n\n    public String getInfo() {\n        return info;\n    }\n\n    public void setInfo(String info) {\n        this.info = info;\n    }\n\n    public String getFoto() {\n        return foto;\n    }\n\n    public void setFoto(String foto) {\n        this.foto = foto;\n    }\n\n    public String getFecha() {\n        return fecha;\n    }\n\n    public void setFecha(String fecha) {\n        this.fecha = fecha;\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/infinitycrop/ui/notifications/Notificaciones.java	(revision 4351a1340cd0727c0788e6d1087924a0b2c06713)
++++ app/src/main/java/com/example/infinitycrop/ui/notifications/Notificaciones.java	(date 1610824423473)
+@@ -1,4 +1,4 @@
+-package rvstd.iso.com.recyclerviewswipetodelete;
++package com.example.infinitycrop.ui.notifications;
+ 
+ public class Notificaciones {
+     //recycler bueno
+Index: app/src/main/res/layout/activity_foro_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ui.Foro.main.ForoMain\">\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_foro_main.xml	(revision 4351a1340cd0727c0788e6d1087924a0b2c06713)
++++ app/src/main/res/layout/activity_foro_main.xml	(date 1610820456689)
+@@ -1,9 +1,13 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context=".ui.Foro.main.ForoMain">
+ 
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++    <com.ismaeldivita.chipnavigation.ChipNavigationBar
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"></com.ismaeldivita.chipnavigation.ChipNavigationBar>
++
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/menu/foro_nav_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/menu/foro_nav_item.xml	(date 1610820456844)
++++ app/src/main/res/menu/foro_nav_item.xml	(date 1610820456844)
+@@ -0,0 +1,33 @@
++<?xml version="1.0" encoding="utf-8"?>
++<menu xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto">
++    <!-- home, buscar, panel de comunidades, pefil -->
++    <item
++        android:id="@+id/home"
++        android:icon="@drawable/ic_home"
++        android:title="Inicio"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/graphics"
++        android:icon="@drawable/icons_dashboard"
++        android:title="Panel de control"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/notifications"
++        android:icon="@drawable/ic_baseline_map"
++        android:title="Mapa"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++    <item
++        android:id="@+id/profile"
++        android:icon="@drawable/ic_profile"
++        android:title="Perfil"
++        app:cnb_backgroundColor="@color/colorPrimaryDashboard"
++        app:cnb_iconColor="#ffffff"
++        app:cnb_textColor="#ffffff" />
++</menu>
+\ No newline at end of file

@@ -1,4 +1,4 @@
-package com.example.infinitycrop.ui.Foro.main;
+package com.example.infinitycrop.ui.Foro.main.Community;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,64 +8,70 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.infinitycrop.R;
-import com.example.infinitycrop.ui.Foro.main.Home.HomeForoFragment;
-import com.example.infinitycrop.ui.Foro.main.Profile.ProfileForoFragment;
-import com.example.infinitycrop.ui.Foro.main.Search.SearchForoFragment;
-import com.example.infinitycrop.ui.Foro.main.Subscription.PanelForoFragment;
+import com.example.infinitycrop.ui.Foro.main.Community.InfoCommunity.InfoCommunityFragment;
+import com.example.infinitycrop.ui.Foro.main.Community.NewPost.NewPostFragment;
+import com.example.infinitycrop.ui.Foro.main.Community.Posts.PostsCommunityFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import java.util.ArrayList;
 
-public class ForoMain extends AppCompatActivity {
-
+public class CommunityMain extends AppCompatActivity {
     ChipNavigationBar chipNavigationBar;
     private ViewPager viewPager;
     private int index = 0;
+    private FloatingActionButton btn_back;
+    private String s;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_foro_main);
+        setContentView(R.layout.activity_community_main);
 
-        chipNavigationBar=findViewById(R.id.botton_nav_foro);
-        viewPager = findViewById(R.id.view_pagerForo);
-        chipNavigationBar.setItemSelected(R.id.foro_home,true);
+        Bundle extras = getIntent().getExtras();
+        s = extras.getString("community");
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        btn_back=findViewById(R.id.btn_back_to_foro);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        chipNavigationBar=findViewById(R.id.botton_nav_community);
+        viewPager = findViewById(R.id.view_pagerCommunity);
+        chipNavigationBar.setItemSelected(R.id.community_home,true);
+
+        ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
 
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        final HomeForoFragment fragment_1 = new HomeForoFragment();
-        final SearchForoFragment fragment_2 = new SearchForoFragment();
-        final PanelForoFragment fragment_3 = new PanelForoFragment();
-        final ProfileForoFragment fragment_4 = new ProfileForoFragment();
+        final PostsCommunityFragment fragment_1 = new PostsCommunityFragment();
+        final NewPostFragment fragment_2 = new NewPostFragment();
+        final InfoCommunityFragment fragment_3 = new InfoCommunityFragment();
         adapter.addFragment(fragment_1);
         adapter.addFragment(fragment_2);
         adapter.addFragment(fragment_3);
-        adapter.addFragment(fragment_4);
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(3);
         index = 1;
         chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int i) {
                 switch(i){
-                    case R.id.foro_home:
+                    case R.id.community_home:
                         viewPager.setCurrentItem(0);
                         break;
-                    case R.id.foro_search:
+                    case R.id.community_addpost:
                         viewPager.setCurrentItem(1);
                         break;
-                    case R.id.foro_panel:
+                    case R.id.community_info:
                         viewPager.setCurrentItem(2);
                         break;
-                    case R.id.foro_profile:
-                        viewPager.setCurrentItem(3);
-                        break;
                 }
-
-
             }
         });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -79,23 +85,20 @@ public class ForoMain extends AppCompatActivity {
 
                 if (position == 0){
 
-                    chipNavigationBar.setItemSelected(R.id.foro_home, true);
+                    chipNavigationBar.setItemSelected(R.id.community_home, true);
                     chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(int id) {
 
                             switch(id){
-                                case R.id.foro_home:
+                                case R.id.community_home:
                                     viewPager.setCurrentItem(0);
                                     break;
-                                case R.id.foro_search:
+                                case R.id.community_addpost:
                                     viewPager.setCurrentItem(1);
                                     break;
-                                case R.id.foro_panel:
+                                case R.id.community_info:
                                     viewPager.setCurrentItem(2);
-                                    break;
-                                case R.id.foro_profile:
-                                    viewPager.setCurrentItem(3);
                                     break;
                             }
                         }
@@ -105,7 +108,7 @@ public class ForoMain extends AppCompatActivity {
 
                 }else if (position == 1){
 
-                    chipNavigationBar.setItemSelected(R.id.foro_search, true);
+                    chipNavigationBar.setItemSelected(R.id.community_addpost, true);
 
                     if(index == 0 || index == 2){
 
@@ -115,23 +118,20 @@ public class ForoMain extends AppCompatActivity {
                     //Toast.makeText(Home.this, ""+index, Toast.LENGTH_SHORT).show();
                 }else if (position == 2){
 
-                    chipNavigationBar.setItemSelected(R.id.foro_panel, true);
+                    chipNavigationBar.setItemSelected(R.id.community_info, true);
                     chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(int id) {
 
                             switch(id){
-                                case R.id.foro_home:
+                                case R.id.community_home:
                                     viewPager.setCurrentItem(0);
                                     break;
-                                case R.id.foro_search:
+                                case R.id.community_addpost:
                                     viewPager.setCurrentItem(1);
                                     break;
-                                case R.id.foro_panel:
+                                case R.id.community_info:
                                     viewPager.setCurrentItem(2);
-                                    break;
-                                case R.id.foro_profile:
-                                    viewPager.setCurrentItem(3);
                                     break;
                             }
                         }
@@ -139,31 +139,6 @@ public class ForoMain extends AppCompatActivity {
 
                     index = 2;
 
-                }else if (position == 3){
-
-                    chipNavigationBar.setItemSelected(R.id.foro_profile, true);
-                    chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(int id) {
-
-                            switch(id){
-                                case R.id.foro_home:
-                                    viewPager.setCurrentItem(0);
-                                    break;
-                                case R.id.foro_search:
-                                    viewPager.setCurrentItem(1);
-                                    break;
-                                case R.id.foro_panel:
-                                    viewPager.setCurrentItem(2);
-                                    break;
-                                case R.id.foro_profile:
-                                    viewPager.setCurrentItem(3);
-                                    break;
-                            }
-                        }
-                    });
-
-                    index = 3;
                 }
             }
 
@@ -204,5 +179,9 @@ public class ForoMain extends AppCompatActivity {
 
         }
 
+    }
+
+    public String getCommunityUid(){
+        return s;
     }
 }
