@@ -6,10 +6,12 @@ import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.lets_start.welcome_forum;
 import com.example.infinitycrop.ui.graphics.GraphicsActivity;
@@ -21,6 +23,8 @@ import com.example.infinitycrop.ui.notifications.NotificacionesActivity;
  * create an instance of this fragment.
  */
 public class Control_panelFragment extends Fragment {
+
+    private String uid;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,6 +74,8 @@ public class Control_panelFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_control_panel, container, false);
+        MainActivity myActivity = (MainActivity)getActivity();
+        uid=myActivity.getMachineUID();
         //buttons
         btn_forum=v.findViewById(R.id.btn_forum);
 
@@ -105,10 +111,10 @@ public class Control_panelFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NotificacionesActivity.class);
+                intent.putExtra("idMachine", uid);
                 startActivity(intent);
             }
         });
-
         return v;
     }
 }
