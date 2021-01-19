@@ -171,7 +171,10 @@ public class GeneralFragment extends Fragment implements MqttCallback{
                         intent.putExtra("idMachine", uid);
                         startActivity(intent);
 
+
+
                     }
+
                 });
             }
         });

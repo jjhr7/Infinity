@@ -2,15 +2,22 @@ package com.example.infinitycrop.ui.dashboard;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,15 +25,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.comun.Mqtt;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.MachineControl.planta1;
 import com.example.infinitycrop.ui.recycler_control.StaticRvAdapter;
 import com.example.infinitycrop.ui.recycler_control.StaticRvModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -44,7 +56,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.example.comun.Mqtt.topicRoot;
 
@@ -53,33 +73,30 @@ import static com.example.comun.Mqtt.topicRoot;
  * Use the {@link DashboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DashboardFragment extends Fragment implements MqttCallback{
+public class DashboardFragment extends Fragment implements MqttCallback {
 
     private RecyclerView recyclerView;
     private StaticRvAdapter staticRvAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    //WEATHER
-    private static  final int REQUEST_LOCATION=1;
-    double lat;
-    double longi;
+    //Weather
 
-    TextView showLocationTxt;
+    final long MIN_TIME = 200;
+    final float MIN_DISTANCE = 200;
+    final int REQUEST_CODE = 101;
+    final String APP_ID = "2599fe29f309cebdb21dd7dcf235662a";
+    String Location_Provider = LocationManager.GPS_PROVIDER;
+    final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
 
-    LocationManager locationManager;
-    String latitude,longitude;
+    TextView NameofCity, weatherState, Temperature;
+    ImageView mweatherIcon;
 
-    TextView view_city;
-    TextView view_temp;
-    TextView view_desc;
-    TextView view_country;
+    LocationManager mLocationManager;
+    LocationListener mLocationListner;
 
-    ImageView view_weather;
-    //
+
+
     //Acceso a la maquina
-
-
-
     public static MqttClient client = null;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -125,13 +142,13 @@ public class DashboardFragment extends Fragment implements MqttCallback{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_dashboard, container, false);
+        final View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
         //FIREBASE
         //Recojo los datos del usuario
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final FirebaseUser usuario = mAuth.getCurrentUser();
-        final FirebaseFirestore fStore=FirebaseFirestore.getInstance();
-        String idUser=usuario.getUid();
+        final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        String idUser = usuario.getUid();
         //guardo el nombre en un textView
         /*final TextView nombre = (TextView) v.findViewById(R.id.hello_text);
         String res="Hola"+" "+usuario.getDisplayName();
@@ -162,50 +179,32 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         });*/
 
 
-        //WEATHER
-        ActivityCompat.requestPermissions(getActivity(),new String[]
-                {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-
-        view_city =v.findViewById(R.id.town);
-        view_city.setText("");
-        view_temp =v.findViewById(R.id.temp);
-        view_temp.setText("");
-        view_desc =v.findViewById(R.id.desc);
-        view_desc.setText("");
-        view_country=v.findViewById(R.id.txtCountry);
-        view_country.setText("");
-        view_weather =v.findViewById(R.id.wheather_image);
-
-        locationManager=(LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-       /* inicioGPS();*/
         //
 
 
-
-
         //RECYCLER VIEW
-        ArrayList<StaticRvModel> item=new ArrayList<>();
-        item.add(new StaticRvModel(R.drawable.icons_sun,"Soleado"));
-        item.add(new StaticRvModel(R.drawable.icons_night_mode,"Nocturno"));
-        item.add(new StaticRvModel(R.drawable.icons_energy_saving,"Ahorro"));
-        item.add(new StaticRvModel(R.drawable.icons_power_off,"Apagado"));
-        item.add(new StaticRvModel(R.drawable.icons_custom,"Custom"));
+        ArrayList<StaticRvModel> item = new ArrayList<>();
+        item.add(new StaticRvModel(R.drawable.icons_sun, "Soleado"));
+        item.add(new StaticRvModel(R.drawable.icons_night_mode, "Nocturno"));
+        item.add(new StaticRvModel(R.drawable.icons_energy_saving, "Ahorro"));
+        item.add(new StaticRvModel(R.drawable.icons_power_off, "Apagado"));
+        item.add(new StaticRvModel(R.drawable.icons_custom, "Custom"));
 
-        final TextView medidasT=v.findViewById(R.id.medidaTemperaturaGeneral);
-        final TextView medidasH=v.findViewById(R.id.medidaHumedadGeneral);
-        final TextView medidasS=v.findViewById(R.id.medidaSalinidadGeneral);
-        final TextView medidasL=v.findViewById(R.id.medidasLuminosidadGeneral);
+        final TextView medidasT = v.findViewById(R.id.medidaTemperaturaGeneral);
+        final TextView medidasH = v.findViewById(R.id.medidaHumedadGeneral);
+        final TextView medidasS = v.findViewById(R.id.medidaSalinidadGeneral);
+        final TextView medidasL = v.findViewById(R.id.medidasLuminosidadGeneral);
 
-        recyclerView=v.findViewById(R.id.rv_1);
-        staticRvAdapter=new StaticRvAdapter(item,medidasT,medidasH,medidasS,medidasL);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerView = v.findViewById(R.id.rv_1);
+        staticRvAdapter = new StaticRvAdapter(item, medidasT, medidasH, medidasS, medidasL);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(staticRvAdapter);
 
 
         //TABS
         tabLayout = v.findViewById(R.id.tab_layout);
         viewPager = v.findViewById(R.id.view_pager);
-         //Array
+        //Array
         ArrayList<String> arrayList = new ArrayList<>();
 
         //set up with viewpager
@@ -213,11 +212,11 @@ public class DashboardFragment extends Fragment implements MqttCallback{
 
         TabAdapter adapter = new TabAdapter(getActivity().getSupportFragmentManager());
         //Pestañas
-        adapter.addFrag(new GeneralFragment(),"General");
-        adapter.addFrag(new Planta1Fragment(),"Planta 1");
-        adapter.addFrag(new Planta2Fragment(),"Planta 2");
+        adapter.addFrag(new GeneralFragment(), "General");
+        adapter.addFrag(new Planta1Fragment(), "Planta 1");
+        adapter.addFrag(new Planta2Fragment(), "Planta 2");
 
-        viewPager.setAdapter(adapter );
+        viewPager.setAdapter(adapter);
 
         /*((MainActivity)getActivity()).ola();*/
      /*   //LEER DATOS FIREBASE
@@ -259,10 +258,109 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         });
 
       */
-
+        //Weather App
+        weatherState =(TextView) v.findViewById(R.id.weatherCondition);
+        Temperature = (TextView)v.findViewById(R.id.temperature);
+        mweatherIcon =(ImageView) v.findViewById(R.id.weatherIcon);
+        NameofCity = (TextView)v.findViewById(R.id.cityName);
 
         return v;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        getWeatherForCurrentLocation();
+    }
+    private void getWeatherForCurrentLocation() {
+        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        mLocationListner = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                String Latitude = String.valueOf(location.getLatitude());
+                String Longitude = String.valueOf(location.getLongitude());
+                RequestParams params = new RequestParams();
+                params.put("lat",Latitude);
+                params.put("lon",Longitude);
+                params.put("appid",APP_ID);
+                letsDoSomeWorking(params);
+
+            }
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+            return;
+        }
+        mLocationManager.requestLocationUpdates(Location_Provider, MIN_TIME, MIN_DISTANCE, mLocationListner);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), "Localizacion obtenida", Toast.LENGTH_SHORT).show();
+                getWeatherForCurrentLocation();
+            } else {
+                Toast.makeText(getContext(), "Localizaacion no obtenida", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+    private void letsDoSomeWorking(RequestParams params){
+        AsyncHttpClient client =new AsyncHttpClient();
+        client.get(WEATHER_URL,params,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                /*Toast.makeText(getContext(), "Data obteninda", Toast.LENGTH_SHORT).show();*/
+                weatherData weatherD= weatherData.fromJson(response);
+                updateUI(weatherD);
+                //super.onSuccess(statusCode, headers, response);
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                //super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(getContext(), "Data no obteninda", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void updateUI(weatherData weather){
+        Temperature.setText(weather.getmTemperature());
+        NameofCity.setText(weather.getMcity());
+        weatherState.setText(weather.getmWeatherType());
+        int resourceID =getResources().getIdentifier(weather.getMicon(),"drawable",getActivity().getPackageName());
+        mweatherIcon.setImageResource(resourceID);
+
+
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mLocationManager!=null){
+            mLocationManager.removeUpdates(mLocationListner);
+        }
+    }
+
+
 
     public void enviarLucesOff(){
         try {
@@ -355,56 +453,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
     }
 
 
-    //WEATHER METHODS
-    private void api_key(final String City) {
-        OkHttpClient client = new OkHttpClient();
 
-        Request request = new Request.Builder()
-                .url("https://api.openweathermap.org/data/2.5/weather?q=" + City + "&appid=a6f41d947e0542a26580bcd5c3fb90ef&units=metric")
-                .get()
-                .build();
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        try {
-            Response response = client.newCall(request).execute();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    String responseData = response.body().string();
-                    try {
-                        JSONObject json = new JSONObject(responseData);
-                        JSONArray array = json.getJSONArray("weather");
-                        JSONObject object = array.getJSONObject(0);
-
-                        String description = object.getString("description");
-                        String icons = object.getString("icon");
-
-                        JSONObject temp1 = json.getJSONObject("main");
-                        Double Temperature = temp1.getDouble("temp");
-
-                        setText(view_city, City);
-
-                        String temps = Math.round(Temperature) + " °C";
-                        setText(view_temp, temps);
-                        setText(view_desc, description);
-                        setImage(view_weather, icons);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     private void setText(final TextView text, final String value) {
         getActivity().runOnUiThread(new Runnable() {
@@ -415,67 +464,7 @@ public class DashboardFragment extends Fragment implements MqttCallback{
         });
     }
 
-    private void setImage(final ImageView imageView, final String value) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //paste switch
-                switch (value) {
-                    case "01d":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d01d));
-                        break;
-                    case "01n":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d01d));
-                        break;
-                    case "02d":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d02d));
-                        break;
-                    case "02n":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d02d));
-                        break;
-                    case "03d":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d03d));
-                        break;
-                    case "03n":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d03d));
-                        break;
-                    case "04d":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d04d));
-                        break;
-                    case "04n":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d04d));
-                        break;
-                    case "09d":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d09d));
-                        break;
-                    case "09n":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d09d));
-                        break;
-                    case "10d":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d10d));
-                        break;
-                    case "10n":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d10d));
-                        break;
-                    case "11d":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d11d));
-                        break;
-                    case "11n":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d11d));
-                        break;
-                    case "13d":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d13d));
-                        break;
-                    case "13n":
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.d13d));
-                        break;
-                    default:
-                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.wheather));
 
-                }
-            }
-        });
-    }
 
     //App location
    /* private void getLocation() {

@@ -105,77 +105,69 @@
 
 
                     <ImageView
-                        android:id="@+id/wheather_image"
-                        android:layout_width="158dp"
-                        android:layout_height="130dp"
-                        android:layout_marginEnd="32dp"
-                        android:src="@drawable/wheather"
+                        android:id="@+id/weatherIcon"
+                        android:layout_width="146dp"
+                        android:layout_height="117dp"
+                        android:src="@drawable/cloudy"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/guideline2"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.547"
+                        app:layout_constraintVertical_bias="0.472"
                         tools:ignore="MissingConstraints" />
 
                     <TextView
-                        android:id="@+id/temp"
+                        android:id="@+id/cityName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="8dp"
-                        android:text="15°C"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Cargando..."
+                        android:textColor="@color/black"
+                        android:textSize="32sp"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:textColor="#000000"
-                        android:textSize="36sp"
-                        app:layout_constraintEnd_toStartOf="@+id/wheather_image"
-                        app:layout_constraintHorizontal_bias="0.013"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/town"
-                        tools:ignore="MissingConstraints" />
+                        android:textSize="55sp"
+                        app:layout_constraintEnd_toStartOf="@+id/weatherIcon"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/cityName"
+                        app:layout_constraintTop_toBottomOf="@+id/cityName" />
 
                     <TextView
-                        android:id="@+id/desc"
+                        android:id="@+id/weatherCondition"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="8dp"
-                        android:text="Description"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="#494343"
-                        app:layout_constraintEnd_toStartOf="@+id/wheather_image"
-                        app:layout_constraintHorizontal_bias="0.012"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/temp"
-                        tools:ignore="MissingConstraints" />
-
-                    <TextView
-                        android:id="@+id/town"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="16dp"
-                        android:text="Krakow"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@+id/wheather_image"
-                        app:layout_constraintHorizontal_bias="0.011"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="MissingConstraints" />
-
-                    <TextView
-                        android:id="@+id/txtCountry"
-                        android:layout_width="84dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:text="TextView"
+                        android:layout_marginBottom="16dp"
+                        android:text="Cargando..."
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/wheather_image"
-                        app:layout_constraintHorizontal_bias="0.015"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/desc"
-                        app:layout_constraintVertical_bias="0.818"
-                        tools:ignore="MissingConstraints" />
+                        app:layout_constraintEnd_toEndOf="@+id/cityName"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/temperature"
+                        app:layout_constraintTop_toBottomOf="@+id/temperature"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="237dp" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

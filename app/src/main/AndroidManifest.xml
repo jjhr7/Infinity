@@ -31,6 +31,7 @@
         <activity android:name=".ui.Foro.lets_start.welcome_forum" />
         <activity android:name=".MainActivity" />
 
+
         <service android:name=".ui.service.ServicioMqtt" />
         <service android:name=".ui.service.ServicioNotificaciones" />
 
