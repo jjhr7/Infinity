@@ -17,11 +17,15 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class GraphicsActivity  extends AppCompatActivity {
 
+    private String s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphics);
+
+        Bundle extras = getIntent().getExtras();
+        s = extras.getString("idMachine"); //declaras como priv la s
 
         //volver a la anterior actividad
         ImageView backToProfile =findViewById(R.id.backToProfile3);
@@ -70,6 +74,10 @@ public class GraphicsActivity  extends AppCompatActivity {
             }
             return null;
         }
+    }
+
+    public String getmachineID(){
+        return s;
     }
 
 

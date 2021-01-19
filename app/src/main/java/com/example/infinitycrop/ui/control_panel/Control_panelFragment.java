@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.lets_start.welcome_forum;
 import com.example.infinitycrop.ui.graphics.GraphicsActivity;
@@ -33,6 +34,7 @@ public class Control_panelFragment extends Fragment {
     private ConstraintLayout btn_forum;
     private ConstraintLayout btn_grafics;
     private ConstraintLayout btn_notificaciones;
+    private String uid;
 
     public Control_panelFragment() {
         // Required empty public constructor
@@ -70,6 +72,10 @@ public class Control_panelFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_control_panel, container, false);
+
+        MainActivity myActivity = (MainActivity) getActivity();
+        uid=myActivity.getMachineUID();
+
         //buttons
         btn_forum=v.findViewById(R.id.btn_forum);
 
@@ -92,6 +98,7 @@ public class Control_panelFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), GraphicsActivity.class);
+                intent.putExtra("idMachine", uid);
                 startActivity(intent);
             }
         });

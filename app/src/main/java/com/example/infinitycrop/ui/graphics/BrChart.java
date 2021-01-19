@@ -4,10 +4,13 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -24,17 +27,34 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.BubbleData;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IBubbleDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class BrChart extends Fragment {
 
@@ -49,6 +69,14 @@ public class BrChart extends Fragment {
 
     private String uid;
     private FirebaseFirestore db;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
+    private int humedad;
+    private int humedadA;
+    private String temperatura;
+    private int luminosidad;
+    public Timestamp fecha;
 
     private com.github.mikephil.charting.charts.BarChart chart;
 
@@ -91,98 +119,130 @@ public class BrChart extends Fragment {
         View v= inflater.inflate(R.layout.fragment_bar_chart, container, false);
 
         chart = v.findViewById(R.id.chartBar);
-        initBarChart();
-        showBarChart();
-
-        return v;
-    }
-
-    private void showBarChart(){
-        ArrayList<Double> valueList = new ArrayList<Double>();
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        String title = "Title";
-
-        //input data
-        for(int i = 0; i < 6; i++){
-            valueList.add(i * 100.1);
-        }
-
-        //fit the data into a bar
-        for (int i = 0; i < valueList.size(); i++) {
-            BarEntry barEntry = new BarEntry(i, valueList.get(i).floatValue());
-            entries.add(barEntry);
-        }
-
-        BarDataSet barDataSet = new BarDataSet(entries, title);
-
-        BarData data = new BarData(barDataSet);
-        chart.setData(data);
-        chart.invalidate();
-
-        initBarDataSet(barDataSet);
-    }
-
-    private void initBarDataSet(BarDataSet barDataSet){
-        //Changing the color of the bar
-        barDataSet.setColor(Color.parseColor("#304567"));
-        //Setting the size of the form in the legend
-        barDataSet.setFormSize(15f);
-        //showing the value of the bar, default true if not set
-        barDataSet.setDrawValues(false);
-        //setting the text size of the value of the bar
-        barDataSet.setValueTextSize(12f);
-    }
-
-
-    private void initBarChart(){
-        //hiding the grey background of the chart, default false if not set
+        chart.setTouchEnabled(true);
+        chart.setPinchZoom(true);
         chart.setDrawGridBackground(false);
-        //remove the bar shadow, default false if not set
-        chart.setDrawBarShadow(false);
-        //remove border of the chart, default false if not set
-        chart.setDrawBorders(false);
+        // enable touch gestures
+        chart.setTouchEnabled(false);
+ 
+        GraphicsActivity myActivity = (GraphicsActivity) getActivity();
+        uid=myActivity.getmachineID();
 
-        //remove the description label text located at the lower right corner
-        Description description = new Description();
-        description.setEnabled(false);
-        chart.setDescription(description);
+        database = FirebaseDatabase.getInstance();
+
+        myRef = database.getReference("Mediciones");
+
+        db = FirebaseFirestore.getInstance();
+
+        db.collection("Mediciones")
+                .whereEqualTo("machineID", uid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            int contador = 0;
+
+                            ArrayList<BarEntry> values_Hum = new ArrayList<>();
+                            ArrayList<BarEntry> values_HumA = new ArrayList<>();
+                            ArrayList<BarEntry> values_Temp = new ArrayList<>();
+                            ArrayList<BarEntry> values_Lum = new ArrayList<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+
+                                contador = contador + 1;
+
+                                Machine_pojo machine = document.toObject(Machine_pojo.class);
+
+                                humedad = machine.getHumedad();
+                                humedadA = machine.getHumedadA();
+                                temperatura = machine.getTemperatura();
+                                luminosidad = machine.getLuminosidad();
+                                fecha = machine.getFecha();
+
+                                int temperatura_int = Integer.valueOf(temperatura);
+
+                                values_Hum.add(new BarEntry(contador, humedad));
+
+                                values_HumA.add(new BarEntry(contador, humedadA));
+
+                                values_Lum.add(new BarEntry(contador, luminosidad));
+
+                                values_Temp.add(new BarEntry(contador, temperatura_int));
+
+
+                                BarDataSet set1, set2, set3, set4 ;
+
+                                // create a dataset and give it a type
+                                set1 = new BarDataSet(values_Hum, "Humedad");
+                                set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+                                set1.setColor(ColorTemplate.COLORFUL_COLORS[0], 130);
+                                set1.setHighLightColor(Color.rgb(244, 117, 117));
+
+                                // create a dataset and give it a type
+                                set2 = new BarDataSet(values_HumA, "Humedad amb");
+                                set2.setAxisDependency(YAxis.AxisDependency.RIGHT);
+                                set2.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
+                                set2.setHighLightColor(Color.rgb(244, 117, 117));
+                                //set2.setFillFormatter(new MyFillFormatter(900f));
+
+                                set3 = new BarDataSet(values_Lum, "Luminosidad");
+                                set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
+                                set3.setColor(ColorTemplate.COLORFUL_COLORS[2], 130);
+                                set3.setHighLightColor(Color.rgb(244, 117, 117));
+
+
+                                set4 = new BarDataSet(values_Temp, "Temperatura");
+                                set4.setAxisDependency(YAxis.AxisDependency.RIGHT);
+                                set4.setColor(ColorTemplate.COLORFUL_COLORS[3], 130);
+                                set4.setHighLightColor(Color.rgb(244, 117, 117));
+
+
+                                ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+                                dataSets.add(set1);
+                                dataSets.add(set2);
+                                dataSets.add(set3);
+                                dataSets.add(set4);
+
+                                BarData data = new BarData(dataSets);
+                                data.setValueTextSize(0f);
+                                data.setBarWidth(0.9f);
+
+                                chart.setData(data);
+
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        // get the legend (only possible after setting data)
+        Legend l = chart.getLegend();
+
+        // draw legend entries as lines
+        l.setForm(Legend.LegendForm.LINE);
+
+
+        YAxis yl = chart.getAxisLeft();
+        yl.setSpaceTop(30f);
+        yl.setSpaceBottom(30f);
+        yl.setDrawZeroLine(false);
+
+        chart.getAxisRight().setEnabled(false);
+
+        XAxis xl = chart.getXAxis();
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
 
         //setting animation for y-axis, the bar will pop up from 0 to its value within the time we set
-        chart.animateY(1000);
+        chart.animateY(3000);
         //setting animation for x-axis, the bar will pop up separately within the time we set
-        chart.animateX(1000);
+        chart.animateX(3000);
 
-        XAxis xAxis = chart.getXAxis();
-        //change the position of x-axis to the bottom
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        //set the horizontal distance of the grid line
-        xAxis.setGranularity(1f);
-        //hiding the x-axis line, default true if not set
-        xAxis.setDrawAxisLine(false);
-        //hiding the vertical grid lines, default true if not set
-        xAxis.setDrawGridLines(false);
-
-        YAxis leftAxis = chart.getAxisLeft();
-        //hiding the left y-axis line, default true if not set
-        leftAxis.setDrawAxisLine(false);
-
-        YAxis rightAxis = chart.getAxisRight();
-        //hiding the right y-axis line, default true if not set
-        rightAxis.setDrawAxisLine(false);
-
-        Legend legend = chart.getLegend();
-        //setting the shape of the legend form to line, default square shape
-        legend.setForm(Legend.LegendForm.LINE);
-        //setting the text size of the legend
-        legend.setTextSize(11f);
-        //setting the alignment of legend toward the chart
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        //setting the stacking direction of legend
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        //setting the location of legend outside the chart, default false if not set
-        legend.setDrawInside(false);
-
+        return v;
     }
 
 }

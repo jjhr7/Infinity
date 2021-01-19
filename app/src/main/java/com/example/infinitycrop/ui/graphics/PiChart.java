@@ -4,12 +4,14 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -18,25 +20,44 @@ import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.control_panel.Control_panelFragment;
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BubbleChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BubbleData;
+import com.github.mikephil.charting.data.BubbleDataSet;
+import com.github.mikephil.charting.data.BubbleEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBubbleDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class PiChart extends Fragment {
 
@@ -50,9 +71,16 @@ public class PiChart extends Fragment {
     private String mParam2;
     private FirebaseFirestore db;
     private String uid;
-    private TextView namemachine;
 
-    private com.github.mikephil.charting.charts.PieChart chart;
+    private int humedad;
+    private int humedadA;
+    private String temperatura;
+    private int luminosidad;
+    public Timestamp fecha;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
+    private BubbleChart chart;
 
 
     public PiChart() {
@@ -91,115 +119,146 @@ public class PiChart extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_pie_chart, container, false);
-        db = FirebaseFirestore.getInstance();
 
         chart = v.findViewById(R.id.pieChart);
+        chart.getDescription().setEnabled(false);
 
-        initPieChart();
-        showPieChart();
+        chart.setDrawGridBackground(false);
+
+        chart.setTouchEnabled(true);
+
+        // enable scaling and dragging
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
+
+        chart.setMaxVisibleValueCount(200);
+        chart.setPinchZoom(false);
+
+        // get the legend (only possible after setting data)
+        Legend l = chart.getLegend();
+
+        // draw legend entries as lines
+        l.setForm(Legend.LegendForm.LINE);
+
+        YAxis yl = chart.getAxisLeft();
+        yl.setSpaceTop(30f);
+        yl.setSpaceBottom(30f);
+        yl.setDrawZeroLine(false);
+
+        chart.getAxisRight().setEnabled(false);
+
+        XAxis xl = chart.getXAxis();
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+
+        GraphicsActivity myActivity = (GraphicsActivity) getActivity();
+        uid=myActivity.getmachineID();
+
+
+        database = FirebaseDatabase.getInstance();
+
+        myRef = database.getReference("Mediciones");
+
+
+        db = FirebaseFirestore.getInstance();
+
+        db.collection("Mediciones")
+                .whereEqualTo("machineID", uid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            int contador = 0;
+
+                            ArrayList<BubbleEntry> values_Hum = new ArrayList<>();
+                            ArrayList<BubbleEntry> values_HumA = new ArrayList<>();
+                            ArrayList<BubbleEntry> values_Temp = new ArrayList<>();
+                            ArrayList<BubbleEntry> values_Lum = new ArrayList<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+
+                                contador = contador + 1;
+
+                                Machine_pojo machine = document.toObject(Machine_pojo.class);
+
+                                humedad = machine.getHumedad();
+                                humedadA = machine.getHumedadA();
+                                temperatura = machine.getTemperatura();
+                                luminosidad = machine.getLuminosidad();
+                                fecha = machine.getFecha();
+
+                                int temperatura_int = Integer.valueOf(temperatura);
+
+                                values_Hum.add(new BubbleEntry(contador, humedad, 1));
+
+                                values_HumA.add(new BubbleEntry(contador, humedadA, 1));
+
+                                values_Lum.add(new BubbleEntry(contador, luminosidad, 1));
+
+                                values_Temp.add(new BubbleEntry(contador, temperatura_int, 1));
+
+                                // create a dataset and give it a type
+                                BubbleDataSet set1 = new BubbleDataSet(values_Hum, "Humedad");
+                                set1.setDrawIcons(false);
+                                set1.setValueTextSize(10f);
+                                set1.setValueTextColor(R.color.black);
+                                set1.setColor(ColorTemplate.COLORFUL_COLORS[0], 130);
+                                set1.setDrawValues(true);
+
+                                BubbleDataSet set2 = new BubbleDataSet(values_HumA, "Humedad amb");
+                                set2.setDrawIcons(false);
+                                set2.setValueTextSize(10f);
+                                set2.setValueTextColor(R.color.black);
+                                set2.setIconsOffset(new MPPointF(0, 15));
+                                set2.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
+                                set2.setDrawValues(true);
+
+                                BubbleDataSet set3 = new BubbleDataSet(values_Lum, "Luminosidad");
+                                set3.setColor(ColorTemplate.COLORFUL_COLORS[2], 130);
+                                set3.setValueTextSize(10f);
+                                set3.setValueTextColor(R.color.black);
+                                set3.setDrawValues(true);
+
+                                BubbleDataSet set4 = new BubbleDataSet(values_Temp, "Temperatura");
+                                set4.setDrawIcons(false);
+                                set4.setValueTextSize(10f);
+                                set4.setValueTextColor(R.color.black);
+                                set4.setIconsOffset(new MPPointF(0, 15));
+                                set4.setColor(ColorTemplate.COLORFUL_COLORS[3], 130);
+                                set4.setDrawValues(true);
+
+                                ArrayList<IBubbleDataSet> dataSets = new ArrayList<>();
+                                dataSets.add(set1); // add the data sets
+                                dataSets.add(set2);
+                                dataSets.add(set3);
+                                dataSets.add(set4);
+
+                                // create a data object with the data sets
+                                BubbleData data = new BubbleData(dataSets);
+                                data.setDrawValues(false);
+                                data.setValueTextSize(8f);
+                                data.setValueTextColor(Color.BLACK);
+                                data.setHighlightCircleWidth(1.5f);
+
+                                chart.setData(data);
+                                chart.invalidate();
+
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
 
         return v;
 
     }
 
-    private void showPieChart(){
-
-        ArrayList<PieEntry> pieEntries = new ArrayList<>();
-        String label = "type";
-
-        /*
-        db = FirebaseFirestore.getInstance();
-
-        db.collection("prueba gráficas").document("LXwoY5WvOFIzybnDJWOI")
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            return;
-                        }
-
-                        if (snapshot != null && snapshot.exists()) {
-
-                            Long medidaA=snapshot.getLong("agua");
-                            Long medidaL=snapshot.getLong("luz");
-                            //initializing data
-                            Map<String, Integer> typeAmountMap = new HashMap<>();
-                            typeAmountMap.put("Luminosidad", Math.toIntExact(medidaL));
-                            typeAmountMap.put("Agua", Math.toIntExact(medidaA));
-
-
-                            //input data and fit data into pie chart entry
-                            for(String type: typeAmountMap.keySet()){
-                                pieEntries.add(new PieEntry(typeAmountMap.get(type).floatValue(), type));
-                            }
-
-
-                        }
-                    }
-                });
-
-         */
-
-        //initializing data
-        Map<String, Integer> typeAmountMap = new HashMap<>();
-        typeAmountMap.put("Luminosidad",200);
-        typeAmountMap.put("Temperatura",230);
-        typeAmountMap.put("Humedad",100);
-        typeAmountMap.put("Humedad ambiente",500);
-
-        //initializing colors for the entries
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.parseColor("#304567"));
-        colors.add(Color.parseColor("#309967"));
-        colors.add(Color.parseColor("#476567"));
-        colors.add(Color.parseColor("#890567"));
-        colors.add(Color.parseColor("#a35567"));
-        colors.add(Color.parseColor("#ff5f67"));
-        colors.add(Color.parseColor("#3ca567"));
-
-        //input data and fit data into pie chart entry
-        for(String type: typeAmountMap.keySet()){
-            pieEntries.add(new PieEntry(typeAmountMap.get(type).floatValue(), type));
-        }
-
-        //collecting the entries with label name
-        PieDataSet pieDataSet = new PieDataSet(pieEntries,label);
-        //setting text size of the value
-        pieDataSet.setValueTextSize(12f);
-        //providing color list for coloring different entries
-        pieDataSet.setColors(colors);
-        //grouping the data set from entry to chart
-        PieData pieData = new PieData(pieDataSet);
-        //showing the value of the entries, default true if not set
-        pieData.setDrawValues(true);
-
-        chart.setData(pieData);
-        chart.invalidate();
-    }
-
-
-    private void initPieChart(){
-        //using percentage as values instead of amount
-        chart.setUsePercentValues(true);
-
-        //remove the description label on the lower left corner, default true if not set
-        chart.getDescription().setEnabled(false);
-
-        //enabling the user to rotate the chart, default true
-        chart.setRotationEnabled(true);
-        //adding friction when rotating the pie chart
-        chart.setDragDecelerationFrictionCoef(0.9f);
-        //setting the first entry start from right hand side, default starting from top
-        chart.setRotationAngle(0);
-
-        //highlight the entry when it is tapped, default true if not set
-        chart.setHighlightPerTapEnabled(true);
-        //setting the color of the hole in the middle, default white
-        chart.setHoleColor(Color.parseColor("#000000"));
-
-    }
 
 
 }

@@ -4,23 +4,53 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.control_panel.Control_panelFragment;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class LineChart extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -32,6 +62,18 @@ public class LineChart extends Fragment {
     private String mParam1;
     private String mParam2;
     private FirebaseFirestore db;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    private LineDataSet ldataSet = new LineDataSet(null,null);
+    private ArrayList<ILineDataSet> iLineDataSets = new ArrayList<>();
+    private LineData linedata;
+    private int humedad;
+    private int humedadA;
+    private String temperatura;
+    private int luminosidad;
+    public Timestamp fecha;
+    private String uid;
+
 
     private com.github.mikephil.charting.charts.LineChart chart;
 
@@ -72,176 +114,161 @@ public class LineChart extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_linear_chart, container, false);
-        db = FirebaseFirestore.getInstance();
+
+        GraphicsActivity myActivity = (GraphicsActivity) getActivity();
+        uid=myActivity.getmachineID();
 
         chart = v.findViewById(R.id.chartLinear);
         chart.setTouchEnabled(true);
         chart.setPinchZoom(true);
+        chart.setDrawGridBackground(false);
+        // enable touch gestures
+        chart.setTouchEnabled(true);
 
-        ArrayList<Entry> values = new ArrayList<>();
-        values.add(new Entry(1, 50));
-        values.add(new Entry(2, 100));
-
-        LineDataSet set1;
-        if (chart.getData() != null &&
-                chart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet) chart.getData().getDataSetByIndex(0);
-            set1.setValues(values);
-            chart.getData().notifyDataChanged();
-            chart.notifyDataSetChanged();
-        } else {
-            set1 = new LineDataSet(values, "Sample Data");
-            set1.setDrawIcons(false);
-            set1.enableDashedLine(10f, 5f, 0f);
-            set1.enableDashedHighlightLine(10f, 5f, 0f);
-            set1.setColor(Color.DKGRAY);
-            set1.setCircleColor(Color.DKGRAY);
-            set1.setLineWidth(1f);
-            set1.setCircleRadius(3f);
-            set1.setDrawCircleHole(false);
-            set1.setValueTextSize(9f);
-            set1.setDrawFilled(true);
-            set1.setFormLineWidth(1f);
-            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-            set1.setFormSize(15.f);
-            if (Utils.getSDKInt() >= 18) {
-                Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fade_blue);
-                set1.setFillDrawable(drawable);
-            } else {
-                set1.setFillColor(Color.DKGRAY);
-            }
-            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1);
-            LineData data = new LineData(dataSets);
-            chart.setData(data);
-        }
-        if (chart.getData() != null &&
-                chart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet) chart.getData().getDataSetByIndex(0);
-            set1.setValues(values);
-            chart.getData().notifyDataChanged();
-            chart.notifyDataSetChanged();
-        } else {
-            set1 = new LineDataSet(values, "Sample Data");
-            set1.setDrawIcons(false);
-            set1.enableDashedLine(10f, 5f, 0f);
-            set1.enableDashedHighlightLine(10f, 5f, 0f);
-            set1.setColor(Color.DKGRAY);
-            set1.setCircleColor(Color.DKGRAY);
-            set1.setLineWidth(1f);
-            set1.setCircleRadius(3f);
-            set1.setDrawCircleHole(false);
-            set1.setValueTextSize(9f);
-            set1.setDrawFilled(true);
-            set1.setFormLineWidth(1f);
-            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
-            set1.setFormSize(15.f);
-            if (Utils.getSDKInt() >= 18) {
-                Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fade_blue);
-                set1.setFillDrawable(drawable);
-            } else {
-                set1.setFillColor(Color.DKGRAY);
-            }
-            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1);
-            LineData data = new LineData(dataSets);
-            chart.setData(data);
-        }
+        //setting animation for y-axis, the bar will pop up from 0 to its value within the time we set
+        chart.animateY(1000);
+        //setting animation for x-axis, the bar will pop up separately within the time we set
+        chart.animateX(1000);
 
 
+        database = FirebaseDatabase.getInstance();
 
-/*
-        List<Entry> valsComp1 = new ArrayList<Entry>();
-        List<Entry> valsComp2 = new ArrayList<Entry>();
+        myRef = database.getReference("Mediciones");
 
-        Entry c1e1 = new Entry(0f, 100000f); // 0 == quarter 1
-        valsComp1.add(c1e1);
-        Entry c1e2 = new Entry(1f, 140000f); // 1 == quarter 2 ...
-        valsComp1.add(c1e2);
-        // and so on ...
-        Entry c2e1 = new Entry(0f, 130000f); // 0 == quarter 1
-        valsComp2.add(c2e1);
-        Entry c2e2 = new Entry(1f, 115000f); // 1 == quarter 2 ...
-        valsComp2.add(c2e2);
-
-        LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
-        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        LineDataSet setComp2 = new LineDataSet(valsComp2, "Company 2");
-        setComp2.setAxisDependency(YAxis.AxisDependency.LEFT);
-
-        // use the interface ILineDataSet
-        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(setComp1);
-        dataSets.add(setComp2);
-        LineData data = new LineData(dataSets);
-        chart.setData(data);
-        chart.invalidate(); // refresh
-
-        // the labels that should be drawn on the XAxis
-        final String[] quarters = new String[] { "Q1", "Q2", "Q3", "Q4" };
-        ValueFormatter formatter = new ValueFormatter() {
-            @Override
-            public String getAxisLabel(float value, AxisBase axis) {
-                return quarters[(int) value];
-            }
-        };
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-        xAxis.setValueFormatter(formatter);
-
-/*
-
-        /*
         db = FirebaseFirestore.getInstance();
-        MainActivity myActivity = (MainActivity) getActivity();
-        uid=myActivity.getMachineUID();
-        db.collection("Mediciones planta 1")
-                .document(uid)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+
+        db.collection("Mediciones")
+                .whereEqualTo("machineID", uid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            return;
-                        }
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
 
-                        if (snapshot != null && snapshot.exists()) {
+                            int contador = 0;
 
-                            List<DataEntry> data = new ArrayList<>();
-                            data.add(new ValueDataEntry("John", 10000));
-                            data.add(new ValueDataEntry("Jake", 12000));
-                            data.add(new ValueDataEntry("Peter", 18000));
+                            ArrayList<Entry> values_Hum = new ArrayList<>();
+                            ArrayList<Entry> values_HumA = new ArrayList<>();
+                            ArrayList<Entry> values_Temp = new ArrayList<>();
+                            ArrayList<Entry> values_Lum = new ArrayList<>();
 
-                            pie.data(data);
-                            anyChartView.setChart(pie);
-
-                           /* //Temperatura
-                            String medidaT=snapshot.getString("Temperatura");
-                            medidaTemp.setText(medidaT+"°C");
-                            //Humedad
-                            String medidaH=snapshot.getString("Humedad");
-                            medidaHum.setText(medidaH+"%");
-                            //Humedad Ambiente
-                            String medidaHA=snapshot.getString("Humedad Ambiente");
-                            medidaHumAm.setText(medidaHA+"%");
-                            //Luminosidad
-                            String medidaL=snapshot.getString("Luminosidad");
-                            medidaLuz.setText(medidaL+"%");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
 
 
+                                contador = contador + 1;
+
+                                Machine_pojo machine = document.toObject(Machine_pojo.class);
+
+                                humedad = machine.getHumedad();
+                                humedadA = machine.getHumedadA();
+                                temperatura = machine.getTemperatura();
+                                luminosidad = machine.getLuminosidad();
+                                fecha = machine.getFecha();
+
+                                int temperatura_int = Integer.valueOf(temperatura);
+
+                                values_Hum.add(new Entry(contador, humedad));
+
+                                values_HumA.add(new Entry(contador, humedadA));
+
+                                values_Lum.add(new Entry(contador, luminosidad));
+
+                                values_Temp.add(new Entry(contador, temperatura_int));
+
+                                chart(values_Hum, values_HumA, values_Temp, values_Lum);
 
 
+                            }
                         } else {
-
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
-
                 });
 
-         */
+        // get the legend (only possible after setting data)
+        Legend l = chart.getLegend();
+
+        // draw legend entries as lines
+        l.setForm(Legend.LegendForm.LINE);
+
+
+        YAxis yl = chart.getAxisLeft();
+        yl.setSpaceTop(30f);
+        yl.setSpaceBottom(30f);
+        yl.setDrawZeroLine(false);
+
+        chart.getAxisRight().setEnabled(false);
+
+        XAxis xl = chart.getXAxis();
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+
+
         return v;
 
     }
 
+    public void chart(ArrayList<Entry> valuesHum, ArrayList<Entry> valuesHumA, ArrayList<Entry> valuesTpa,ArrayList<Entry> valuesLum ){
+
+        LineDataSet set1, set2, set3, set4;
+
+            // create a dataset and give it a type
+            set1 = new LineDataSet(valuesHum, "Humedad");
+            set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+            set1.setColor(ColorTemplate.COLORFUL_COLORS[0], 130);
+            set1.setCircleColor(Color.MAGENTA);
+            set1.setLineWidth(2f);
+            set1.setCircleRadius(3f);
+            set1.setFillAlpha(65);
+            set1.setFillColor(ColorTemplate.getHoloBlue());
+            set1.setHighLightColor(Color.rgb(244, 117, 117));
+            set1.setDrawCircleHole(false);
+
+            // create a dataset and give it a type
+            set2 = new LineDataSet(valuesHumA, "Humedad amb");
+            set2.setAxisDependency(YAxis.AxisDependency.RIGHT);
+            set2.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
+            set2.setCircleColor(Color.RED);
+            set2.setLineWidth(2f);
+            set2.setCircleRadius(3f);
+            set2.setFillAlpha(65);
+            set2.setFillColor(Color.RED);
+            set2.setDrawCircleHole(false);
+            set2.setHighLightColor(Color.rgb(244, 117, 117));
+            //set2.setFillFormatter(new MyFillFormatter(900f));
+
+            set3 = new LineDataSet(valuesLum, "Luminosidad");
+            set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
+            set3.setColor(ColorTemplate.COLORFUL_COLORS[2], 130);
+            set3.setCircleColor(Color.YELLOW);
+            set3.setLineWidth(2f);
+            set3.setCircleRadius(3f);
+            set3.setFillAlpha(65);
+            set3.setFillColor(ColorTemplate.colorWithAlpha(Color.YELLOW, 200));
+            set3.setDrawCircleHole(false);
+            set3.setHighLightColor(Color.rgb(244, 117, 117));
+
+
+            set4 = new LineDataSet(valuesTpa, "Temperatura");
+            set4.setAxisDependency(YAxis.AxisDependency.RIGHT);
+            set4.setColor(ColorTemplate.COLORFUL_COLORS[3], 130);
+            set4.setCircleColor(Color.DKGRAY);
+            set4.setLineWidth(2f);
+            set4.setCircleRadius(3f);
+            set4.setFillAlpha(65);
+            set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 200));
+            set4.setDrawCircleHole(false);
+            set4.setHighLightColor(Color.rgb(244, 117, 117));
+
+
+            // create a data object with the data sets
+            LineData data = new LineData(set1, set2, set3, set4);
+            data.setValueTextColor(Color.WHITE);
+            data.setValueTextSize(9f);
+
+            // set data
+            chart.setData(data);
+            chart.invalidate();
+    }
 
 }
