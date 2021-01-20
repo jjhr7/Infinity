@@ -20,8 +20,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="378dp"
-        android:layout_height="560dp"
+        android:layout_width="375dp"
+        android:layout_height="564dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/detail_page_bg"
         app:layout_constraintBottom_toBottomOf="parent"

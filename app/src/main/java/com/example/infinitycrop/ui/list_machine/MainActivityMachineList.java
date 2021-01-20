@@ -78,7 +78,7 @@ public class MainActivityMachineList extends AppCompatActivity {
         adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                //documentSnapshot.getData() -> devuelve all que tiene la maquina en firebase
+                /*documentSnapshot.getData();*/ //-> devuelve all que tiene la maquina en firebase
                 MachineModel machine = documentSnapshot.toObject(MachineModel.class);
                 final String id = documentSnapshot.getId();
                 final String path = documentSnapshot.getString("description"); //devuelve ruta en firebase Machine\madara

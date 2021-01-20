@@ -11,9 +11,12 @@
     <uses-permission android:name="com.google.android.things.permission.MANAGE_INPUT_DRIVERS" />
     <uses-permission android:name="com.google.android.things.permission.USE_PERIPHERAL_IO" /> <!-- Permisos Qr -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
 
     <application
         android:allowBackup="true"
@@ -37,6 +40,7 @@
 
         <activity android:name=".ui.LoadAnimations.IntroductoryActivity">
             <intent-filter>
+                <action android:name="android.intent.action.SET_ALARM"/>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
