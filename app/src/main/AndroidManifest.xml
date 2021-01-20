@@ -56,6 +56,8 @@
         <activity android:name=".ui.graphics.GraphicsActivity" />
         <activity android:name=".ui.MachineControl.planta1" />
         <activity android:name=".ui.notifications.NotificacionesActivity" />
+        <activity android:name=".ui.guiabotanica.GuiaActivity" />
+        <activity android:name=".ui.guiabotanica.PlantActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

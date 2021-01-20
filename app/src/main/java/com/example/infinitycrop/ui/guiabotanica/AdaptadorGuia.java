@@ -1,7 +1,8 @@
-package org.example.lvilmar1.recycleviewpersonalizado;
+package com.example.infinitycrop.ui.guiabotanica;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.infinitycrop.R;
 
 import java.util.ArrayList;
 
@@ -34,10 +37,10 @@ public class AdaptadorGuia extends RecyclerView.Adapter<AdaptadorGuia.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolderNotificaciones holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolderNotificaciones holder, final int position) {
         holder.nombre.setText(listaNotificaciones.get(position).getNombrePlanta());
         holder.info.setText(listaNotificaciones.get(position).getDescripcionPlanta());
-        //holder.foto.setImageResource(R.drawable.planta);
+        //holder.foto.setImageURI(listaNotificaciones.get(position).getFotoPlanta());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

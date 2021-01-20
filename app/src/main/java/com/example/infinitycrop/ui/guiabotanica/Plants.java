@@ -1,4 +1,4 @@
- package org.example.lvilmar1.recycleviewpersonalizado;
+ package com.example.infinitycrop.ui.guiabotanica;
 
 public class Plants {
 

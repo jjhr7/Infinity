@@ -1,31 +1,23 @@
-package org.example.lvilmar1.recycleviewpersonalizado;
+package com.example.infinitycrop.ui.guiabotanica;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
+import com.example.infinitycrop.R;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class PlantActivity extends AppCompatActivity {
@@ -40,6 +32,7 @@ public class PlantActivity extends AppCompatActivity {
     TextView luminosidad;
     private String uid;
     String nombre, info, foto;
+    String humedad2;
 
     private List<Plants> plants = new ArrayList<>();
     //Set para que no se repitan las id de las comunidades y que no se dupliquen
@@ -49,8 +42,20 @@ public class PlantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant);
-        getIncomingIntent();
 
+
+        //volver a la anterior actividad
+        ImageView backToProfile =findViewById(R.id.backToGuide);
+        backToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStop();
+                finish();
+            }
+        });
+
+
+        getIncomingIntent();
     }
     private void getIncomingIntent() {
         if(getIntent().hasExtra("nombre") && getIntent().hasExtra("info")){
