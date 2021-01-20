@@ -38,7 +38,6 @@ public class GuiaActivity extends AppCompatActivity {
     String humedad;
     String luminosidad;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,9 +100,9 @@ public class GuiaActivity extends AppCompatActivity {
                                 descripcion = Planta.getDescripcionPlanta();
                                 nombre = Planta.getNombrePlanta();
 
-
                                 Guia notificacion = new Guia(nombre,foto, descripcion,humedad,temperatura,luminosidad);
                                 listaNotificaciones.add(notificacion);
+
 
                             }
                             adaptadorNotificaciones = new AdaptadorGuia(getBaseContext(), listaNotificaciones);

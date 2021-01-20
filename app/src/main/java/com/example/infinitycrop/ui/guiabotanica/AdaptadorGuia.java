@@ -2,6 +2,7 @@ package com.example.infinitycrop.ui.guiabotanica;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.infinitycrop.R;
 
 import java.util.ArrayList;
@@ -40,7 +42,9 @@ public class AdaptadorGuia extends RecyclerView.Adapter<AdaptadorGuia.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolderNotificaciones holder, final int position) {
         holder.nombre.setText(listaNotificaciones.get(position).getNombrePlanta());
         holder.info.setText(listaNotificaciones.get(position).getDescripcionPlanta());
-        //holder.foto.setImageURI(listaNotificaciones.get(position).getFotoPlanta());
+        Glide.with(holder.itemView.getContext())
+                .load(listaNotificaciones.get(position).fotoPlanta)
+                .into(holder.foto);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,9 +52,9 @@ public class AdaptadorGuia extends RecyclerView.Adapter<AdaptadorGuia.ViewHolder
                 i.putExtra("nombre", listaNotificaciones.get(position).getNombrePlanta());
                 i.putExtra("info",listaNotificaciones.get(position).getDescripcionPlanta());
                 i.putExtra("foto", listaNotificaciones.get(position).getFotoPlanta());
-                i.putExtra("humedad", listaNotificaciones.get(position).getFotoPlanta());
-                i.putExtra("temperatura", listaNotificaciones.get(position).getFotoPlanta());
-                i.putExtra("luminosidad", listaNotificaciones.get(position).getFotoPlanta());
+                i.putExtra("humedad", listaNotificaciones.get(position).getHumedadPlanta());
+                i.putExtra("temperatura", listaNotificaciones.get(position).getTemperaturaPlanta());
+                i.putExtra("luminosidad", listaNotificaciones.get(position).getLuminosidadPlanta());
 
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 context.startActivity(i);
