@@ -235,6 +235,7 @@ public class HomeForoFragment extends Fragment {
         posts.clear();
         //get all the post where i was subscribed.
         db.collection("Posts")
+                .orderBy("date",Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

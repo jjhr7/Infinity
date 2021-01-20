@@ -79,7 +79,7 @@ public class Planta1Fragment extends Fragment {
         final TextView medidaTemp=v.findViewById(R.id.medidaTemperatura);
         final TextView medidaHum=v.findViewById(R.id.medidaHumedad);
         final TextView medidaHumAm=v.findViewById(R.id.medidaSalinidad);
-        final TextView medidaLuz=v.findViewById(R.id.medidasLuminosidad);
+        /*final TextView medidaLuz=v.findViewById(R.id.medidasLuminosidad);*/
         uid=myActivity.getMachineUID();
         db.collection("Mediciones planta 1")
                 .document(uid)
@@ -102,8 +102,8 @@ public class Planta1Fragment extends Fragment {
                             String medidaHA=snapshot.getString("Humedad Ambiente");
                             medidaHumAm.setText(medidaHA+"%");
                             //Luminosidad
-                            String medidaL=snapshot.getString("Luminosidad");
-                            medidaLuz.setText(medidaL+"%");
+                            /*String medidaL=snapshot.getString("Luminosidad");
+                            medidaLuz.setText(medidaL+"%");*/
 
 
                         } else {

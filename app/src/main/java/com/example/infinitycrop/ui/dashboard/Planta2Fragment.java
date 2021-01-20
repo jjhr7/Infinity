@@ -74,9 +74,9 @@ public class Planta2Fragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         MainActivity myActivity = (MainActivity) getActivity();
         final TextView medidaTemp=v.findViewById(R.id.medidaTemperaturaPlanta2);
-        final TextView medidaHum=v.findViewById(R.id.medidaHumedadPlanta2);
+        /*final TextView medidaHum=v.findViewById(R.id.medidaHumedadPlanta2);*/
         final TextView medidaHumAm=v.findViewById(R.id.medidaSalinidadPlanta2);
-        final TextView medidaLuz=v.findViewById(R.id.medidasLuminosidadPlanta2);
+        /*final TextView medidaLuz=v.findViewById(R.id.medidasLuminosidadPlanta2);*/
         uid=myActivity.getMachineUID();
         db.collection("Mediciones planta 2")
                 .document(uid)
@@ -93,14 +93,14 @@ public class Planta2Fragment extends Fragment {
                             String medidaT=snapshot.getString("Temperatura");
                             medidaTemp.setText(medidaT+"°C");
                             //Humedad
-                            String medidaH=snapshot.getString("Humedad");
-                            medidaHum.setText(medidaH+"%");
+                            /*String medidaH=snapshot.getString("Humedad");
+                            medidaHum.setText(medidaH+"%");*/
                             //Humedad Ambiente
                             String medidaHA=snapshot.getString("Humedad Ambiente");
                             medidaHumAm.setText(medidaHA+"%");
                             //Luminosidad
-                            String medidaL=snapshot.getString("Luminosidad");
-                            medidaLuz.setText(medidaL+"%");
+                            /*String medidaL=snapshot.getString("Luminosidad");
+                            medidaLuz.setText(medidaL+"%");*/
 
 
                         } else {

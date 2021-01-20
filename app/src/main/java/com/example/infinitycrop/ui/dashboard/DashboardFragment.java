@@ -192,11 +192,11 @@ public class DashboardFragment extends Fragment implements MqttCallback {
 
         final TextView medidasT = v.findViewById(R.id.medidaTemperaturaGeneral);
         final TextView medidasH = v.findViewById(R.id.medidaHumedadGeneral);
-        final TextView medidasS = v.findViewById(R.id.medidaSalinidadGeneral);
-        final TextView medidasL = v.findViewById(R.id.medidasLuminosidadGeneral);
+        /*final TextView medidasS = v.findViewById(R.id.medidaSalinidadGeneral);*/
+        /*final TextView medidasL = v.findViewById(R.id.medidasLuminosidadGeneral);*/
 
         recyclerView = v.findViewById(R.id.rv_1);
-        staticRvAdapter = new StaticRvAdapter(item, medidasT, medidasH, medidasS, medidasL);
+        staticRvAdapter = new StaticRvAdapter(item);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(staticRvAdapter);
 

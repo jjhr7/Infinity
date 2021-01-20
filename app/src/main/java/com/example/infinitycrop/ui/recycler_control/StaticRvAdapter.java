@@ -35,12 +35,8 @@ public class StaticRvAdapter extends RecyclerView.Adapter<StaticRvAdapter.Static
     TextView textMedidasS;
     TextView textMedidasL;
 
-    public StaticRvAdapter(ArrayList<StaticRvModel> items,TextView mediT,TextView mediH,TextView mediS,TextView mediL) {
+    public StaticRvAdapter(ArrayList<StaticRvModel> items) {
         this.items = items;
-        textMedidasTemp =mediT;
-        textMedidasH =mediH;
-        textMedidasS =mediS;
-        textMedidasL =mediL;
 
     }
 

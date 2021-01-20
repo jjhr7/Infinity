@@ -109,7 +109,8 @@
                             android:layout_height="39dp"
                             android:layout_marginTop="24dp"
                             android:text="34°C"
-                            android:textSize="31sp"
+                            android:gravity="center"
+                            android:textSize="25sp"
                             app:layout_constraintStart_toStartOf="@+id/textTemperatura"
                             app:layout_constraintTop_toBottomOf="@+id/textTemperatura" />
 
@@ -126,82 +127,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            <!--humedad-->
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:layout_marginBottom="12dp"
-                android:layout_margin="12dp"
-                >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
-                    android:orientation="vertical"
-                    android:padding="2dp">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="12dp"
-                        android:layout_height="match_parent">
-
-
-                        <TextView
-                            android:id="@+id/textHumedad"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:text="Humedad"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                            <!--app:layout_constraintBottom_toBottomOf="@+id/switchHumedad"-->
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <!--<Switch
-                            android:id="@+id/switchHumedad"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:checked="true"
-                            android:textColorLink="#a0c63e"
-                            android:textSize="8sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />-->
-
-                        <TextView
-                            android:id="@+id/medidaHumedadPlanta2"
-                            android:layout_width="90dp"
-                            android:layout_height="39dp"
-                            android:layout_marginTop="24dp"
-                            android:text="68%"
-                            android:textSize="31sp"
-                            app:layout_constraintStart_toStartOf="@+id/textHumedad"
-                            app:layout_constraintTop_toBottomOf="@+id/textHumedad" />
-
-                        <ImageView
-                            android:id="@+id/imgHumedad"
-                            android:layout_width="53dp"
-                            android:layout_height="55dp"
-                            android:layout_marginEnd="1dp"
-                            android:src="@drawable/icons_humidity"
-                            app:layout_constraintBottom_toBottomOf="@+id/medidaHumedadPlanta2"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/medidaHumedadPlanta2"
-                            app:layout_constraintTop_toTopOf="@+id/medidaHumedadPlanta2" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
             <!--salinidad-->
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
@@ -261,7 +187,8 @@
                             android:layout_height="39dp"
                             android:layout_marginTop="24dp"
                             android:text="10%"
-                            android:textSize="31sp"
+                            android:gravity="center"
+                            android:textSize="25sp"
                             app:layout_constraintStart_toStartOf="@+id/textSalinidad"
                             app:layout_constraintTop_toBottomOf="@+id/textSalinidad" />
 
@@ -328,26 +255,17 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/medidasLuminosidadPlanta2"
-                            android:layout_width="90dp"
-                            android:layout_height="39dp"
-                            android:layout_marginTop="24dp"
-                            android:text="90%"
-                            android:textSize="31sp"
-                            app:layout_constraintStart_toStartOf="@+id/textLuminosidad"
-                            app:layout_constraintTop_toBottomOf="@+id/textLuminosidad" />
 
                         <ImageView
                             android:id="@+id/imgLuminosidad"
                             android:layout_width="53dp"
                             android:layout_height="55dp"
-                            android:layout_marginEnd="1dp"
+                            android:layout_marginTop="24dp"
                             android:src="@drawable/icons_luminosity"
-                            app:layout_constraintBottom_toBottomOf="@+id/medidasLuminosidadPlanta2"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/medidasLuminosidadPlanta2"
-                            app:layout_constraintTop_toTopOf="@+id/medidasLuminosidadPlanta2" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/switchLuminosidadPlanta2" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

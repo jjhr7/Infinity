@@ -3,8 +3,11 @@ package com.example.infinitycrop.ui.Foro.main.Community.NewPost;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -12,8 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;
 import com.example.infinitycrop.ui.Foro.main.Community.CommunityMain;
 import com.example.infinitycrop.ui.Foro.main.Community.NewPost.CreatePost.CreatePost;
+import com.example.infinitycrop.ui.Foro.main.Community.NewPost.RvMyPosts.AdapterMyPosts;
+import com.example.infinitycrop.ui.Foro.main.Home.RVs.PostModel;
+import com.example.infinitycrop.ui.Foro.main.Home.RVs.RVFollowed.AdapterFollowedCmty;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,7 +81,13 @@ public class NewPostFragment extends Fragment {
     private String comunityID;
     private ConstraintLayout btn_create;
     private RecyclerView rv_myPost;
+    private AdapterMyPosts adapterMyPosts;
 
+    private List<PostModel> postModelList= new ArrayList<>();
+    //firebase
+    private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
+    private String uid;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,6 +96,11 @@ public class NewPostFragment extends Fragment {
 
         CommunityMain communityMain= (CommunityMain) getActivity();
         comunityID=communityMain.getCommunityUid();
+
+        //firebase
+        db=FirebaseFirestore.getInstance();
+        firebaseAuth=FirebaseAuth.getInstance();
+        uid=firebaseAuth.getUid();
 
         //rv, adapter
         rv_myPost=v.findViewById(R.id.rv_myGalleryPosts);
@@ -88,6 +115,40 @@ public class NewPostFragment extends Fragment {
             }
         });
 
+        initRvMyPosts();
+        getMyPosts();
+
         return v;
     }
+
+    private void initRvMyPosts(){
+        rv_myPost.setHasFixedSize(false);
+        rv_myPost.setLayoutManager(new GridLayoutManager(getContext(),3,GridLayoutManager.VERTICAL,false));
+    }
+    private void getMyPosts(){
+        db.collection("Posts")
+                .whereEqualTo("creator",uid)
+                .whereEqualTo("community",comunityID)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            return;
+                        }
+                        if(value!=null){
+                            postModelList.clear();
+                            for (QueryDocumentSnapshot doc : value) {
+                                PostModel postModel=doc.toObject(PostModel.class);
+                                postModel.setUid(doc.getId());
+                                postModelList.add(postModel);
+                            }
+                            adapterMyPosts= new AdapterMyPosts(postModelList,getContext());
+                            //onclickAdapterFollowedCmty();
+                            rv_myPost.setAdapter(adapterMyPosts);
+                        }
+                    }
+                });
+    }
+
 }

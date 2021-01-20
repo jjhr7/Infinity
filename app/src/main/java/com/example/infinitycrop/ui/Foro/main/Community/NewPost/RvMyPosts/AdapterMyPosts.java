@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.main.Home.RVs.PostModel;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -28,13 +30,14 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyPostsH
     @Override
     public MyPostsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.post_item,parent,false);
+                .inflate(R.layout.img_post_item,parent,false);
         return new MyPostsHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyPostsHolder holder, int position) {
         PostModel postModel=postModels.get(position);
+        Picasso.get().load(postModel.getImg()).into(holder.imag_post);
     }
 
     @Override
@@ -43,11 +46,13 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyPostsH
     }
 
     public static class MyPostsHolder extends RecyclerView.ViewHolder{
-    protected ImageView imag_post;
 
-    public MyPostsHolder(@NonNull View itemView) {
-        super(itemView);
+        protected RoundedImageView imag_post;
+
+        public MyPostsHolder(@NonNull View itemView) {
+            super(itemView);
+            imag_post=itemView.findViewById(R.id.img_image_post);
+        }
     }
-}
 
 }
