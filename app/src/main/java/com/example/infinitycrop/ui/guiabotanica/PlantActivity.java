@@ -67,6 +67,7 @@ public class PlantActivity extends AppCompatActivity {
             String temperatura=getIntent().getStringExtra("temperatura");
             String luminosidad=getIntent().getStringExtra("luminosidad");
 
+
             TextView name = findViewById(R.id.nombreID);
             name.setText(nombre);
 
@@ -75,7 +76,6 @@ public class PlantActivity extends AppCompatActivity {
 
             TextView humidity = findViewById(R.id.humedadID);
             humidity.setText(humedad);
-
 
             TextView temperature = findViewById(R.id.temperaturaID);
             temperature.setText(temperatura);
