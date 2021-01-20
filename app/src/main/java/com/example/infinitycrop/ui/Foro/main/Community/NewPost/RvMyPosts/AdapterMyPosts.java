@@ -16,10 +16,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyPostsHolder> {
+public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyPostsHolder> implements View.OnClickListener{
 
     private List<PostModel> postModels;
     private Context context;
+    private View.OnClickListener listener;
 
     public AdapterMyPosts(List<PostModel> postModels, Context context) {
         this.postModels = postModels;
@@ -31,6 +32,7 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyPostsH
     public MyPostsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.img_post_item,parent,false);
+        v.setOnClickListener(this);
         return new MyPostsHolder(v);
     }
 
@@ -43,6 +45,17 @@ public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyPostsH
     @Override
     public int getItemCount() {
         return postModels.size();
+    }
+
+    //onClikc
+    public void setOnClickListener(View.OnClickListener listener) {
+        this.listener = listener;
+    }
+    @Override
+    public void onClick(View v) {
+        if(listener!=null){
+            listener.onClick(v);
+        }
     }
 
     public static class MyPostsHolder extends RecyclerView.ViewHolder{

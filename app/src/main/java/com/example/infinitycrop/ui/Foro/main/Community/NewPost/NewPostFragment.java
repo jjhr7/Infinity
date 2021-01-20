@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;
@@ -144,11 +145,27 @@ public class NewPostFragment extends Fragment {
                                 postModelList.add(postModel);
                             }
                             adapterMyPosts= new AdapterMyPosts(postModelList,getContext());
-                            //onclickAdapterFollowedCmty();
+                            onclickPost();
                             rv_myPost.setAdapter(adapterMyPosts);
                         }
                     }
                 });
+    }
+
+    private void onclickPost(){
+        adapterMyPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position=rv_myPost.getChildLayoutPosition(v);
+                PostModel postModel=postModelList.get(position);
+                intentPosts(postModel.getUid());
+            }
+        });
+    }
+    private void intentPosts(String idPost){
+        Intent intent = new Intent(getActivity(), PostView.class);
+        intent.putExtra("Post", idPost);
+        startActivity(intent);
     }
 
 }

@@ -152,7 +152,7 @@ public class choose_community extends AppCompatActivity {
                 final String id = documentSnapshot.getId();
                 //final String path = documentSnapshot.getString("name");
                 //Toast.makeText(getApplicationContext(),id, Toast.LENGTH_LONG).show();
-                bottomSheetCommunity(communityModel,id,position);
+                bottomSheetCommunies(communityModel,id,position);
 
             }
         });
@@ -230,6 +230,107 @@ public class choose_community extends AppCompatActivity {
                     });
                     AlertDialog dialog = builder.create();
                     dialog.show();
+                    bottomSheetDialog.dismiss();
+                }
+            });
+            bottomSheetDialog.findViewById(R.id.btn_cancelBottomSheet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bottomSheetDialog.dismiss();
+                }
+            });
+
+        }else{ //cuando hago click en otra comunidad
+            //variables from the botomSheet layout
+            final int suscriptores=communityModel.getFollowers();
+            TextView name=bottomSheetDialog.findViewById(R.id.name_bS_community);
+            TextView name2=bottomSheetDialog.findViewById(R.id.name_bS_community2);
+            name.setText(communityModel.getName());
+            name2.setText(communityModel.getName());
+            RoundedImageView img=bottomSheetDialog.findViewById(R.id.img_bS_community);
+            Picasso.get().load(communityModel.getImg()).into(img);
+            TextView desc=bottomSheetDialog.findViewById(R.id.desc_bS_community);
+            desc.setText(communityModel.getDescription());
+            TextView posts=bottomSheetDialog.findViewById(R.id.num_posts);
+            String post= String.valueOf(communityModel.getPosts());
+            posts.setText(post);
+            TextView followers=bottomSheetDialog.findViewById(R.id.num_followers);
+            String followersString= String.valueOf(communityModel.getFollowers());
+            followers.setText(followersString);
+            //button follow , unfollow
+            final Button button=bottomSheetDialog.findViewById(R.id.btn_follow);
+            firebaseFirestore.collection("Foro user").document(uid)
+                    .collection("Following").document(uiDocument)
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if(value.exists()){
+                                button.setText(R.string.community_sheet_text5);
+                                button.setBackgroundResource(R.drawable.button_unfollow);
+                                button.setTextColor(getResources().getColor(R.color.black));
+                            }else{
+                                button.setText(R.string.community_sheet_text4);
+                            }
+                        }
+                    });
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //ya es suscrito
+                    String textButton=button.getText().toString();
+                    String ifText=getResources().getString(R.string.community_sheet_text5);
+                    if(textButton.equals(ifText)){
+                        //eliminar de la coleccion following de Foro user
+                        communitiesAdapter.unFollow(position,uiDocument,suscriptores);
+                    }else{ //no esta suscrito
+                        //añadir comunidad a la coleccion Following
+                        communitiesAdapter.follow(position,uiDocument,suscriptores);
+                    }
+                    bottomSheetDialog.dismiss();
+                }
+            });
+            bottomSheetDialog.findViewById(R.id.btn_cancelBottomSheet).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bottomSheetDialog.dismiss();
+                }
+            });
+        }
+        bottomSheetDialog.show();
+    }
+
+    private void bottomSheetCommunies(final CommunityModel communityModel, final String uiDocument, final int position){
+        final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(choose_community.this,R.style.BottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_community);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if(communityModel.getCreator().equals(uid)){ //cuando haces click sobre tu comunidad
+            //variables from the botomSheet layout
+            TextView name=bottomSheetDialog.findViewById(R.id.name_bS_community);
+            TextView name2=bottomSheetDialog.findViewById(R.id.name_bS_community2);
+            name.setText(communityModel.getName());
+            name2.setText(communityModel.getName());
+            RoundedImageView img=bottomSheetDialog.findViewById(R.id.img_bS_community);
+            Picasso.get().load(communityModel.getImg()).into(img);
+            TextView desc=bottomSheetDialog.findViewById(R.id.desc_bS_community);
+            desc.setText(communityModel.getDescription());
+            TextView posts=bottomSheetDialog.findViewById(R.id.num_posts);
+            String post= String.valueOf(communityModel.getPosts());
+            posts.setText(post);
+            TextView followers=bottomSheetDialog.findViewById(R.id.num_followers);
+            String followersString= String.valueOf(communityModel.getFollowers());
+            followers.setText(followersString);
+            //button editar , eliminar
+            final Button button=bottomSheetDialog.findViewById(R.id.btn_follow);
+            button.setText(R.string.community_sheet_text7);
+            button.setBackgroundResource(R.drawable.button_action_machine);
+            button.setTextColor(getResources().getColor(R.color.colorPrimaryDashboard));
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Intent modificar community
+                    Intent intent = new Intent(getBaseContext(), EditCommunity.class);
+                    intent.putExtra("community", uiDocument);
+                    startActivity(intent);
                     bottomSheetDialog.dismiss();
                 }
             });
