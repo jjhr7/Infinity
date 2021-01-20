@@ -8,8 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.AlarmClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -41,14 +44,18 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -72,7 +79,7 @@ public class planta1 extends AppCompatActivity {
 
     private CheckBox checkYes, checkNo;
     private Button editInfo, saveChanges;
-    private TextView mDisplayDate,mDisplayHour,infoTitle;
+    private TextView mDisplayHour,infoTitle,mStation;
     private EditText nameplant;
     private FirebaseFirestore db;
 
@@ -137,6 +144,8 @@ public class planta1 extends AppCompatActivity {
                                 nombres.add(doc.getString("name"));
                                 estado.add(doc.getId());
                         }
+
+
                        /* Toast.makeText(getApplicationContext(),nombres.toString(), Toast.LENGTH_LONG).show();*/
 
 
@@ -170,6 +179,9 @@ public class planta1 extends AppCompatActivity {
         //Nombre de la planta
         nameplant = (EditText)findViewById(R.id.editTextNobrep);
         nameplant.setEnabled(false);
+        mDisplayHour=(TextView) findViewById(R.id.editHour);
+        mDisplayHour.setEnabled(false);
+        mStation=(TextView)findViewById(R.id.txtStation);
         //Checkboxes
         checkYes=(CheckBox)findViewById(R.id.checkBoxSi);
         checkYes.setKeyListener(null);
@@ -184,7 +196,6 @@ public class planta1 extends AppCompatActivity {
                 saveNote(v);
                 editInfo.setVisibility(View.VISIBLE);
                 saveChanges.setVisibility(View.GONE);
-                mDisplayDate.setEnabled(false);
                 mDisplayHour.setEnabled(false);
                 nameplant.setEnabled(false);
                 infoTitle.setText("Pulsa el botón para editar:");
@@ -203,54 +214,32 @@ public class planta1 extends AppCompatActivity {
 
                 saveChanges.setVisibility(View.VISIBLE);
                 editInfo.setVisibility(View.GONE);
-                mDisplayDate.setEnabled(true);
                 mDisplayHour.setEnabled(true);
                 nameplant.setEnabled(true);
                 infoTitle.setText("Información completa:");
+
 
 
             }
         });
         infoTitle = (TextView) findViewById(R.id.textViewinfo);
         //HORA
-        mDisplayHour =(TextView) findViewById(R.id.editHour);
-        mDisplayHour.setEnabled(false);
+
         mDisplayHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        planta1.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        Calendar c = Calendar.getInstance();
-                        t2Hour = hourOfDay;
-                        t2Minute = minute;
-                        String time = t2Hour + ":" + t2Minute;
-                        SimpleDateFormat f24Hours = new SimpleDateFormat("HH:mm");
-                        try {
-                            Date date = f24Hours.parse(time);
-                            SimpleDateFormat f12Hours = new SimpleDateFormat("hh:mm aa");
-                            mDisplayHour.setText(f12Hours.format(date));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                        c.set(Calendar.MINUTE,minute);
-                        c.set(Calendar.SECOND,0);
-                        startAlarm(c);
-                    }
-                },12,0,false
-                );
-                timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                timePickerDialog.updateTime(t2Hour,t2Minute);
-                timePickerDialog.show();
+                Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+                if(intent.resolveActivity(getPackageManager())!=null){
+                    startActivity(intent);
+                }
 
-            }
+        }
         });
 
 
 
-        //CALENDARIO
+
+        /*//CALENDARIO
         mDisplayDate = (TextView) findViewById(R.id.tvDate);
         mDisplayDate.setEnabled(false);
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
@@ -275,7 +264,7 @@ public class planta1 extends AppCompatActivity {
                 mDisplayDate.setText(date);
             }
         };
-
+            */
     }
 
     @Override
@@ -284,21 +273,25 @@ public class planta1 extends AppCompatActivity {
 
 
     }
-    private void startAlarm(Calendar c){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+    /*public void establecerAlarma(String mensaje,int dias,int hora,int minutos){
+        Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM)
+                .putExtra(AlarmClock.EXTRA_DAYS,dias)
+                .putExtra(AlarmClock.EXTRA_MESSAGE,mensaje)
+                .putExtra(AlarmClock.EXTRA_HOUR,hora)
+                .putExtra(AlarmClock.EXTRA_MINUTES,minutos);
+        if(intent.resolveActivity(getPackageManager())!=null){
+            startActivity(intent);
+        }
+    }*/
 
-    }
     public void saveNote(View v){
         String cola = idDocument;
         String nombre = nameplant.getText().toString();
-        String hora = mDisplayHour.getText().toString();
-        String dia = mDisplayDate.getText().toString();
+
         String piso = one;
 
         Map<String, Object> note = new HashMap<>();
         note.put("name",nombre);
-        note.put("fecha",dia);
-        note.put("hora",hora);
         note.put("piso",piso);
 
         db.collection("Mediciones planta 1").document(id).collection("DatosPiso").document(cola).update(note).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -325,13 +318,26 @@ public class planta1 extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()){
                             String nombre = documentSnapshot.getString("name");
-                            String fecha = documentSnapshot.getString("fecha");
-                            String hora = documentSnapshot.getString("hora");
+                            String estacion = documentSnapshot.getString("estacion");
+                            int resultado =documentSnapshot.getLong("estado").intValue();
+                            if(resultado==1){
+                                checkYes.isSelected();
+                                checkYes.setChecked(true);
+                                checkYes.isChecked();
+                                checkNo.setChecked(false);
+                            }else{
+                                checkNo.isSelected();
+                                checkNo.setChecked(true);
+                                checkNo.isChecked();
+                                checkYes.setChecked(false);
+                            }
+
 
                            // Map<String,Object> note = documentSnapshot.getData();
                             nameplant.setText(nombre);
-                            mDisplayHour.setText(hora);
-                            mDisplayDate.setText(fecha);
+                            mStation.setText(estacion);
+
+
 
                         }else{
                             Toast.makeText(planta1.this,"Document does exist",Toast.LENGTH_SHORT).show();
