@@ -206,7 +206,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
                     //Temperatura
                     String temperatura = value.getString("Temperatura");
                     Double tempValue = Double.parseDouble(temperatura);
-                    if (tempValue > 7) {
+                    if (tempValue < 13) {
                         final Map<String, Object> notificacionesTempAlerta = new HashMap<>();
                         notificacionesTempAlerta.put("Tipo", "1");
                         notificacionesTempAlerta.put("MachineID", getId);
@@ -216,7 +216,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
                         db.collection("Notificaciones").add(notificacionesTempAlerta);
                     }
 
-                    if (tempValue > 3 && tempValue < 6) {
+                    if (tempValue >= 13 && tempValue  <= 16) {
 
                         final Map<String, Object> notificacionesTempAviso = new HashMap<>();
                         notificacionesTempAviso.put("Tipo", "2");
@@ -231,7 +231,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
                     //Humedad
                     String humedad = value.getString("Humedad");
                     Double humedadValue = Double.parseDouble(humedad);
-                    if (humedadValue > 13) {
+                    if (humedadValue < 20) {
                         final Map<String, Object> notificacionesHumedadAlerta = new HashMap<>();
                         notificacionesHumedadAlerta.put("Tipo", "1");
                         notificacionesHumedadAlerta.put("MachineID", getId);
@@ -241,7 +241,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
                         db.collection("Notificaciones").add(notificacionesHumedadAlerta);
                     }
 
-                    if (humedadValue > 5 && humedadValue < 8) {
+                    if (humedadValue >= 20 && humedadValue <= 30) {
                         final Map<String, Object> notificacionesHumedadAviso = new HashMap<>();
                         notificacionesHumedadAviso.put("Tipo", "2");
                         notificacionesHumedadAviso.put("MachineID", getId);
@@ -282,7 +282,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
                     String luminosidad = value.getString("Luminosidad");
                     Double luminosidadValue = Double.parseDouble(luminosidad);
 
-                    if (luminosidadValue > 54) {
+                    if (luminosidadValue <= 30) {
                         final Map<String, Object> notificacionesLuminosidadAlerta = new HashMap<>();
                         notificacionesLuminosidadAlerta.put("Tipo", "1");
                         notificacionesLuminosidadAlerta.put("MachineID", getId);
@@ -291,7 +291,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
 
                         db.collection("Notificaciones").add(notificacionesLuminosidadAlerta);
                     }
-                    if (luminosidadValue > 36 && luminosidadValue < 47) {
+                    if (luminosidadValue <= 50) {
                         final Map<String, Object> notificacionesLuminosidadAviso = new HashMap<>();
                         notificacionesLuminosidadAviso.put("Tipo", "2");
                         notificacionesLuminosidadAviso.put("MachineID", getId);
