@@ -158,7 +158,7 @@ public class DashboardFragment extends Fragment implements MqttCallback {
         }
     }
     private String uidActualMachine;
-    private Button btn_createCima;
+    private TextView btn_createCima;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

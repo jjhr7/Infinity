@@ -11,12 +11,10 @@
     <uses-permission android:name="com.google.android.things.permission.MANAGE_INPUT_DRIVERS" />
     <uses-permission android:name="com.google.android.things.permission.USE_PERIPHERAL_IO" /> <!-- Permisos Qr -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
 
     <application
         android:allowBackup="true"
@@ -24,7 +22,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:theme="@style/AppThemeHome">
-        <activity android:name=".ui.Foro.main.Community.NewPost.PostView"></activity>
+        <activity android:name=".ui.dashboard.CreateClima"></activity>
+        <activity android:name=".ui.Foro.main.Community.NewPost.PostView" />
         <activity android:name=".ui.Foro.main.Community.NewPost.CreatePost.CreatePost" />
         <activity android:name=".ui.Foro.main.Community.CommunityMain" />
         <activity android:name=".ui.Foro.lets_start.EditCommunity" />
@@ -40,7 +39,7 @@
 
         <activity android:name=".ui.LoadAnimations.IntroductoryActivity">
             <intent-filter>
-                <action android:name="android.intent.action.SET_ALARM"/>
+                <action android:name="android.intent.action.SET_ALARM" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
