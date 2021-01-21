@@ -29,7 +29,7 @@ public class PostView extends AppCompatActivity {
 
     private String idPost;
     private FirebaseFirestore db;
-
+    //funciona
     private FloatingActionButton btn_back;
     private ImageView img_community;
     private TextView name_community;

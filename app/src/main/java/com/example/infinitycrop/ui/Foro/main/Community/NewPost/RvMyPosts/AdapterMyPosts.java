@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class AdapterMyPosts extends RecyclerView.Adapter<AdapterMyPosts.MyPostsHolder> implements View.OnClickListener{
-
+//andrey
     private List<PostModel> postModels;
     private Context context;
     private View.OnClickListener listener;

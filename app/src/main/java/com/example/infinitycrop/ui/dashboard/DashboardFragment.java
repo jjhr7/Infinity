@@ -198,6 +198,13 @@ public class DashboardFragment extends Fragment implements MqttCallback {
                     }
                 });
 
+                create_plantilla.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
 
                 backClimna.setOnClickListener(new View.OnClickListener() {
                     @Override

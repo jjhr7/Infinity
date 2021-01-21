@@ -51,7 +51,7 @@ import java.util.UUID;
 import id.zelory.compressor.Compressor;
 
 public class CreatePost extends AppCompatActivity {
-
+//andrey
     private ImageView img_post;
     private Bitmap thumb_bitmap;
     private TextView btn_changeImg;
