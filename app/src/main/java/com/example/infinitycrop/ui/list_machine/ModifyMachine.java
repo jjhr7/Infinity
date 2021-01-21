@@ -2,6 +2,7 @@ package com.example.infinitycrop.ui.list_machine;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import com.example.infinitycrop.R;
@@ -39,6 +40,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Handler;
 
 
 public class ModifyMachine extends AppCompatActivity {
@@ -50,11 +52,28 @@ public class ModifyMachine extends AppCompatActivity {
     private static final String TAG = "";
     private String id;
     private String name;
+    Dialog dialog;
+    private Button button_done;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_machine);
+
+        //Animación
+        dialog=new Dialog(ModifyMachine.this);
+        dialog.setContentView(R.layout.animation_done);
+        dialog.setCancelable(false);
+
+        button_done=dialog.findViewById(R.id.btn_aceptar);
+        button_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
 
         Bundle extras = getIntent().getExtras();
         name = extras.getString("maq");
@@ -123,10 +142,9 @@ public class ModifyMachine extends AppCompatActivity {
             public void onClick(View v) {
                 isMachineNameChanged();
                 isCheckBoxChanged();
-                finish();
+                dialog.show();
             }
         });
-
     }
 
 
@@ -137,7 +155,7 @@ public class ModifyMachine extends AppCompatActivity {
 
         db.collection("Machine").document(getMachineUID()).update(nombreMaq);
 
-        Toast.makeText(this, "Los datos han sido modificados correctamente", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Los datos han sido modificados correctamente", Toast.LENGTH_SHORT).show();
     }
 
     private void isCheckBoxChanged() {

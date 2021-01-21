@@ -15,6 +15,7 @@ import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.lets_start.welcome_forum;
 import com.example.infinitycrop.ui.graphics.GraphicsActivity;
+import com.example.infinitycrop.ui.guiabotanica.GuiaActivity;
 import com.example.infinitycrop.ui.notifications.NotificacionesActivity;
 
 /**
@@ -37,6 +38,7 @@ public class Control_panelFragment extends Fragment {
     private ConstraintLayout btn_forum;
     private ConstraintLayout btn_grafics;
     private ConstraintLayout btn_notificaciones;
+    private ConstraintLayout btn_guia;
 
     public Control_panelFragment() {
         // Required empty public constructor
@@ -114,6 +116,18 @@ public class Control_panelFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NotificacionesActivity.class);
                 intent.putExtra("idMachine", uid);
+                startActivity(intent);
+            }
+        });
+
+        //buttons
+        btn_guia=v.findViewById(R.id.btn_guia_botanica);
+
+        //onClick
+        btn_guia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), GuiaActivity.class);
                 startActivity(intent);
             }
         });

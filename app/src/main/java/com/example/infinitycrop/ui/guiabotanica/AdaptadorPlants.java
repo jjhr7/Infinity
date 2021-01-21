@@ -1,4 +1,4 @@
-package org.example.lvilmar1.recycleviewpersonalizado;
+package com.example.infinitycrop.ui.guiabotanica;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.infinitycrop.R;
 
 import java.util.ArrayList;
 

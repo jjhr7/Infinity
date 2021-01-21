@@ -1,4 +1,4 @@
- package org.example.lvilmar1.recycleviewpersonalizado;
+ package com.example.infinitycrop.ui.guiabotanica;
 
 public class Plants {
 
@@ -10,7 +10,7 @@ public class Plants {
     String fotoPlanta;
     private String uid;
 
-    public Plants(String nombrePlanta, String descripcionPlanta, String humedadPlanta, String temperaturaPlanta, String luminosidadPlanta, String fotoPlanta) {
+    public Plants(String nombrePlanta, String fotoPlanta, String descripcionPlanta, String humedadPlanta, String temperaturaPlanta, String luminosidadPlanta) {
         this.nombrePlanta=nombrePlanta;
         this.descripcionPlanta=descripcionPlanta;
         this.humedadPlanta=humedadPlanta;

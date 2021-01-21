@@ -1,15 +1,18 @@
-package org.example.lvilmar1.recycleviewpersonalizado;
+package com.example.infinitycrop.ui.guiabotanica;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
+import com.example.infinitycrop.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,6 +45,17 @@ public class GuiaActivity extends AppCompatActivity {
 
         GuiaActivity myActivity = new GuiaActivity();
         //uid=myActivity.getMachineUID();
+
+        //volver a la anterior actividad
+        ImageView backToProfile =findViewById(R.id.backToProfile6);
+        backToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStop();
+                finish();
+            }
+        });
+        //
 
         recyclerNotificaciones = (RecyclerView) findViewById(R.id.RecyclerId);
         recyclerNotificaciones.setLayoutManager(new LinearLayoutManager(this));
@@ -77,6 +91,8 @@ public class GuiaActivity extends AppCompatActivity {
 
                                 Plants Planta = document.toObject(Plants.class);
 
+
+
                                 humedad = Planta.getHumedadPlanta();
                                 temperatura = Planta.getTemperaturaPlanta();
                                 luminosidad = Planta.getLuminosidadPlanta();
@@ -86,6 +102,7 @@ public class GuiaActivity extends AppCompatActivity {
 
                                 Guia notificacion = new Guia(nombre,foto, descripcion,humedad,temperatura,luminosidad);
                                 listaNotificaciones.add(notificacion);
+
 
                             }
                             adaptadorNotificaciones = new AdaptadorGuia(getBaseContext(), listaNotificaciones);

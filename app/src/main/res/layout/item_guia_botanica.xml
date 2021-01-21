@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GuiaActivity">
+    tools:context=".ui.guiabotanica.GuiaActivity">
 
     <LinearLayout
         android:id="@+id/layout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="139dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
@@ -19,17 +19,18 @@
 
         <ImageView
             android:id="@+id/idImagen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="111dp"
+            android:layout_height="106dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:scaleType="fitXY"
             android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:id="@+id/layout2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="217dp"
+            android:layout_height="111dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
@@ -47,12 +48,22 @@
 
             <TextView
                 android:id="@+id/idDescripcion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="211dp"
+                android:layout_height="48dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="15dp"
                 android:text="Info"
                 android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/saberMas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Saber más"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#000000"
+                android:textColorHint="#000000"
+                android:textColorLink="#000000"
+                android:textStyle="italic" />
         </LinearLayout>
     </LinearLayout>
 

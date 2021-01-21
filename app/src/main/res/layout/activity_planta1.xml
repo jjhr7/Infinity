@@ -204,7 +204,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="22.3dp"
-                            android:text="Hora de fin"
+                            android:text="Programar una alarma"
                             android:textColor="#9E9D9D" />
 
                         <TextView
@@ -213,8 +213,7 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:ems="10"
-                            android:text="Toca para añdir"
-                            android:inputType="time"
+                            android:text="Toca para añadir"
                             android:maxLines="1"
                             android:paddingTop="5dp"
                             android:textColorHint="#333232"
@@ -232,22 +231,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="22.3dp"
-                            android:text="Fecha de fin"
+                            android:text="Ubicación de la planta"
                             android:textColor="#9E9D9D" />
                         <TextView
-                            android:id="@+id/tvDate"
+                            android:id="@+id/txtStation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:ems="10"
-                            android:text="Toca para añdir"
-                            android:inputType="time"
+                            android:text="Esta planta se encuentra en la estación número: "
                             android:editable="false"
                             android:maxLines="1"
                             android:paddingTop="5dp"
                             android:textColorHint="#333232"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="15sp" />
+                            android:textSize="13sp" />
 
                         <View
                             android:layout_width="match_parent"
