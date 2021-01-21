@@ -3,6 +3,7 @@ package com.example.infinitycrop.ui.control_panel;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -14,9 +15,15 @@ import android.view.ViewGroup;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.lets_start.welcome_forum;
+import com.example.infinitycrop.ui.Foro.main.ForoMain;
 import com.example.infinitycrop.ui.graphics.GraphicsActivity;
 import com.example.infinitycrop.ui.guiabotanica.GuiaActivity;
 import com.example.infinitycrop.ui.notifications.NotificacionesActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,6 +78,9 @@ public class Control_panelFragment extends Fragment {
         }
     }
 
+    private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
+    private String idAuth;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,6 +89,9 @@ public class Control_panelFragment extends Fragment {
         MainActivity myActivity = (MainActivity)getActivity();
         uid=myActivity.getMachineUID();
 
+        db=FirebaseFirestore.getInstance();
+        firebaseAuth= FirebaseAuth.getInstance();
+        idAuth=firebaseAuth.getUid();
         //buttons
         btn_forum=v.findViewById(R.id.btn_forum);
 
@@ -86,8 +99,24 @@ public class Control_panelFragment extends Fragment {
         btn_forum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), welcome_forum.class);
-                startActivity(intent);
+                db.collection("Foro user").document(idAuth)
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Intent intent = new Intent(getActivity(), ForoMain.class);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(getActivity(), welcome_forum.class);
+                                startActivity(intent);
+                            }
+                        } else {
+
+                        }
+                    }
+                });
             }
         });
 

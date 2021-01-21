@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <Button
         android:id="@+id/createNewClima"
         android:layout_width="0dp"
@@ -12,7 +14,7 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/button_enter_machine"
         android:stateListAnimator="@null"
-        android:text="Acceder a la máquina"
+        android:text="Crear nuevo clima"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +31,7 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/button_action_machine"
         android:stateListAnimator="@null"
-        android:text="Modificar máquina"
+        android:text="Crear apartir del clima por defecto"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimaryDashboard"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,11 +46,13 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/button_action_machine"
         android:stateListAnimator="@null"
         android:text="Cancelar"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimaryDashboard"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

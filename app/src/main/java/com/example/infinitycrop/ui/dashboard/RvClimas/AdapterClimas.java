@@ -180,7 +180,7 @@ public class AdapterClimas extends RecyclerView.Adapter<AdapterClimas.ClimasHold
     //MQTT -> INICIO
 
     public void setClimaTemperatura(String machine,String temperatura,String humedad){
-        String mensaje=machine+"-5-"+temperatura;
+        String mensaje="5-"+temperatura;
         try {
             client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
                     MemoryPersistence());
@@ -201,8 +201,8 @@ public class AdapterClimas extends RecyclerView.Adapter<AdapterClimas.ClimasHold
         //conexión con el broker Root1 = Lector de datos
         //nos subscribimos a topic
         try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "operaciones", Mqtt.qos);
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones-"+machine);//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones-"+machine, Mqtt.qos);
             client.setCallback((MqttCallback) this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
@@ -212,14 +212,14 @@ public class AdapterClimas extends RecyclerView.Adapter<AdapterClimas.ClimasHold
             MqttMessage message = new MqttMessage(mensaje.getBytes());
             message.setQos(Mqtt.qos);
             message.setRetained(false);
-            client.publish(topicRoot+"operaciones", message);
+            client.publish(topicRoot+"operaciones-"+machine, message);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al publicar.", e);
         }
         setClimaHumedad(machineId,humedad);
     }
     public void setClimaHumedad(String machine,String humedad){
-        String mensaje=machine+"-4-"+humedad;
+        String mensaje="4-"+humedad;
         try {
             client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
                     MemoryPersistence());
@@ -240,8 +240,8 @@ public class AdapterClimas extends RecyclerView.Adapter<AdapterClimas.ClimasHold
         //conexión con el broker Root1 = Lector de datos
         //nos subscribimos a topic
         try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "operaciones", Mqtt.qos);
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones-"+machine);//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones-"+machine, Mqtt.qos);
             client.setCallback((MqttCallback) this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
@@ -251,7 +251,7 @@ public class AdapterClimas extends RecyclerView.Adapter<AdapterClimas.ClimasHold
             MqttMessage message = new MqttMessage(mensaje.getBytes());
             message.setQos(Mqtt.qos);
             message.setRetained(false);
-            client.publish(topicRoot+"operaciones", message);
+            client.publish(topicRoot+"operaciones-"+machine, message);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al publicar.", e);
         }
