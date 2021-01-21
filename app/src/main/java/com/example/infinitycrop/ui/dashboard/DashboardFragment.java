@@ -158,6 +158,7 @@ public class DashboardFragment extends Fragment implements MqttCallback {
         }
     }
     private String uidActualMachine;
+    private Button btn_createCima;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -173,10 +174,43 @@ public class DashboardFragment extends Fragment implements MqttCallback {
         final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
         idUser = mAuth.getUid();
         db=FirebaseFirestore.getInstance();
+        btn_createCima=v.findViewById(R.id.btn_anyadir_clima);
         //rv
         recyclerView = v.findViewById(R.id.rv_1);
         initRvClimas();
         getMyClimas();
+
+        btn_createCima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
+                bottomSheetDialog.setContentView(R.layout.bottom_sheet_create_clima);
+
+                Button create_new=bottomSheetDialog.findViewById(R.id.createNewClima);
+                Button create_plantilla=bottomSheetDialog.findViewById(R.id.createDefaultClima);
+                Button backClimna=bottomSheetDialog.findViewById(R.id.btn_cancelarCreateClima);
+
+
+                create_new.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
+
+                backClimna.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+
+
+
+                bottomSheetDialog.show();
+            }
+        });
 
 
         //guardo el nombre en un textView
