@@ -155,7 +155,7 @@ public class ModifyMachine extends AppCompatActivity {
 
         db.collection("Machine").document(getMachineUID()).update(nombreMaq);
 
-        Toast.makeText(this, "Los datos han sido modificados correctamente", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Los datos han sido modificados correctamente", Toast.LENGTH_SHORT).show();
     }
 
     private void isCheckBoxChanged() {
