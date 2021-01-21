@@ -154,6 +154,7 @@
                 android:weightSum="2">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/btn_notificaciones"
                     android:layout_width="0dp"
                     android:layout_height="80dp"
                     android:layout_marginRight="8dp"
@@ -162,34 +163,34 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/icon_set2"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:id="@+id/icon_notificacion"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentBottom="true"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/icons_status"
+                        android:src="@drawable/icons_notification"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView1622"
+                        app:layout_constraintEnd_toStartOf="@+id/textView_notificacion"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
                     </ImageView>
 
                     <TextView
-                        android:id="@+id/textView1622"
+                        android:id="@+id/textView_notificacion"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="10dp"
-                        android:layout_toRightOf="@id/icon_set2"
+                        android:layout_toRightOf="@id/icon_notificacion"
                         android:gravity="center"
-                        android:text="Estado de la máquina"
+                        android:text="Notificaciones"
                         android:textColor="#202020"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/icon_set2"
+                        app:layout_constraintStart_toEndOf="@+id/icon_notificacion"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -239,7 +240,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -292,7 +293,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </LinearLayout>
+            </LinearLayout>-->
         </LinearLayout>
     </ScrollView>
 

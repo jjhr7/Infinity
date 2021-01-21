@@ -56,6 +56,7 @@ public class GeneralFragment extends Fragment implements MqttCallback{
     public static MqttClient client = null;
     private String uid;
     private FirebaseFirestore db;
+    private DatabaseReference databaseReference;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -101,19 +102,10 @@ public class GeneralFragment extends Fragment implements MqttCallback{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_general, container, false);
+        databaseReference= FirebaseDatabase.getInstance().getReference();
         //switch methods
-        Switch switchLuz = (Switch) v.findViewById(R.id.switchLuminosidadGeneral);
-        switchLuz.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                    enviarLucesOn();
-                } else {
-                    // The toggle is disabled
-                    enviarLucesOff();
-                }
-            }
-        });
+        final Switch switchLuz = (Switch) v.findViewById(R.id.switchLuminosidadGeneral);
+
         db = FirebaseFirestore.getInstance();
         MainActivity myActivity = (MainActivity) getActivity();
         final TextView medidaTemp=v.findViewById(R.id.medidaTemperaturaGeneral);
@@ -192,6 +184,44 @@ public class GeneralFragment extends Fragment implements MqttCallback{
             }
         });
 
+        //switch luz
+        /*databaseReference.child("Mediciones general")
+                .child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String LuzPieza1= snapshot.child("LuzPieza1").getValue().toString();
+                    String LuzPieza2=snapshot.child("LuzPieza2").getValue().toString();
+                    String LuzPieza3=snapshot.child("LuzPieza3").getValue().toString();
+                    String LuzPuerta=snapshot.child("LuzPuerta").getValue().toString();
+                    String LuzTecho=snapshot.child("LuzTecho").getValue().toString();
+
+                    if(LuzPieza1.equals("0") && LuzPieza2.equals("0") && LuzPieza3.equals("0") && LuzPuerta.equals("0") && LuzTecho.equals("0")){
+                        switchLuz.setChecked(true);
+                    }else if(LuzPieza1.equals("1") && LuzPieza2.equals("1") && LuzPieza3.equals("1") && LuzPuerta.equals("1") && LuzTecho.equals("1")){
+                        switchLuz.setChecked(false);
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });*/
+
+        switchLuz.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    enviarLucesOn();
+                } else {
+                    // The toggle is disabled
+                    enviarLucesOff();
+                }
+            }
+        });
+
         return v;
     }
         /*btnmymachine.setOnClickListener(new View.OnClickListener() {
@@ -226,8 +256,8 @@ public class GeneralFragment extends Fragment implements MqttCallback{
         //conexión con el broker Root1 = Lector de datos
         //nos subscribimos a topic lectura
         try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "operaciones", Mqtt.qos);
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones-"+uid);//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones-"+uid, Mqtt.qos);
             client.setCallback((MqttCallback) this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
@@ -237,7 +267,7 @@ public class GeneralFragment extends Fragment implements MqttCallback{
             MqttMessage message = new MqttMessage("1-OFF".getBytes());
             message.setQos(Mqtt.qos);
             message.setRetained(false);
-            client.publish(topicRoot+"operaciones", message);
+            client.publish(topicRoot+"operaciones-"+uid, message);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al publicar.", e);
         }
@@ -263,8 +293,8 @@ public class GeneralFragment extends Fragment implements MqttCallback{
         //conexión con el broker Root1 = Lector de datos
         //nos subscribimos a topic lectura
         try {
-            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones");//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
-            client.subscribe(topicRoot + "operaciones", Mqtt.qos);
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones-"+uid);//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones-"+uid, Mqtt.qos);
             client.setCallback((MqttCallback) this);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al suscribir.", e);
@@ -274,7 +304,7 @@ public class GeneralFragment extends Fragment implements MqttCallback{
             MqttMessage message = new MqttMessage("1-ON".getBytes());
             message.setQos(Mqtt.qos);
             message.setRetained(false);
-            client.publish(topicRoot+"operaciones", message);
+            client.publish(topicRoot+"operaciones-"+uid, message);
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al publicar.", e);
         }

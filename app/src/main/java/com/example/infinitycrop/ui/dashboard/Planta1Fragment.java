@@ -3,38 +3,60 @@ package com.example.infinitycrop.ui.dashboard;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.comun.Mqtt;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
+import static com.example.comun.Mqtt.topicRoot;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link GeneralFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Planta1Fragment extends Fragment {
+public class Planta1Fragment extends Fragment implements MqttCallback{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private DatabaseReference databaseReference;
     private String uid;
     private FirebaseFirestore db;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private Switch switchLuz;
+    public static MqttClient client = null;
     public Planta1Fragment() {
         // Required empty public constructor
     }
@@ -72,8 +94,8 @@ public class Planta1Fragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_planta1, container, false);
 
-
-
+        switchLuz=v.findViewById(R.id.switchLuminosidadPlamta1);
+        databaseReference= FirebaseDatabase.getInstance().getReference();
         db = FirebaseFirestore.getInstance();
         MainActivity myActivity = (MainActivity) getActivity();
         final TextView medidaTemp=v.findViewById(R.id.medidaTemperatura);
@@ -111,6 +133,135 @@ public class Planta1Fragment extends Fragment {
                         }
                     }
                 });
+
+
+        //switch luz
+        /*databaseReference.child("Mediciones general")
+                .child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String LuzPieza1= snapshot.child("LuzPieza1").getValue().toString();
+                    String LuzPieza2=snapshot.child("LuzPieza2").getValue().toString();
+                    String LuzPieza3=snapshot.child("LuzPieza3").getValue().toString();
+                    String LuzPuerta=snapshot.child("LuzPuerta").getValue().toString();
+                    String LuzTecho=snapshot.child("LuzTecho").getValue().toString();
+
+                    if(LuzPieza1.equals("0") && LuzPieza2.equals("0") && LuzTecho.equals("0")){
+                        switchLuz.setChecked(true);
+                    }else if(LuzPieza1.equals("1") && LuzPieza2.equals("1") && LuzTecho.equals("1")){
+                        switchLuz.setChecked(false);
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });*/
+
+        switchLuz.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    enviarLucesOn();
+                } else {
+                    // The toggle is disabled
+                    enviarLucesOff();
+                }
+            }
+        });
         return v;
+    }
+
+    public void enviarLucesOff(){
+        try {
+            client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
+                    MemoryPersistence());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(true);
+        connOpts.setKeepAliveInterval(60);
+        connOpts.setWill(topicRoot+"WillTopic", "App desconectada".getBytes(),Mqtt.qos, false);
+
+        try {
+            client.connect(connOpts);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        //conexión con el broker Root1 = Lector de datos
+        //nos subscribimos a topic lectura
+        try {
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones-"+uid);//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones-"+uid, Mqtt.qos);
+            client.setCallback((MqttCallback) this);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al suscribir.", e);
+        }
+        try {
+            Log.i(Mqtt.TAG, "Publicando mensaje: " + "mensaje");
+            MqttMessage message = new MqttMessage("2-OFF".getBytes());
+            message.setQos(Mqtt.qos);
+            message.setRetained(false);
+            client.publish(topicRoot+"operaciones-"+uid, message);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al publicar.", e);
+        }
+    }
+    public void enviarLucesOn(){
+        try {
+            client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
+                    MemoryPersistence());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(true);
+        connOpts.setKeepAliveInterval(60);
+        connOpts.setWill(topicRoot+"WillTopic", "App desconectada".getBytes(),Mqtt.qos, false);
+
+        try {
+            client.connect(connOpts);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        //conexión con el broker Root1 = Lector de datos
+        //nos subscribimos a topic lectura
+        try {
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones-"+uid);//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones-"+uid, Mqtt.qos);
+            client.setCallback((MqttCallback) this);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al suscribir.", e);
+        }
+        try {
+            Log.i(Mqtt.TAG, "Publicando mensaje: " + "mensaje");
+            MqttMessage message = new MqttMessage("2-ON".getBytes());
+            message.setQos(Mqtt.qos);
+            message.setRetained(false);
+            client.publish(topicRoot+"operaciones-"+uid, message);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al publicar.", e);
+        }
+    }
+
+    @Override
+    public void connectionLost(Throwable cause) {
+
+    }
+
+    @Override
+    public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+    }
+
+    @Override
+    public void deliveryComplete(IMqttDeliveryToken token) {
+
     }
 }
