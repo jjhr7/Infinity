@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg4"
     android:layout_height="match_parent"
-    tools:context="com.example.infinitycrop.ui.MachineControl.planta1">
+    tools:context="com.example.infinitycrop.ui.MachineControl.planta2">
 
     <RelativeLayout
 
@@ -42,7 +42,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:gravity="clip_horizontal"
-                    android:text="Piso 1"
+                    android:text="Piso 2"
                     android:textColor="@color/white"
                     android:textSize="25dp"
                     android:textStyle="bold" />
@@ -121,7 +121,7 @@
                                 android:textStyle="normal" />
 
                             <Button
-                                android:id="@+id/btnedit"
+                                android:id="@+id/btnedit2"
                                 android:layout_width="match_parent"
                                 android:layout_marginTop="2dp"
                                 android:layout_height="30dp"
@@ -219,8 +219,7 @@
                             android:paddingTop="5dp"
                             android:textColorHint="#333232"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="15sp"
-                            android:maxLength="40"/>
+                            android:textSize="15sp" />
 
                         <View
                             android:layout_width="match_parent"

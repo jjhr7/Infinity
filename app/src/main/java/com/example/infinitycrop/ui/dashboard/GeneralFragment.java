@@ -20,6 +20,7 @@ import com.example.comun.Mqtt;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.MachineControl.planta1;
+import com.example.infinitycrop.ui.MachineControl.planta2;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
@@ -168,6 +169,18 @@ public class GeneralFragment extends Fragment implements MqttCallback{
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent (getContext(), planta1.class);
+                        intent.putExtra("idMachine", uid);
+                        startActivity(intent);
+
+
+
+                    }
+
+                });
+                btn2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent (getContext(), planta2.class);
                         intent.putExtra("idMachine", uid);
                         startActivity(intent);
 

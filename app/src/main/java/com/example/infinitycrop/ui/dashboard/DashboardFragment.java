@@ -34,7 +34,9 @@ import android.widget.Toast;
 import com.example.comun.Mqtt;
 import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.Foro.lets_start.EditCommunity;
 import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;
+import com.example.infinitycrop.ui.Foro.main.Community.NewPost.CreatePost.CreatePost;
 import com.example.infinitycrop.ui.Foro.main.Home.RVs.RVFollowed.AdapterFollowedCmty;
 import com.example.infinitycrop.ui.MachineControl.planta1;
 import com.example.infinitycrop.ui.dashboard.RvClimas.AdapterClimas;
@@ -194,14 +196,20 @@ public class DashboardFragment extends Fragment implements MqttCallback {
                 create_new.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Intent intent = new Intent(getContext(), CreateClima.class);
+                        intent.putExtra("modo", "new");
+                        startActivity(intent);
+                        bottomSheetDialog.dismiss();
                     }
                 });
 
                 create_plantilla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Intent intent = new Intent(getContext(), CreateClima.class);
+                        intent.putExtra("modo", "default");
+                        startActivity(intent);
+                        bottomSheetDialog.dismiss();
                     }
                 });
 
@@ -794,6 +802,10 @@ public class DashboardFragment extends Fragment implements MqttCallback {
                 @Override
                 public void onClick(View v) {
                     //Intent tiwh extra to edit clima
+                    Intent intent = new Intent(getContext(), EditarClima.class);
+                    intent.putExtra("id", climaModel.getUid());
+                    startActivity(intent);
+                    bottomSheetDialog.dismiss();
                 }
             });
             eliminar.setOnClickListener(new View.OnClickListener() {

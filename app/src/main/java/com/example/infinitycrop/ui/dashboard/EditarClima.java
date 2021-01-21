@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateClima extends AppCompatActivity {
+public class EditarClima extends AppCompatActivity {
 
 
     private String modo;
@@ -31,25 +31,46 @@ public class CreateClima extends AppCompatActivity {
     private Button btn_cancelar_crearClima;
     private FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
+    private String id;
     private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_clima);
+        setContentView(R.layout.activity_editar_clima);
 
         Bundle extras = getIntent().getExtras();
-        modo = extras.getString("modo");
+        id = extras.getString("id");
 
         db=FirebaseFirestore.getInstance();
 
-        name_climaCreateClima=findViewById(R.id.name_climaCreateClima);
-        temperaturaCreateClima=findViewById(R.id.temperaturaCreateClima);
-        humedadCreateClima=findViewById(R.id.humedadCreateClima);
-        btn_createClima_act=findViewById(R.id.btn_createClima_act);
-        btn_cancelar_crearClima=findViewById(R.id.btn_cancelar_crearClima);
+        name_climaCreateClima=findViewById(R.id.name_climaEditClima);
+        temperaturaCreateClima=findViewById(R.id.temperaturaEditClima);
+        humedadCreateClima=findViewById(R.id.humedadEditClima);
+        btn_createClima_act=findViewById(R.id.btn_EditClima_act);
+        btn_cancelar_crearClima=findViewById(R.id.btn_cancelar_EditClima);
         firebaseAuth= FirebaseAuth.getInstance();
         uid=firebaseAuth.getUid();
+
+
+        db.collection("Climas").document(id).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                name_climaCreateClima.setText(document.getString("name"));
+                                temperaturaCreateClima.setText(document.getString("temperatura"));
+                                humedadCreateClima.setText(document.getString("humedad"));
+                            } else {
+
+                            }
+                        } else {
+
+                        }
+                    }
+                });
 
         btn_cancelar_crearClima.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,29 +78,6 @@ public class CreateClima extends AppCompatActivity {
                 finish();
             }
         });
-
-
-        if(modo.equals("default")){
-            db.collection("Climas").document("Default").get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                   name_climaCreateClima.setText(document.getString("name"));
-                                    temperaturaCreateClima.setText(document.getString("temperatura"));
-                                    humedadCreateClima.setText(document.getString("humedad"));
-                                } else {
-
-                                }
-                            } else {
-
-                            }
-                        }
-                    });
-        }
-
 
         btn_createClima_act.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,14 +95,13 @@ public class CreateClima extends AppCompatActivity {
                     a.put("machineId", "" );
                     a.put("defecto", false );
 
-                    db.collection("Climas").add(a);
+                    db.collection("Climas").document(id).update(a);
 
-                    Toast.makeText(getApplicationContext(),"Clima creado con éxito", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Clima editado con éxito", Toast.LENGTH_LONG).show();
                     finish();
                 }
 
             }
         });
-
     }
 }

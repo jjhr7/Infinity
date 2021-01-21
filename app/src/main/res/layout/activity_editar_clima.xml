@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="#EFE9E9"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.CreateClima">
+    tools:context=".ui.dashboard.EditarClima">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="500dp"
-            android:text="Crear Clima"
+            android:text="Editar Clima"
             android:textColor="@color/black"
             android:textSize="22sp"
             android:textStyle="bold"
@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView37">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/name_climaCreateClima"
+                android:id="@+id/name_climaEditClima"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nombre del clima" />
@@ -57,7 +57,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
         <EditText
-            android:id="@+id/temperaturaCreateClima"
+            android:id="@+id/temperaturaEditClima"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -66,12 +66,12 @@
             android:ems="10"
             android:hint="Temperatura"
             android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@+id/humedadCreateClima"
+            app:layout_constraintEnd_toStartOf="@+id/humedadEditClima"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView38" />
 
         <EditText
-            android:id="@+id/humedadCreateClima"
+            android:id="@+id/humedadEditClima"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
@@ -79,11 +79,11 @@
             android:hint="Humedad"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/temperaturaCreateClima"
-            app:layout_constraintTop_toTopOf="@+id/temperaturaCreateClima" />
+            app:layout_constraintStart_toEndOf="@+id/temperaturaEditClima"
+            app:layout_constraintTop_toTopOf="@+id/temperaturaEditClima" />
 
         <Button
-            android:id="@+id/btn_cancelar_crearClima"
+            android:id="@+id/btn_cancelar_EditClima"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -93,20 +93,20 @@
             android:text="@string/posts_text11"
             android:textColor="@color/colorPrimaryDashboard"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/temperaturaCreateClima" />
+            app:layout_constraintTop_toBottomOf="@+id/temperaturaEditClima" />
 
         <Button
-            android:id="@+id/btn_createClima_act"
+            android:id="@+id/btn_EditClima_act"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/button_enter_machine"
             android:padding="10dp"
-            android:text="Crear clima"
+            android:text="Guardar cambios"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/humedadCreateClima" />
+            app:layout_constraintTop_toBottomOf="@+id/humedadEditClima" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

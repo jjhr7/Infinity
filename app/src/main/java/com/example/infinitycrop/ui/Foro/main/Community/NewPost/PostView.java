@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.Foro.main.Community.CommunityMain;
 import com.example.infinitycrop.ui.Foro.main.Home.RVs.PostModel;
+import com.example.infinitycrop.ui.profile.settings.ModifyProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,6 +45,9 @@ public class PostView extends AppCompatActivity {
     private FloatingActionButton btn_delete;
     private String uid;
 
+    Dialog dialog1;
+    private Button button_done;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +55,18 @@ public class PostView extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         idPost = extras.getString("Post");
+
+        dialog1=new Dialog(PostView.this);
+        dialog1.setContentView(R.layout.animation_done);
+        dialog1.setCancelable(false);
+        button_done=dialog1.findViewById(R.id.btn_aceptar);
+        button_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog1.dismiss();
+                finish();
+            }
+        });
 
         db=FirebaseFirestore.getInstance();
         firebaseAuth=FirebaseAuth.getInstance();
@@ -169,8 +187,9 @@ public class PostView extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 db.collection("Posts").document(idPost).delete();
                 Toast.makeText(getApplicationContext(),"Tu post ha sido eliminado", Toast.LENGTH_LONG).show();
-                finish();
+                //finish();
                 dialog.cancel();
+                ventanaEmergente();
             }
         }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
@@ -180,5 +199,9 @@ public class PostView extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void ventanaEmergente(){
+        dialog1.show();
     }
 }

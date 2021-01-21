@@ -112,11 +112,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
-                            android:maxLines="1"
                             android:paddingTop="5dp"
                             android:textColorHint="#333232"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"
+                            android:maxLines="1"
+                            android:maxLength="40"/>
 
                         <View
                             android:layout_width="match_parent"
