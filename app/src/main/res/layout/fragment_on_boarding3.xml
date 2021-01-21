@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue">
+    android:background="@color/grenn">
 
     <ImageView
         android:id="@+id/backToGuide"
@@ -24,7 +24,7 @@
         android:layout_height="20dp"
         android:layout_marginTop="25dp"
         android:text="Herramientas a tu disposición"
-        android:textColor="@color/yellow"
+        android:textColor="@color/colorSecondaryLight"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Saltar"
-        android:textColor="@color/yellow"
+        android:textColor="@color/colorSecondaryLight"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
@@ -51,6 +51,7 @@
         android:id="@+id/textView17"
         android:layout_width="306dp"
         android:layout_height="65dp"
+        android:textColor="@color/white"
         android:fontFamily="sans-serif-light"
         android:text="Todo el control"
         android:textSize="46sp"
@@ -67,7 +68,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
         android:text="En tus manos"
-        android:textColor="@color/yellow"
+        android:textColor="@color/colorSecondaryLight"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +83,7 @@
         android:layout_width="147dp"
         android:layout_height="43dp"
         android:fontFamily="sans-serif-light"
-
+        android:textColor="@color/white"
         android:text="Visualiza y supervisa el rendimieno de tu cultivo de forma fácil y sencilla"
         android:textSize="12sp"
         android:textStyle="bold"

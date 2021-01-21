@@ -35,7 +35,9 @@
                 android:layout_marginLeft="16dp"
                 android:text="Editar perfil"
                 android:textColor="#202020"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:maxLines="1"
+                android:maxLength="40"/>
 
             <ImageView
                 android:id="@+id/backToProfile2"

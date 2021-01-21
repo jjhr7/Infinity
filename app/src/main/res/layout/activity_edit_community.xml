@@ -98,7 +98,9 @@ tools:context=".ui.Foro.lets_start.EditCommunity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:maxLength="40"/>
     </LinearLayout>
 
     <LinearLayout

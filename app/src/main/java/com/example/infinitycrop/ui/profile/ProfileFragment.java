@@ -249,6 +249,11 @@ public class ProfileFragment extends Fragment {
                     user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            if(us.isEmailVerified()) {
+                                txtverf.setVisibility(View.GONE);
+                                btnconf.setVisibility(View.GONE);
+
+                            }
                             Toast.makeText(getActivity(),"Enviando correo de confirmación",Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -260,10 +265,13 @@ public class ProfileFragment extends Fragment {
                     });
                 }
             });
+
             /*}else{
             txtverify.setVisibility(View.GONE);
             btnverify.setVisibility(View.GONE);*/
         }
+
+
         /*RequestQueue colaPeticiones = Volley.newRequestQueue(getActivity()
                 .getApplicationContext());
         ImageLoader lectorImagenes = new ImageLoader(colaPeticiones,

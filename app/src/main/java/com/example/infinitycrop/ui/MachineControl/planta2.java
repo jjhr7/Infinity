@@ -62,7 +62,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import me.sujanpoudel.wheelview.WheelView;
 
-public class planta1 extends AppCompatActivity {
+public class planta2 extends AppCompatActivity {
     private List<String> nombres;
     private List<String> estado;
     //Aviso al entrar
@@ -71,8 +71,8 @@ public class planta1 extends AppCompatActivity {
     private TextView textR;
     //
 
-    private int piso = 1;
-    String one = String.valueOf(piso);
+    private int piso = 2;
+    String two = String.valueOf(piso);
     private int stated = 1;
     String state = String.valueOf(stated);
 
@@ -94,7 +94,7 @@ public class planta1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_planta1);
+        setContentView(R.layout.activity_planta2);
 
         //Aviso al entrar
         fondoR = findViewById(R.id.constraitR);
@@ -118,7 +118,7 @@ public class planta1 extends AppCompatActivity {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               finish();
+                finish();
             }
         });
 
@@ -131,7 +131,7 @@ public class planta1 extends AppCompatActivity {
         nombres=new ArrayList<>();
         estado=new ArrayList<>();
         //firestore
-        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots,
@@ -141,12 +141,12 @@ public class planta1 extends AppCompatActivity {
                         }
                         nombres.clear();
                         for (DocumentSnapshot doc : snapshots) {
-                                nombres.add(doc.getString("name"));
-                                estado.add(doc.getId());
+                            nombres.add(doc.getString("name"));
+                            estado.add(doc.getId());
                         }
 
 
-                       /* Toast.makeText(getApplicationContext(),nombres.toString(), Toast.LENGTH_LONG).show();*/
+                        /* Toast.makeText(getApplicationContext(),nombres.toString(), Toast.LENGTH_LONG).show();*/
 
 
 
@@ -160,8 +160,9 @@ public class planta1 extends AppCompatActivity {
                                 return Unit.INSTANCE;
                             }
                             private final  void showToast(Integer index) {
-                               // Toast.makeText(planta1.this,""+wheelView.getTitles().get(index),Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(planta1.this,""+wheelView.getTitles().get(index),Toast.LENGTH_SHORT).show();
                                 idDocument=estado.get(index);
+
                                 itenInfo(idDocument);
 
 
@@ -175,21 +176,21 @@ public class planta1 extends AppCompatActivity {
 
 
 
-            //Nombre de la planta
-            nameplant = (EditText)findViewById(R.id.editTextNobrep);
-            nameplant.setEnabled(false);
-            mDisplayHour=(TextView) findViewById(R.id.editHour);
-            mDisplayHour.setEnabled(false);
-            mStation=(TextView)findViewById(R.id.txtStation);
-            //Checkboxes
-            checkYes=(CheckBox)findViewById(R.id.checkBoxSi);
-            checkYes.setKeyListener(null);
-            checkNo=(CheckBox)findViewById(R.id.checkBoxNo);
-            checkNo.setKeyListener(null);
+        //Nombre de la planta
+        nameplant = (EditText)findViewById(R.id.editTextNobrep);
+        nameplant.setEnabled(false);
+        mDisplayHour=(TextView) findViewById(R.id.editHour);
+        mDisplayHour.setEnabled(false);
+        mStation=(TextView)findViewById(R.id.txtStation);
+        //Checkboxes
+        checkYes=(CheckBox)findViewById(R.id.checkBoxSi);
+        checkYes.setKeyListener(null);
+        checkNo=(CheckBox)findViewById(R.id.checkBoxNo);
+        checkNo.setKeyListener(null);
 
-            //Boton guardar cambios
-            saveChanges = (Button)findViewById(R.id.btn_save);
-            saveChanges.setOnClickListener(new View.OnClickListener() {
+        //Boton guardar cambios
+        saveChanges = (Button)findViewById(R.id.btn_save);
+        saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveNote(v);
@@ -206,7 +207,7 @@ public class planta1 extends AppCompatActivity {
         });
 
         //Boton editar informacion
-        editInfo = (Button) findViewById(R.id.btnedit);
+        editInfo = (Button) findViewById(R.id.btnedit2);
         editInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,7 +233,7 @@ public class planta1 extends AppCompatActivity {
                     startActivity(intent);
                 }
 
-        }
+            }
         });
 
 
@@ -287,21 +288,21 @@ public class planta1 extends AppCompatActivity {
         String cola = idDocument;
         String nombre = nameplant.getText().toString();
 
-        String piso = one;
+        String piso = two;
 
         Map<String, Object> note = new HashMap<>();
         note.put("name",nombre);
         note.put("piso",piso);
 
-        db.collection("Mediciones planta 1").document(id).collection("DatosPiso").document(cola).update(note).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso").document(cola).update(note).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-            Toast.makeText(planta1.this,"Datos guardados correctamente",Toast.LENGTH_SHORT).show();
+                Toast.makeText(planta2.this,"Datos guardados satisfactoriamente",Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(planta1.this,"Error al guardar",Toast.LENGTH_SHORT).show();
+                Toast.makeText(planta2.this,"Error al sobreescribir los datos",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -311,7 +312,7 @@ public class planta1 extends AppCompatActivity {
     private void itenInfo(String uiDoc){
         //hacer consulta a ese documento con uiDOc y sacar su info
         //luego set Text a all
-        db.collection("Mediciones planta 1").document(id).collection("DatosPiso").document(uiDoc).get()
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso").document(uiDoc).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -332,20 +333,20 @@ public class planta1 extends AppCompatActivity {
                             }
 
 
-                           // Map<String,Object> note = documentSnapshot.getData();
+                            // Map<String,Object> note = documentSnapshot.getData();
                             nameplant.setText(nombre);
                             mStation.setText(estacion);
 
 
 
                         }else{
-                            Toast.makeText(planta1.this,"Document does exist",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(planta2.this,"Error al obtener piso",Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(planta1.this,"Error al obtener piso",Toast.LENGTH_SHORT).show();
+                Toast.makeText(planta2.this,"Error",Toast.LENGTH_SHORT).show();
             }
         });
                 /*.addSnapshotListener(new EventListener<DocumentSnapshot>() {
