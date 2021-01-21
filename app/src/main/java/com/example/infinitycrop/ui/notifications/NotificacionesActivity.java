@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.infinitycrop.MainActivity;
@@ -56,6 +57,16 @@ public class NotificacionesActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifiaciones);
+
+        //volver a la anterior actividad
+        ImageView backToProfile =findViewById(R.id.backToProfile6);
+        backToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStop();
+                finish();
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         s = extras.getString("idMachine"); //declaras como priv la s
