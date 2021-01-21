@@ -2,6 +2,7 @@ package com.example.infinitycrop.ui.dashboard;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,6 +12,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,19 +26,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.comun.Mqtt;
+import com.example.infinitycrop.MainActivity;
 import com.example.infinitycrop.R;
+import com.example.infinitycrop.ui.Foro.lets_start.rv_community.CommunityModel;
+import com.example.infinitycrop.ui.Foro.main.Home.RVs.RVFollowed.AdapterFollowedCmty;
 import com.example.infinitycrop.ui.MachineControl.planta1;
+import com.example.infinitycrop.ui.dashboard.RvClimas.AdapterClimas;
+import com.example.infinitycrop.ui.dashboard.RvClimas.ClimaModel;
 import com.example.infinitycrop.ui.recycler_control.StaticRvAdapter;
 import com.example.infinitycrop.ui.recycler_control.StaticRvModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -62,6 +80,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cz.msebera.android.httpclient.Header;
@@ -76,7 +95,8 @@ import static com.example.comun.Mqtt.topicRoot;
 public class DashboardFragment extends Fragment implements MqttCallback {
 
     private RecyclerView recyclerView;
-    private StaticRvAdapter staticRvAdapter;
+    //private StaticRvAdapter staticRvAdapter;
+    private AdapterClimas adapterClimas;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     //Weather
@@ -90,12 +110,12 @@ public class DashboardFragment extends Fragment implements MqttCallback {
 
     TextView NameofCity, weatherState, Temperature;
     ImageView mweatherIcon;
-
+    private String idUser;
     LocationManager mLocationManager;
     LocationListener mLocationListner;
-
-
-
+    private List<ClimaModel> climaModelList=new ArrayList<>();
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
     //Acceso a la maquina
     public static MqttClient client = null;
     // TODO: Rename parameter arguments, choose names that match
@@ -137,18 +157,28 @@ public class DashboardFragment extends Fragment implements MqttCallback {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    private String uidActualMachine;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
         //FIREBASE
+
+        MainActivity myActivity = (MainActivity) getActivity();
+        uidActualMachine=myActivity.getMachineUID();
         //Recojo los datos del usuario
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         final FirebaseUser usuario = mAuth.getCurrentUser();
         final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-        String idUser = usuario.getUid();
+        idUser = mAuth.getUid();
+        db=FirebaseFirestore.getInstance();
+        //rv
+        recyclerView = v.findViewById(R.id.rv_1);
+        initRvClimas();
+        getMyClimas();
+
+
         //guardo el nombre en un textView
         /*final TextView nombre = (TextView) v.findViewById(R.id.hello_text);
         String res="Hola"+" "+usuario.getDisplayName();
@@ -183,22 +213,19 @@ public class DashboardFragment extends Fragment implements MqttCallback {
 
 
         //RECYCLER VIEW
-        ArrayList<StaticRvModel> item = new ArrayList<>();
+        /*ArrayList<StaticRvModel> item = new ArrayList<>();
         item.add(new StaticRvModel(R.drawable.icons_sun, "Soleado"));
         item.add(new StaticRvModel(R.drawable.icons_night_mode, "Nocturno"));
         item.add(new StaticRvModel(R.drawable.icons_energy_saving, "Ahorro"));
         item.add(new StaticRvModel(R.drawable.icons_power_off, "Apagado"));
-        item.add(new StaticRvModel(R.drawable.icons_custom, "Custom"));
+        item.add(new StaticRvModel(R.drawable.icons_custom, "Custom"));*/
 
         final TextView medidasT = v.findViewById(R.id.medidaTemperaturaGeneral);
         final TextView medidasH = v.findViewById(R.id.medidaHumedadGeneral);
         /*final TextView medidasS = v.findViewById(R.id.medidaSalinidadGeneral);*/
         /*final TextView medidasL = v.findViewById(R.id.medidasLuminosidadGeneral);*/
 
-        recyclerView = v.findViewById(R.id.rv_1);
-        staticRvAdapter = new StaticRvAdapter(item);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(staticRvAdapter);
+
 
 
         //TABS
@@ -552,4 +579,217 @@ public class DashboardFragment extends Fragment implements MqttCallback {
             /*getLocation();*/
  /*       }
     }*/
+
+    private void initRvClimas(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        //recyclerView.setAdapter(staticRvAdapter);
+    }
+    private void getMyClimas(){
+
+        db.collection("Climas").document("Default").get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String name=document.getString("name");
+                                String creator=document.getString("creator");
+                                String temperatura=document.getString("temperatura");
+                                String humedad=document.getString("humedad");
+                                String machine=document.getString("machineId");
+                                boolean defecto=document.getBoolean("defecto");
+                                String uid=document.getId();
+                                final ClimaModel DefaultClima=new ClimaModel(temperatura,humedad,name,creator,uid,uidActualMachine,defecto);
+
+                                db.collection("Climas")
+                                        .whereEqualTo("creator",idUser)
+                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable QuerySnapshot value,
+                                                                @Nullable FirebaseFirestoreException e) {
+                                                if (e != null) {
+                                                    return;
+                                                }
+                                                if(value!=null){
+                                                    climaModelList.clear();
+                                                    climaModelList.add(DefaultClima);
+                                                    for (QueryDocumentSnapshot doc : value) {
+                                                        String name=doc.getString("name");
+                                                        String creator=doc.getString("creator");
+                                                        String temperatura=doc.getString("temperatura");
+                                                        String humedad=doc.getString("humedad");
+                                                        String machine=doc.getString("machineId");
+                                                        boolean defecto=doc.getBoolean("defecto");
+                                                        String uid=doc.getId();
+
+                                                        ClimaModel climaModel=new ClimaModel(temperatura,humedad,name,creator,uid,uidActualMachine,defecto);
+                                                        climaModelList.add(climaModel);
+                                                    }
+                                                    adapterClimas= new AdapterClimas(climaModelList,getContext(),uidActualMachine);
+                                                    onclickClima();
+                                                    recyclerView.setAdapter(adapterClimas);
+                                                }
+                                            }
+                                        });
+
+                            }
+                        } else {
+
+                        }
+                    }
+                });
+    }
+
+    private void onclickClima(){
+        adapterClimas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position=recyclerView.getChildLayoutPosition(v);
+                ClimaModel climaModel=climaModelList.get(position);
+                bottomSheetClima(climaModel,position);
+            }
+        });
+    }
+
+    private String climaActivated;
+
+    private void bottomSheetClima(final ClimaModel climaModel, final int position){
+        final String uiDocument=climaModel.getUid();
+        final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_climas);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        TextView name=bottomSheetDialog.findViewById(R.id.name_clima);
+        TextView temp=bottomSheetDialog.findViewById(R.id.umbral_temperatura_clima);
+        TextView hum=bottomSheetDialog.findViewById(R.id.umbral_humedad_clima);
+        final Button activar=bottomSheetDialog.findViewById(R.id.btn_activatClima);
+        Button editar=bottomSheetDialog.findViewById(R.id.btn_editar_clima);
+        Button eliminar=bottomSheetDialog.findViewById(R.id.btn_eliminar_clima);
+        Button cancelar=bottomSheetDialog.findViewById(R.id.btn_cancelar_clima);
+
+        name.setText(climaModel.getName());
+        temp.setText(climaModel.getTemperatura());
+        hum.setText(climaModel.getHumedad());
+        //onClick
+
+
+        final String[] idRealMachine = {""};
+        db.collection("Machine")
+                .whereEqualTo("description",uidActualMachine)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                idRealMachine[0] =document.getId();
+                            }
+                            db.collection("Machine").document(idRealMachine[0]).collection("Clima")
+                                    .document("Activado").get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    climaActivated= document.getString("climaID");
+                                                    if(climaModel.getUid().equals(climaActivated)){
+                                                        activar.setText("Desactivar clima");
+                                                        activar.setBackgroundResource(R.drawable.button_unfollow);
+                                                        activar.setTextColor(getResources().getColor(R.color.black));
+                                                    }else{
+                                                        activar.setText("Activar clima");
+                                                        activar.setBackgroundResource(R.drawable.button_enter_machine);
+                                                        activar.setTextColor(getResources().getColor(R.color.white));
+                                                    }
+                                                } else {
+
+                                                }
+                                            } else {
+
+                                            }
+                                        }
+                                    });
+
+                        } else {
+
+                        }
+                    }
+                });
+
+        activar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(activar.getText().equals("Desactivar clima")){
+                    if(climaModel.isDefecto()){
+                        Toast.makeText(getContext(),"Tienes que tener activado al menos un clima", Toast.LENGTH_LONG).show();
+                    }else{
+                        db.collection("Machine").document(idRealMachine[0]).collection("Clima").document("Activado").update("climaID","Default");
+                    }
+                }else if(activar.getText().equals("Activar clima")){
+                    db.collection("Machine").document(idRealMachine[0]).collection("Clima").document("Activado").update("climaID",climaModel.getUid());
+                }
+                getMyClimas();
+                bottomSheetDialog.dismiss();
+
+            }
+        });
+
+        if(climaModel.isDefecto()){
+            editar.setVisibility(View.GONE);
+            eliminar.setVisibility(View.GONE);
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bottomSheetDialog.dismiss();
+                }
+            });
+        }else{
+            editar.setVisibility(View.VISIBLE);
+            eliminar.setVisibility(View.VISIBLE);
+            editar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Intent tiwh extra to edit clima
+                }
+            });
+            eliminar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    builder.setMessage("¿Seguro que quieres eliminar este clima?");
+                    builder.setTitle("Eliminar clima");
+                    builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(climaModel.getUid().equals(climaActivated)){
+                                db.collection("Machine").document(idRealMachine[0]).collection("Clima").document("Activado").update("climaID","Default");
+                                db.collection("Climas").document(climaModel.getUid()).delete();
+                            }else{
+                                db.collection("Climas").document(climaModel.getUid()).delete();
+                            }
+
+                            bottomSheetDialog.dismiss();
+                            dialog.cancel();
+                        }
+                    }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bottomSheetDialog.dismiss();
+                }
+            });
+        }
+        bottomSheetDialog.show();
+    }
 }

@@ -255,7 +255,18 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         a2.put("Temperatura", "0");
         a2.put("Fecha", new Timestamp(new Date()));
         a2.put("machineId", id);
-        machineRef.add(new MachineModel(TextnameMachine.getText().toString().trim(), priorityMachine, id, uid));
+        machineRef.add(new MachineModel(TextnameMachine.getText().toString().trim(), priorityMachine, id, uid)).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if(task.isSuccessful()){
+                    DocumentReference doc=task.getResult();
+                    final Map<String, Object> newMach = new HashMap<>();
+                    newMach.put("climaID", "Default");
+                    String newMachine=doc.getId();
+                    db.collection("Machine").document(newMachine).collection("Clima").document("Activado").set(newMach);
+                }
+            }
+        });
         db.collection("Mediciones general").document(id).set(a);
         db.collection("Mediciones planta 1").document(id).set(a1);
         db.collection("Mediciones planta 2").document(id).set(a2);
@@ -317,7 +328,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
                 .document("planta3").set(planta6);
 
 
-        Toast.makeText(this, "Maquina añadida", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Maquina añadida", Toast.LENGTH_SHORT).show();
         finish();
     }
 }

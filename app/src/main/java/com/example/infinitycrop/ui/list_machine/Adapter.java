@@ -46,6 +46,7 @@ public class Adapter extends FirestoreRecyclerAdapter<MachineModel, Adapter.Prod
     }
 
     protected void deleteItem(int position){
+        getSnapshots().getSnapshot(position).getReference().collection("Clima").document("Activado").delete();
         getSnapshots().getSnapshot(position).getReference().delete();
         String qrScan= (String) getSnapshots().getSnapshot(position).getData().get("description");
         //eliminar de la coleccion Mediciones

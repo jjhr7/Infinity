@@ -118,7 +118,7 @@ public class GeneralFragment extends Fragment implements MqttCallback{
         final TextView medidaTemp=v.findViewById(R.id.medidaTemperaturaGeneral);
         final TextView medidaHum=v.findViewById(R.id.medidaHumedadGeneral);
         /*final TextView medidaHumAm=v.findViewById(R.id.medidaSalinidadGeneral);*/
-        /*final TextView medidaLuz=v.findViewById(R.id.medidasLuminosidadGeneral);*/
+        final TextView medidaLuz=v.findViewById(R.id.medidasLuminosidadGeneral);
         uid=myActivity.getMachineUID();
         db.collection("Mediciones general")
                 .document(uid)
@@ -141,8 +141,8 @@ public class GeneralFragment extends Fragment implements MqttCallback{
                             /*String medidaHA=snapshot.getString("Humedad Ambiente");
                             medidaHumAm.setText(medidaHA+"%");*/
                             //Luminosidad
-                            /*String medidaL=snapshot.getString("Luminosidad");
-                            medidaLuz.setText(medidaL+"%");*/
+                            String medidaL=snapshot.getString("Luminosidad");
+                            medidaLuz.setText(medidaL+"%");
 
 
                         } else {
