@@ -199,7 +199,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
             }
         });
 
-        /*db.collection("Mediciones general").document(getId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        db.collection("Mediciones general").document(getId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 if(value.exists()){
@@ -250,7 +250,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
 
                         db.collection("Notificaciones").add(notificacionesHumedadAviso);
 
-                    }*/
+                    }
 
 
                     /*//Humedad Ambiente
@@ -279,7 +279,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
 
 
                     //Luminosidad
-                    /*String luminosidad = value.getString("Luminosidad");
+                    String luminosidad = value.getString("Luminosidad");
                     Double luminosidadValue = Double.parseDouble(luminosidad);
 
                     if (luminosidadValue <= 30) {
@@ -302,7 +302,7 @@ public class ServicioMqtt extends Service implements MqttCallback {
                     }
                 }
             }
-        });*/
+        });
 
         return START_STICKY;
     }
