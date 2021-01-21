@@ -67,10 +67,10 @@ public class LineChart extends Fragment {
     private LineDataSet ldataSet = new LineDataSet(null,null);
     private ArrayList<ILineDataSet> iLineDataSets = new ArrayList<>();
     private LineData linedata;
-    private int humedad;
+    private String humedad;
     private int humedadA;
     private String temperatura;
-    private int luminosidad;
+    private String luminosidad;
     public Timestamp fecha;
     private String uid;
 
@@ -148,9 +148,8 @@ public class LineChart extends Fragment {
                             int contador = 0;
 
                             ArrayList<Entry> values_Hum = new ArrayList<>();
-                            ArrayList<Entry> values_HumA = new ArrayList<>();
                             ArrayList<Entry> values_Temp = new ArrayList<>();
-                            ArrayList<Entry> values_Lum = new ArrayList<>();
+                            ArrayList<Entry> values_lum = new ArrayList<>();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -160,22 +159,23 @@ public class LineChart extends Fragment {
                                 Machine_pojo machine = document.toObject(Machine_pojo.class);
 
                                 humedad = machine.getHumedad();
-                                humedadA = machine.getHumedadA();
                                 temperatura = machine.getTemperatura();
                                 luminosidad = machine.getLuminosidad();
                                 fecha = machine.getFecha();
 
                                 int temperatura_int = Integer.valueOf(temperatura);
 
-                                values_Hum.add(new Entry(contador, humedad));
+                                int humedad_int = Integer.valueOf(humedad);
 
-                                values_HumA.add(new Entry(contador, humedadA));
+                                int luminosidad_int = Integer.valueOf(luminosidad);
 
-                                values_Lum.add(new Entry(contador, luminosidad));
+                                values_Hum.add(new Entry(contador, humedad_int));
 
                                 values_Temp.add(new Entry(contador, temperatura_int));
 
-                                chart(values_Hum, values_HumA, values_Temp, values_Lum);
+                                values_lum.add(new Entry(contador, luminosidad_int));
+
+                                chart(values_Hum, values_Temp, values_lum);
 
 
                             }
@@ -208,15 +208,15 @@ public class LineChart extends Fragment {
 
     }
 
-    public void chart(ArrayList<Entry> valuesHum, ArrayList<Entry> valuesHumA, ArrayList<Entry> valuesTpa,ArrayList<Entry> valuesLum ){
+    public void chart(ArrayList<Entry> valuesHum, ArrayList<Entry> valuesTpa, ArrayList<Entry> valuesLum){
 
-        LineDataSet set1, set2, set3, set4;
+        LineDataSet set1, set2, set3;
 
             // create a dataset and give it a type
-            set1 = new LineDataSet(valuesHum, "Humedad");
+            set1 = new LineDataSet(valuesHum, "Humedad (%)");
             set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-            set1.setColor(ColorTemplate.COLORFUL_COLORS[0], 130);
-            set1.setCircleColor(Color.MAGENTA);
+            set1.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
+            set1.setCircleColor(Color.RED);
             set1.setLineWidth(2f);
             set1.setCircleRadius(3f);
             set1.setFillAlpha(65);
@@ -224,46 +224,35 @@ public class LineChart extends Fragment {
             set1.setHighLightColor(Color.rgb(244, 117, 117));
             set1.setDrawCircleHole(false);
 
-            // create a dataset and give it a type
-            set2 = new LineDataSet(valuesHumA, "Humedad amb");
+
+            set2 = new LineDataSet(valuesTpa, "Temperatura (º)");
             set2.setAxisDependency(YAxis.AxisDependency.RIGHT);
-            set2.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
-            set2.setCircleColor(Color.RED);
+            set2.setColor(ColorTemplate.COLORFUL_COLORS[0], 130);
+            set2.setCircleColor(Color.MAGENTA);
             set2.setLineWidth(2f);
             set2.setCircleRadius(3f);
             set2.setFillAlpha(65);
-            set2.setFillColor(Color.RED);
+            set2.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 200));
             set2.setDrawCircleHole(false);
             set2.setHighLightColor(Color.rgb(244, 117, 117));
-            //set2.setFillFormatter(new MyFillFormatter(900f));
 
-            set3 = new LineDataSet(valuesLum, "Luminosidad");
+
+
+            set3 = new LineDataSet(valuesLum, "Luminosidad (%)");
             set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
             set3.setColor(ColorTemplate.COLORFUL_COLORS[2], 130);
             set3.setCircleColor(Color.YELLOW);
             set3.setLineWidth(2f);
             set3.setCircleRadius(3f);
             set3.setFillAlpha(65);
-            set3.setFillColor(ColorTemplate.colorWithAlpha(Color.YELLOW, 200));
+            set3.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 200));
             set3.setDrawCircleHole(false);
             set3.setHighLightColor(Color.rgb(244, 117, 117));
 
 
-            set4 = new LineDataSet(valuesTpa, "Temperatura");
-            set4.setAxisDependency(YAxis.AxisDependency.RIGHT);
-            set4.setColor(ColorTemplate.COLORFUL_COLORS[3], 130);
-            set4.setCircleColor(Color.DKGRAY);
-            set4.setLineWidth(2f);
-            set4.setCircleRadius(3f);
-            set4.setFillAlpha(65);
-            set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 200));
-            set4.setDrawCircleHole(false);
-            set4.setHighLightColor(Color.rgb(244, 117, 117));
-
-
             // create a data object with the data sets
-            LineData data = new LineData(set1, set2, set3, set4);
-            data.setValueTextColor(Color.WHITE);
+            LineData data = new LineData(set1, set2, set3);
+            data.setValueTextColor(Color.BLACK);
             data.setValueTextSize(9f);
 
             // set data

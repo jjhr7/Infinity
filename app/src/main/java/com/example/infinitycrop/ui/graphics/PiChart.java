@@ -72,10 +72,10 @@ public class PiChart extends Fragment {
     private FirebaseFirestore db;
     private String uid;
 
-    private int humedad;
+    private String humedad;
     private int humedadA;
     private String temperatura;
-    private int luminosidad;
+    private String luminosidad;
     public Timestamp fecha;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -173,7 +173,6 @@ public class PiChart extends Fragment {
                             int contador = 0;
 
                             ArrayList<BubbleEntry> values_Hum = new ArrayList<>();
-                            ArrayList<BubbleEntry> values_HumA = new ArrayList<>();
                             ArrayList<BubbleEntry> values_Temp = new ArrayList<>();
                             ArrayList<BubbleEntry> values_Lum = new ArrayList<>();
 
@@ -185,56 +184,55 @@ public class PiChart extends Fragment {
                                 Machine_pojo machine = document.toObject(Machine_pojo.class);
 
                                 humedad = machine.getHumedad();
-                                humedadA = machine.getHumedadA();
                                 temperatura = machine.getTemperatura();
                                 luminosidad = machine.getLuminosidad();
                                 fecha = machine.getFecha();
 
                                 int temperatura_int = Integer.valueOf(temperatura);
 
-                                values_Hum.add(new BubbleEntry(contador, humedad, 1));
+                                int humedad_int = Integer.valueOf(humedad);
 
-                                values_HumA.add(new BubbleEntry(contador, humedadA, 1));
+                                int luminosidad_int = Integer.valueOf(luminosidad);
 
-                                values_Lum.add(new BubbleEntry(contador, luminosidad, 1));
 
-                                values_Temp.add(new BubbleEntry(contador, temperatura_int, 1));
+
+                                values_Hum.add(new BubbleEntry(contador, humedad_int, 10 * 100F));
+
+                                values_Temp.add(new BubbleEntry(contador, temperatura_int, 10 * 100F));
+
+                                values_Lum.add(new BubbleEntry(contador, luminosidad_int, 10 * 100F));
 
                                 // create a dataset and give it a type
-                                BubbleDataSet set1 = new BubbleDataSet(values_Hum, "Humedad");
+                                BubbleDataSet set1 = new BubbleDataSet(values_Hum, "Humedad (%)");
                                 set1.setDrawIcons(false);
                                 set1.setValueTextSize(10f);
                                 set1.setValueTextColor(R.color.black);
-                                set1.setColor(ColorTemplate.COLORFUL_COLORS[0], 130);
+                                set1.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
                                 set1.setDrawValues(true);
 
-                                BubbleDataSet set2 = new BubbleDataSet(values_HumA, "Humedad amb");
+
+                                BubbleDataSet set2 = new BubbleDataSet(values_Lum, "Luminosidad (%)");
                                 set2.setDrawIcons(false);
                                 set2.setValueTextSize(10f);
                                 set2.setValueTextColor(R.color.black);
                                 set2.setIconsOffset(new MPPointF(0, 15));
-                                set2.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
+                                set2.setColor(ColorTemplate.COLORFUL_COLORS[2], 130);
                                 set2.setDrawValues(true);
 
-                                BubbleDataSet set3 = new BubbleDataSet(values_Lum, "Luminosidad");
-                                set3.setColor(ColorTemplate.COLORFUL_COLORS[2], 130);
-                                set3.setValueTextSize(10f);
-                                set3.setValueTextColor(R.color.black);
-                                set3.setDrawValues(true);
 
-                                BubbleDataSet set4 = new BubbleDataSet(values_Temp, "Temperatura");
-                                set4.setDrawIcons(false);
-                                set4.setValueTextSize(10f);
-                                set4.setValueTextColor(R.color.black);
-                                set4.setIconsOffset(new MPPointF(0, 15));
-                                set4.setColor(ColorTemplate.COLORFUL_COLORS[3], 130);
-                                set4.setDrawValues(true);
+                                BubbleDataSet set3 = new BubbleDataSet(values_Temp, "Temperatura (º)");
+                                set2.setDrawIcons(false);
+                                set2.setValueTextSize(10f);
+                                set2.setValueTextColor(R.color.black);
+                                set2.setIconsOffset(new MPPointF(0, 15));
+                                set2.setColor(ColorTemplate.COLORFUL_COLORS[0], 130);
+                                set2.setDrawValues(true);
 
                                 ArrayList<IBubbleDataSet> dataSets = new ArrayList<>();
                                 dataSets.add(set1); // add the data sets
                                 dataSets.add(set2);
                                 dataSets.add(set3);
-                                dataSets.add(set4);
+
 
                                 // create a data object with the data sets
                                 BubbleData data = new BubbleData(dataSets);
