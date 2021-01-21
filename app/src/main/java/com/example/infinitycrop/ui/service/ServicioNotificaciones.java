@@ -51,7 +51,7 @@ public class ServicioNotificaciones extends Service {
                             //Temperatura
 
                             Long medidaT=snapshot.getLong("Temperatura");
-                            if(medidaT > 7){
+                            if(medidaT < 13){
 
                                 final Map<String, Object> notificacionesTempAlerta = new HashMap<>();
                                 notificacionesTempAlerta.put("Tipo", 1);
@@ -59,7 +59,7 @@ public class ServicioNotificaciones extends Service {
                             }
 
 
-                            if(medidaT > 5 && medidaT < 7) {
+                            if(medidaT >= 13 && medidaT <= 16) {
                                 //collecion notificaciones temperatura
                                 final Map<String, Object> notificacionesTempAviso = new HashMap<>();
                                 notificacionesTempAviso.put("Tipo", 2);
@@ -69,12 +69,12 @@ public class ServicioNotificaciones extends Service {
                             //Humedad
 
                             Long medidaH=snapshot.getLong("Humedad");
-                            if(medidaH > 7){
+                            if(medidaH < 20){
                                 final Map<String, Object> notificacionesHumedadAlerta = new HashMap<>();
                                 notificacionesHumedadAlerta.put("Tipo", 1);
                                 db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones humedad").set(notificacionesHumedadAlerta);
                             }
-                            if(medidaH > 5 && medidaT < 7) {
+                            if(medidaH >= 20 && medidaT <= 30) {
                                 //collecion notificaciones temperatura
                                 final Map<String, Object> notificacionesHumedadAviso = new HashMap<>();
                                 notificacionesHumedadAviso.put("Tipo", 2);
@@ -84,12 +84,12 @@ public class ServicioNotificaciones extends Service {
                             //Humedad Ambiente
 
                             Long medidaHA=snapshot.getLong("Humedad Ambiente");
-                            if(medidaHA > 7){
+                            if(medidaHA < 20){
                                 final Map<String, Object> notificacionesHumedadAmbAlerta = new HashMap<>();
                                 notificacionesHumedadAmbAlerta.put("Tipo", 1);
                                 db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones humedad ambiente").set(notificacionesHumedadAmbAlerta);
                             }
-                            if(medidaHA > 5 && medidaHA < 7) {
+                            if(medidaHA >= 20 && medidaHA <= 30) {
                                 //collecion notificaciones temperatura
                                 final Map<String, Object> notificacionesHumedadAmbAviso = new HashMap<>();
                                 notificacionesHumedadAmbAviso.put("Tipo", 2);
@@ -99,12 +99,12 @@ public class ServicioNotificaciones extends Service {
                             //Luminosidad
 
                             Long medidaL=snapshot.getLong("Luminosidad");
-                            if(medidaL > 7){
+                            if(medidaL <= 30){
                                 final Map<String, Object> notificacionesLuminosidadAlerta = new HashMap<>();
                                 notificacionesLuminosidadAlerta.put("Tipo", 1);
                                 db.collection("Notificaciones").document(getId).collection("Notificaciones general").document("Notificaciones luminosidad").set(notificacionesLuminosidadAlerta);
                             }
-                            if(medidaL > 5 && medidaL < 7) {
+                            if(medidaL <= 50) {
                                 //collecion notificaciones temperatura
                                 final Map<String, Object> notificacionesLuminosidadAviso = new HashMap<>();
                                 notificacionesLuminosidadAviso.put("Tipo", 2);

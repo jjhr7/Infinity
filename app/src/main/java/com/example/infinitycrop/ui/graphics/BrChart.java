@@ -36,6 +36,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IBubbleDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,10 +73,10 @@ public class BrChart extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
-    private int humedad;
+    private String humedad;
     private int humedadA;
     private String temperatura;
-    private int luminosidad;
+    private String luminosidad;
     public Timestamp fecha;
 
     private com.github.mikephil.charting.charts.BarChart chart;
@@ -124,7 +125,7 @@ public class BrChart extends Fragment {
         chart.setDrawGridBackground(false);
         // enable touch gestures
         chart.setTouchEnabled(false);
- 
+
         GraphicsActivity myActivity = (GraphicsActivity) getActivity();
         uid=myActivity.getmachineID();
 
@@ -145,7 +146,6 @@ public class BrChart extends Fragment {
                             int contador = 0;
 
                             ArrayList<BarEntry> values_Hum = new ArrayList<>();
-                            ArrayList<BarEntry> values_HumA = new ArrayList<>();
                             ArrayList<BarEntry> values_Temp = new ArrayList<>();
                             ArrayList<BarEntry> values_Lum = new ArrayList<>();
 
@@ -157,60 +157,83 @@ public class BrChart extends Fragment {
                                 Machine_pojo machine = document.toObject(Machine_pojo.class);
 
                                 humedad = machine.getHumedad();
-                                humedadA = machine.getHumedadA();
                                 temperatura = machine.getTemperatura();
                                 luminosidad = machine.getLuminosidad();
                                 fecha = machine.getFecha();
 
                                 int temperatura_int = Integer.valueOf(temperatura);
 
-                                values_Hum.add(new BarEntry(contador, humedad));
+                                int humedad_int = Integer.valueOf(humedad);
 
-                                values_HumA.add(new BarEntry(contador, humedadA));
+                                int luminosidad_int = Integer.valueOf(luminosidad);
 
-                                values_Lum.add(new BarEntry(contador, luminosidad));
+
+                                values_Hum.add(new BarEntry(contador, humedad_int));
 
                                 values_Temp.add(new BarEntry(contador, temperatura_int));
 
+                                values_Lum.add(new BarEntry(contador, luminosidad_int));
 
-                                BarDataSet set1, set2, set3, set4 ;
+
+                                BarDataSet set1, set2, set3 ;
 
                                 // create a dataset and give it a type
-                                set1 = new BarDataSet(values_Hum, "Humedad");
+                                set1 = new BarDataSet(values_Hum, "Humedad (%)");
                                 set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-                                set1.setColor(ColorTemplate.COLORFUL_COLORS[0], 130);
+                                set1.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
                                 set1.setHighLightColor(Color.rgb(244, 117, 117));
 
-                                // create a dataset and give it a type
-                                set2 = new BarDataSet(values_HumA, "Humedad amb");
-                                set2.setAxisDependency(YAxis.AxisDependency.RIGHT);
-                                set2.setColor(ColorTemplate.COLORFUL_COLORS[1], 130);
-                                set2.setHighLightColor(Color.rgb(244, 117, 117));
-                                //set2.setFillFormatter(new MyFillFormatter(900f));
 
-                                set3 = new BarDataSet(values_Lum, "Luminosidad");
-                                set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
+                                set2 = new BarDataSet(values_Temp, "Temperatura (º)");
+                                set2.setAxisDependency(YAxis.AxisDependency.LEFT);
+                                set2.setColor(ColorTemplate.COLORFUL_COLORS[3], 130);
+                                set2.setHighLightColor(Color.rgb(244, 117, 117));
+
+
+                                set3 = new BarDataSet(values_Lum, "Luminosidad (%)");
+                                set3.setAxisDependency(YAxis.AxisDependency.LEFT);
                                 set3.setColor(ColorTemplate.COLORFUL_COLORS[2], 130);
                                 set3.setHighLightColor(Color.rgb(244, 117, 117));
 
+                                //data
+                                float groupSpace = 0.16f;
+                                float barSpace = 0.01f; // x2 dataset
 
-                                set4 = new BarDataSet(values_Temp, "Temperatura");
-                                set4.setAxisDependency(YAxis.AxisDependency.RIGHT);
-                                set4.setColor(ColorTemplate.COLORFUL_COLORS[3], 130);
-                                set4.setHighLightColor(Color.rgb(244, 117, 117));
+                                int start = 0;
 
 
-                                ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-                                dataSets.add(set1);
-                                dataSets.add(set2);
-                                dataSets.add(set3);
-                                dataSets.add(set4);
-
-                                BarData data = new BarData(dataSets);
+                                BarData data = new BarData(set1, set2, set3);
                                 data.setValueTextSize(0f);
                                 data.setBarWidth(0.9f);
+                                data.setValueTextColor(Color.BLACK);
+                                data.setValueTextSize(9f);
+
+                                // get the legend (only possible after setting data)
+                                Legend l = chart.getLegend();
+
+                                // draw legend entries as lines
+                                l.setForm(Legend.LegendForm.LINE);
+
+
+                                YAxis yl = chart.getAxisLeft();
+                                yl.setSpaceTop(30f);
+                                yl.setSpaceBottom(30f);
+                                yl.setDrawZeroLine(false);
+
+                                chart.getAxisRight().setEnabled(false);
+
+                                XAxis xl = chart.getXAxis();
+                                xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+                                //setting animation for y-axis, the bar will pop up from 0 to its value within the time we set
+                                chart.animateY(2000);
+                                //setting animation for x-axis, the bar will pop up separately within the time we set
+                                chart.animateX(2000);
 
                                 chart.setData(data);
+                                chart.groupBars(start, groupSpace, barSpace);
+
+                                chart.invalidate();
 
 
                             }
@@ -220,27 +243,7 @@ public class BrChart extends Fragment {
                     }
                 });
 
-        // get the legend (only possible after setting data)
-        Legend l = chart.getLegend();
 
-        // draw legend entries as lines
-        l.setForm(Legend.LegendForm.LINE);
-
-
-        YAxis yl = chart.getAxisLeft();
-        yl.setSpaceTop(30f);
-        yl.setSpaceBottom(30f);
-        yl.setDrawZeroLine(false);
-
-        chart.getAxisRight().setEnabled(false);
-
-        XAxis xl = chart.getXAxis();
-        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-        //setting animation for y-axis, the bar will pop up from 0 to its value within the time we set
-        chart.animateY(3000);
-        //setting animation for x-axis, the bar will pop up separately within the time we set
-        chart.animateX(3000);
 
         return v;
     }

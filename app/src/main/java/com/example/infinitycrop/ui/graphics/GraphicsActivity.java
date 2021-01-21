@@ -43,7 +43,7 @@ public class GraphicsActivity  extends AppCompatActivity {
         final int[] tabIcons = {
                 R.drawable.ic_baseline_multiline_chart_24,
                 R.drawable.ic_baseline_bar_chart_24,
-                R.drawable.ic_baseline_pie_chart_24
+                //R.drawable.ic_baseline_pie_chart_24
         };
 
         new TabLayoutMediator(tabs, viewPager,
@@ -63,14 +63,14 @@ public class GraphicsActivity  extends AppCompatActivity {
         }
         @Override
         public int getItemCount() {
-            return 3;
+            return 2;
         }
         @Override @NonNull
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0: return new LineChart();
                 case 1: return new BrChart();
-                case 2: return new PiChart();
+                //case 2: return new PiChart();
             }
             return null;
         }
