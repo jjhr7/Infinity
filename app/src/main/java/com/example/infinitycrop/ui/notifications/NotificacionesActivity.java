@@ -111,7 +111,8 @@ r
         db = FirebaseFirestore.getInstance();
 
         db.collection("Notificaciones")
-                .whereEqualTo("machineId", s)
+                .whereEqualTo("MachineID", s)
+                .limit(10)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
