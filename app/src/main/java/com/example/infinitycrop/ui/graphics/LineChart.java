@@ -138,7 +138,8 @@ public class LineChart extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         db.collection("Mediciones")
-                .whereEqualTo("machineID", uid)
+                .whereEqualTo("machineId", uid)
+                .limit(5)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -163,17 +164,17 @@ public class LineChart extends Fragment {
                                 luminosidad = machine.getLuminosidad();
                                 fecha = machine.getFecha();
 
-                                int temperatura_int = Integer.valueOf(temperatura);
+                                double temperatura_int = Double.valueOf(temperatura);
 
-                                int humedad_int = Integer.valueOf(humedad);
+                                double humedad_int = Double.valueOf(humedad);
 
-                                int luminosidad_int = Integer.valueOf(luminosidad);
+                                double luminosidad_int = Double.valueOf(luminosidad);
 
-                                values_Hum.add(new Entry(contador, humedad_int));
+                                values_Hum.add(new Entry(contador, (float) humedad_int));
 
-                                values_Temp.add(new Entry(contador, temperatura_int));
+                                values_Temp.add(new Entry(contador, (float) temperatura_int));
 
-                                values_lum.add(new Entry(contador, luminosidad_int));
+                                values_lum.add(new Entry(contador, (float) luminosidad_int));
 
                                 chart(values_Hum, values_Temp, values_lum);
 

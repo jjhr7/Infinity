@@ -136,7 +136,8 @@ public class BrChart extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         db.collection("Mediciones")
-                .whereEqualTo("machineID", uid)
+                .whereEqualTo("machineId", uid)
+                .limit(5)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -161,18 +162,18 @@ public class BrChart extends Fragment {
                                 luminosidad = machine.getLuminosidad();
                                 fecha = machine.getFecha();
 
-                                int temperatura_int = Integer.valueOf(temperatura);
+                                double temperatura_int = Double.valueOf(temperatura);
 
-                                int humedad_int = Integer.valueOf(humedad);
+                                double humedad_int = Double.valueOf(humedad);
 
-                                int luminosidad_int = Integer.valueOf(luminosidad);
+                                double luminosidad_int = Double.valueOf(luminosidad);
 
 
-                                values_Hum.add(new BarEntry(contador, humedad_int));
+                                values_Hum.add(new BarEntry(contador, (float) humedad_int));
 
-                                values_Temp.add(new BarEntry(contador, temperatura_int));
+                                values_Temp.add(new BarEntry(contador, (float) temperatura_int));
 
-                                values_Lum.add(new BarEntry(contador, luminosidad_int));
+                                values_Lum.add(new BarEntry(contador, (float) luminosidad_int));
 
 
                                 BarDataSet set1, set2, set3 ;
