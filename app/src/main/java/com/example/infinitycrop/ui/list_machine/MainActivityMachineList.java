@@ -97,6 +97,7 @@ public class MainActivityMachineList extends AppCompatActivity {
                         intent.putExtra("machine", id);
                         intent.putExtra("description", path);
                         startActivity(intent);
+                        bottomSheetDialog.dismiss();
                     }
                 });
                 btnmodify.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +113,7 @@ public class MainActivityMachineList extends AppCompatActivity {
                         intent.putExtra("maq", name);
                         intent.putExtra("identificator", identif);
                         startActivity(intent);
+                        bottomSheetDialog.dismiss();
                     }
                 });
                 btncancel.setOnClickListener(new View.OnClickListener() {

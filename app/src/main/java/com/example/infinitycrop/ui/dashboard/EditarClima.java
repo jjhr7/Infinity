@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.example.infinitycrop.R;
@@ -27,6 +28,7 @@ public class EditarClima extends AppCompatActivity {
     private TextInputEditText name_climaCreateClima;
     private EditText temperaturaCreateClima;
     private EditText humedadCreateClima;
+    private NumberPicker luminosidadPicker;
     private Button btn_createClima_act;
     private Button btn_cancelar_crearClima;
     private FirebaseFirestore db;
@@ -47,6 +49,9 @@ public class EditarClima extends AppCompatActivity {
         name_climaCreateClima=findViewById(R.id.name_climaEditClima);
         temperaturaCreateClima=findViewById(R.id.temperaturaEditClima);
         humedadCreateClima=findViewById(R.id.humedadEditClima);
+        luminosidadPicker=findViewById(R.id.luminosidadEditNumberPicker);
+        luminosidadPicker.setMinValue(0);
+        luminosidadPicker.setMaxValue(100);
         btn_createClima_act=findViewById(R.id.btn_EditClima_act);
         btn_cancelar_crearClima=findViewById(R.id.btn_cancelar_EditClima);
         firebaseAuth= FirebaseAuth.getInstance();
@@ -63,6 +68,7 @@ public class EditarClima extends AppCompatActivity {
                                 name_climaCreateClima.setText(document.getString("name"));
                                 temperaturaCreateClima.setText(document.getString("temperatura"));
                                 humedadCreateClima.setText(document.getString("humedad"));
+                                luminosidadPicker.setValue(Integer.parseInt(document.getString("luminosidad")));
                             } else {
 
                             }
@@ -91,6 +97,7 @@ public class EditarClima extends AppCompatActivity {
                     a.put("name", name_climaCreateClima.getText().toString());
                     a.put("humedad", humedadCreateClima.getText().toString());
                     a.put("temperatura", temperaturaCreateClima.getText().toString() );
+                    a.put("luminosidad", String.valueOf(luminosidadPicker.getValue()) );
                     a.put("creator", uid );
                     a.put("machineId", "" );
                     a.put("defecto", false );

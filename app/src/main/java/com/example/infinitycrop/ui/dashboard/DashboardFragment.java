@@ -645,11 +645,12 @@ public class DashboardFragment extends Fragment implements MqttCallback {
                                 String name=document.getString("name");
                                 String creator=document.getString("creator");
                                 String temperatura=document.getString("temperatura");
+                                String luz=document.getString("luminosidad");
                                 String humedad=document.getString("humedad");
                                 String machine=document.getString("machineId");
                                 boolean defecto=document.getBoolean("defecto");
                                 String uid=document.getId();
-                                final ClimaModel DefaultClima=new ClimaModel(temperatura,humedad,name,creator,uid,uidActualMachine,defecto);
+                                final ClimaModel DefaultClima=new ClimaModel(temperatura,humedad,luz,name,creator,uid,uidActualMachine,defecto);
 
                                 db.collection("Climas")
                                         .whereEqualTo("creator",idUser)
@@ -669,10 +670,11 @@ public class DashboardFragment extends Fragment implements MqttCallback {
                                                         String temperatura=doc.getString("temperatura");
                                                         String humedad=doc.getString("humedad");
                                                         String machine=doc.getString("machineId");
+                                                        String luminosidad=doc.getString("luminosidad");
                                                         boolean defecto=doc.getBoolean("defecto");
                                                         String uid=doc.getId();
 
-                                                        ClimaModel climaModel=new ClimaModel(temperatura,humedad,name,creator,uid,uidActualMachine,defecto);
+                                                        ClimaModel climaModel=new ClimaModel(temperatura,humedad,luminosidad,name,creator,uid,uidActualMachine,defecto);
                                                         climaModelList.add(climaModel);
                                                     }
                                                     adapterClimas= new AdapterClimas(climaModelList,getContext(),uidActualMachine);
@@ -711,6 +713,7 @@ public class DashboardFragment extends Fragment implements MqttCallback {
 
         TextView name=bottomSheetDialog.findViewById(R.id.name_clima);
         TextView temp=bottomSheetDialog.findViewById(R.id.umbral_temperatura_clima);
+        TextView luz=bottomSheetDialog.findViewById(R.id.umbral_luminosidad_clima);
         TextView hum=bottomSheetDialog.findViewById(R.id.umbral_humedad_clima);
         final Button activar=bottomSheetDialog.findViewById(R.id.btn_activatClima);
         Button editar=bottomSheetDialog.findViewById(R.id.btn_editar_clima);
@@ -720,6 +723,7 @@ public class DashboardFragment extends Fragment implements MqttCallback {
         name.setText(climaModel.getName());
         temp.setText(climaModel.getTemperatura());
         hum.setText(climaModel.getHumedad());
+        luz.setText(climaModel.getLuminosidad());
         //onClick
 
 

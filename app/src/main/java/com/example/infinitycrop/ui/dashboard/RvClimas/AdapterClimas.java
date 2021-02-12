@@ -95,7 +95,7 @@ public class AdapterClimas extends RecyclerView.Adapter<AdapterClimas.ClimasHold
                                                     String climaActivated= document.getString("climaID");
                                                     if(climaModel.getUid().equals(climaActivated)){
                                                         holder.linearLayout.setBackgroundResource(R.drawable.button_action_machine);
-                                                        setClimaTemperatura(machineId,climaModel.getTemperatura(),climaModel.getHumedad());
+                                                        setClimaTemperatura(machineId,climaModel.getTemperatura(),climaModel.getHumedad(),climaModel.getLuminosidad());
                                                     }
                                                 } else {
 
@@ -179,7 +179,7 @@ public class AdapterClimas extends RecyclerView.Adapter<AdapterClimas.ClimasHold
 
     //MQTT -> INICIO
 
-    public void setClimaTemperatura(String machine,String temperatura,String humedad){
+    public void setClimaTemperatura(String machine,String temperatura,String humedad,String luminosidad){
         String mensaje="5-"+temperatura;
         try {
             client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
@@ -216,10 +216,49 @@ public class AdapterClimas extends RecyclerView.Adapter<AdapterClimas.ClimasHold
         } catch (MqttException e) {
             Log.e(Mqtt.TAG, "Error al publicar.", e);
         }
-        setClimaHumedad(machineId,humedad);
+        setClimaHumedad(machineId,humedad,luminosidad);
     }
-    public void setClimaHumedad(String machine,String humedad){
+    public void setClimaHumedad(String machine,String humedad,String luminosidad){
         String mensaje="4-"+humedad;
+        try {
+            client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
+                    MemoryPersistence());
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(true);
+        connOpts.setKeepAliveInterval(60);
+        connOpts.setWill(topicRoot+"WillTopic", "App desconectada".getBytes(),Mqtt.qos, false);
+
+        try {
+            client.connect(connOpts);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+        //conexión con el broker Root1 = Lector de datos
+        //nos subscribimos a topic
+        try {
+            Log.i(Mqtt.TAG, "Subscrito a " + topicRoot + "operaciones-"+machine);//aqui está el root al que nos subscribimos si se quiere modificar se tiene que modificar este
+            client.subscribe(topicRoot + "operaciones-"+machine, Mqtt.qos);
+            client.setCallback((MqttCallback) this);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al suscribir.", e);
+        }
+        try {
+            Log.i(Mqtt.TAG, "Publicando mensaje: " + "mensaje");
+            MqttMessage message = new MqttMessage(mensaje.getBytes());
+            message.setQos(Mqtt.qos);
+            message.setRetained(false);
+            client.publish(topicRoot+"operaciones-"+machine, message);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al publicar.", e);
+        }
+        setClimaLuminosidad(machine,humedad,luminosidad);
+    }
+    public void setClimaLuminosidad(String machine,String humedad,String luminosidad){
+        String mensaje="6-"+luminosidad;
         try {
             client = new MqttClient(Mqtt.broker, Mqtt.clientId, new
                     MemoryPersistence());

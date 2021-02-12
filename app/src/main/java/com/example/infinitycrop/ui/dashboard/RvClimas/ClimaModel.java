@@ -4,6 +4,7 @@ public class ClimaModel {
 
     private String temperatura;
     private String humedad;
+    private String luminosidad;
     private String name;
     private String creator;
     private String uid;
@@ -13,23 +14,33 @@ public class ClimaModel {
     public ClimaModel() {
     }
 
-    public ClimaModel(String temperatura, String humedad, String name, String creator, String machineId, boolean defecto) {
+    public ClimaModel(String temperatura, String humedad, String luminosidad, String name, String creator, String uid, boolean defecto) {
         this.temperatura = temperatura;
         this.humedad = humedad;
+        this.luminosidad = luminosidad;
         this.name = name;
         this.creator = creator;
-        this.machineId = machineId;
+        this.uid = uid;
         this.defecto = defecto;
     }
 
-    public ClimaModel(String temperatura, String humedad, String name, String creator, String uid, String machineId, boolean defecto) {
+    public ClimaModel(String temperatura, String humedad, String luminosidad, String name, String creator, String uid, String machineId, boolean defecto) {
         this.temperatura = temperatura;
         this.humedad = humedad;
+        this.luminosidad = luminosidad;
         this.name = name;
         this.creator = creator;
         this.uid = uid;
         this.machineId = machineId;
         this.defecto = defecto;
+    }
+
+    public String getLuminosidad() {
+        return luminosidad;
+    }
+
+    public void setLuminosidad(String luminosidad) {
+        this.luminosidad = luminosidad;
     }
 
     public String getTemperatura() {
