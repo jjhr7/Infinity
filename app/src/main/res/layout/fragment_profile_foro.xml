@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EFE9E9"
@@ -75,12 +76,14 @@
                 android:id="@+id/btneditDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
-                android:layout_gravity="end|clip_vertical"
+                android:layout_gravity="end"
                 android:layout_marginTop="12dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="40dp"
                 android:background="@drawable/btn_savep"
                 android:text="Editar"
-                android:textColor="@color/colorSecondary" />
+                android:textColor="@color/colorSecondary"
+                android:visibility="visible"
+                tools:visibility="visible" />
         </LinearLayout>
 
         <androidx.cardview.widget.CardView

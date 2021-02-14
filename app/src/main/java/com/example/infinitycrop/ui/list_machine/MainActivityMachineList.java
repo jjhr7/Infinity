@@ -50,7 +50,7 @@ public class MainActivityMachineList extends AppCompatActivity {
         //Query
         Query query=firebaseFirestore
                 .collection("Machine")
-               .whereEqualTo("userUID", uid)
+                .whereEqualTo("userUID", uid)
                 .orderBy("priority",Query.Direction.ASCENDING);
         //RecyclerView
         FirestoreRecyclerOptions<MachineModel> options=new FirestoreRecyclerOptions.Builder<MachineModel>()

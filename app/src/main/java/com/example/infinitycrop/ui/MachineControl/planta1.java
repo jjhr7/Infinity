@@ -65,9 +65,10 @@ import me.sujanpoudel.wheelview.WheelView;
 public class planta1 extends AppCompatActivity {
     private List<String> nombres;
     private List<String> estado;
+
     //Aviso al entrar
     private ConstraintLayout fondoR;
-    private ImageView imgr,goBack;
+    private ImageView imgr,goBack,imgEstado;
     private TextView textR;
     //
 
@@ -77,9 +78,9 @@ public class planta1 extends AppCompatActivity {
     String state = String.valueOf(stated);
 
 
-    private CheckBox checkYes, checkNo;
+
     private Button editInfo, saveChanges;
-    private TextView mDisplayHour,infoTitle,mStation;
+    private TextView mDisplayHour,infoTitle,mStation,txtEstado;
     private EditText nameplant;
     private FirebaseFirestore db;
 
@@ -140,9 +141,10 @@ public class planta1 extends AppCompatActivity {
                             return;
                         }
                         nombres.clear();
-                        for (DocumentSnapshot doc : snapshots) {
+                        for (final DocumentSnapshot doc : snapshots) {
                                 nombres.add(doc.getString("name"));
                                 estado.add(doc.getId());
+
                         }
 
 
@@ -181,11 +183,8 @@ public class planta1 extends AppCompatActivity {
             mDisplayHour=(TextView) findViewById(R.id.editHour);
             mDisplayHour.setEnabled(false);
             mStation=(TextView)findViewById(R.id.txtStation);
-            //Checkboxes
-            checkYes=(CheckBox)findViewById(R.id.checkBoxSi);
-            checkYes.setKeyListener(null);
-            checkNo=(CheckBox)findViewById(R.id.checkBoxNo);
-            checkNo.setKeyListener(null);
+            txtEstado=(TextView)findViewById(R.id.textoEstado);
+            imgEstado=(ImageView)findViewById(R.id.colorEstado);
 
             //Boton guardar cambios
             saveChanges = (Button)findViewById(R.id.btn_save);
@@ -320,15 +319,19 @@ public class planta1 extends AppCompatActivity {
                             String estacion = documentSnapshot.getString("estacion");
                             int resultado =documentSnapshot.getLong("estado").intValue();
                             if(resultado==1){
-                                checkYes.isSelected();
+                                txtEstado.setText("Ocupado");
+                                imgEstado.setImageResource(R.drawable.circulo_pequenyo2);
+                               /* checkYes.isSelected();
                                 checkYes.setChecked(true);
                                 checkYes.isChecked();
-                                checkNo.setChecked(false);
+                                checkNo.setChecked(false);*/
                             }else{
-                                checkNo.isSelected();
+                                txtEstado.setText("Libre");
+                                imgEstado.setImageResource(R.drawable.circulo_pequenyo);
+                                /*checkNo.isSelected();
                                 checkNo.setChecked(true);
                                 checkNo.isChecked();
-                                checkYes.setChecked(false);
+                                checkYes.setChecked(false);*/
                             }
 
 

@@ -67,7 +67,7 @@ public class planta2 extends AppCompatActivity {
     private List<String> estado;
     //Aviso al entrar
     private ConstraintLayout fondoR;
-    private ImageView imgr,goBack;
+    private ImageView imgr,goBack,imgEstado;
     private TextView textR;
     //
 
@@ -79,7 +79,7 @@ public class planta2 extends AppCompatActivity {
 
     private CheckBox checkYes, checkNo;
     private Button editInfo, saveChanges;
-    private TextView mDisplayHour,infoTitle,mStation;
+    private TextView mDisplayHour,infoTitle,mStation,txtEstado;
     private EditText nameplant;
     private FirebaseFirestore db;
 
@@ -143,6 +143,7 @@ public class planta2 extends AppCompatActivity {
                         for (DocumentSnapshot doc : snapshots) {
                             nombres.add(doc.getString("name"));
                             estado.add(doc.getId());
+
                         }
 
 
@@ -182,11 +183,8 @@ public class planta2 extends AppCompatActivity {
         mDisplayHour=(TextView) findViewById(R.id.editHour);
         mDisplayHour.setEnabled(false);
         mStation=(TextView)findViewById(R.id.txtStation);
-        //Checkboxes
-        checkYes=(CheckBox)findViewById(R.id.checkBoxSi);
-        checkYes.setKeyListener(null);
-        checkNo=(CheckBox)findViewById(R.id.checkBoxNo);
-        checkNo.setKeyListener(null);
+        txtEstado=(TextView)findViewById(R.id.textoEstado);
+        imgEstado=(ImageView)findViewById(R.id.colorEstado);
 
         //Boton guardar cambios
         saveChanges = (Button)findViewById(R.id.btn_save);
@@ -321,15 +319,11 @@ public class planta2 extends AppCompatActivity {
                             String estacion = documentSnapshot.getString("estacion");
                             int resultado =documentSnapshot.getLong("estado").intValue();
                             if(resultado==1){
-                                checkYes.isSelected();
-                                checkYes.setChecked(true);
-                                checkYes.isChecked();
-                                checkNo.setChecked(false);
+                                txtEstado.setText("Ocupado");
+                                imgEstado.setImageResource(R.drawable.circulo_pequenyo2);
                             }else{
-                                checkNo.isSelected();
-                                checkNo.setChecked(true);
-                                checkNo.isChecked();
-                                checkYes.setChecked(false);
+                                txtEstado.setText("Libre");
+                                imgEstado.setImageResource(R.drawable.circulo_pequenyo);
                             }
 
 

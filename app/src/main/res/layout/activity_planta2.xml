@@ -77,7 +77,7 @@
                 app:wheelSelectedTextColor="@color/white"
                 app:wheelStartAngle="315"
                 app:wheelTextColor="@color/white"
-                app:wheelTextSize="16sp" />
+                app:wheelTextSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -138,7 +138,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Sección ocupada:"
+                            android:text="Estado de la estación:"
                             android:textColor="#9E9D9D" />
 
                         <LinearLayout
@@ -146,21 +146,22 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <CheckBox
-                                android:id="@+id/checkBoxSi"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Si" />
+                            <ImageView
+                                android:id="@+id/colorEstado"
+                                android:layout_width="30dp"
+                                android:layout_height="18dp"
+                                app:srcCompat="@drawable/circulo_pequenyo" />
 
-                            <CheckBox
-                                android:id="@+id/checkBoxNo"
+                            <TextView
+                                android:id="@+id/textoEstado"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:checked="true"
-                                android:clickable="false"
-                                android:text="No" />
+                                android:gravity="center|left"
+                                android:text="Libre"
+                                android:textColor="@color/black" />
+
                         </LinearLayout>
 
 

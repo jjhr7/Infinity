@@ -292,40 +292,133 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta3.put("piso", 1);
         planta3.put("estado",0);
         planta3.put("estacion","Esta planta se encuentra en la estación número 3");
+        final Map<String, Object> planta4 = new HashMap<>();
+        planta4.put("fecha", "00/00/0000");
+        planta4.put("hora", "00:00 a. m.");
+        planta4.put("name", "Planta 4");
+        planta4.put("piso", 1);
+        planta4.put("estado",0);
+        planta4.put("estacion","Esta planta se encuentra en la estación número 4");
+        final Map<String, Object> planta5 = new HashMap<>();
+        planta5.put("fecha", "00/00/0000");
+        planta5.put("hora", "00:00 a. m.");
+        planta5.put("name", "Planta 5");
+        planta5.put("piso", 1);
+        planta5.put("estado",0);
+        planta5.put("estacion","Esta planta se encuentra en la estación número 5");
+        final Map<String, Object> planta6 = new HashMap<>();
+        planta6.put("fecha", "00/00/0000");
+        planta6.put("hora", "00:00 a. m.");
+        planta6.put("name", "Planta 6");
+        planta6.put("piso", 1);
+        planta6.put("estado",0);
+        planta6.put("estacion","Esta planta se encuentra en la estación número 6");
+        final Map<String, Object> planta7 = new HashMap<>();
+        planta7.put("fecha", "00/00/0000");
+        planta7.put("hora", "00:00 a. m.");
+        planta7.put("name", "Planta 7");
+        planta7.put("piso", 1);
+        planta7.put("estado",0);
+        planta7.put("estacion","Esta planta se encuentra en la estación número 7");
+        final Map<String, Object> planta8 = new HashMap<>();
+        planta8.put("fecha", "00/00/0000");
+        planta8.put("hora", "00:00 a. m.");
+        planta8.put("name", "Planta 8");
+        planta8.put("piso", 1);
+        planta8.put("estado",0);
+        planta8.put("estacion","Esta planta se encuentra en la estación número 8");
         db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
                 .document("planta1").set(planta1);
         db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
                 .document("planta2").set(planta2);
         db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
                 .document("planta3").set(planta3);
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+                .document("planta4").set(planta4);
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+                .document("planta5").set(planta5);
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+                .document("planta6").set(planta6);
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+                .document("planta7").set(planta7);
+        db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
+                .document("planta8").set(planta8);
+
+
         //añadir subCollecion datos piso 2
-        final Map<String, Object> planta4 = new HashMap<>();
-        planta4.put("fecha", "00/00/0000");
-        planta4.put("hora", "00:00 a. m.");
-        planta4.put("name", "Planta 1");
-        planta4.put("piso", 2);
-        planta4.put("estacion","Esta planta se encuentra en la estación número 4");
-        planta4.put("estado",0);
-        final Map<String, Object> planta5 = new HashMap<>();
-        planta5.put("fecha", "00/00/0000");
-        planta5.put("hora", "00:00 a. m.");
-        planta5.put("name", "Planta 2");
-        planta5.put("piso", 2);
-        planta5.put("estado",0);
-        planta5.put("estacion","Esta planta se encuentra en la estación número 5");
-        final Map<String, Object> planta6 = new HashMap<>();
-        planta6.put("fecha", "00/00/0000");
-        planta6.put("hora", "00:00 a. m.");
-        planta6.put("name", "Planta 3");
-        planta6.put("piso", 2);
-        planta6.put("estado",0);
-        planta6.put("estacion","Esta planta se encuentra en la estación número 6");
+        final Map<String, Object> planta9 = new HashMap<>();
+        planta9.put("fecha", "00/00/0000");
+        planta9.put("hora", "00:00 a. m.");
+        planta9.put("name", "Planta 1");
+        planta9.put("piso", 2);
+        planta9.put("estacion","Esta planta se encuentra en la estación número 9");
+        planta9.put("estado",0);
+        final Map<String, Object> planta10 = new HashMap<>();
+        planta10.put("fecha", "00/00/0000");
+        planta10.put("hora", "00:00 a. m.");
+        planta10.put("name", "Planta 2");
+        planta10.put("piso", 2);
+        planta10.put("estado",0);
+        planta10.put("estacion","Esta planta se encuentra en la estación número 10");
+        final Map<String, Object> planta11 = new HashMap<>();
+        planta11.put("fecha", "00/00/0000");
+        planta11.put("hora", "00:00 a. m.");
+        planta11.put("name", "Planta 3");
+        planta11.put("piso", 2);
+        planta11.put("estado",0);
+        planta11.put("estacion","Esta planta se encuentra en la estación número 11");
+        final Map<String, Object> planta12 = new HashMap<>();
+        planta12.put("fecha", "00/00/0000");
+        planta12.put("hora", "00:00 a. m.");
+        planta12.put("name", "Planta 4");
+        planta12.put("piso", 2);
+        planta12.put("estado",0);
+        planta12.put("estacion","Esta planta se encuentra en la estación número 12");
+        final Map<String, Object> planta13 = new HashMap<>();
+        planta13.put("fecha", "00/00/0000");
+        planta13.put("hora", "00:00 a. m.");
+        planta13.put("name", "Planta 5");
+        planta13.put("piso", 2);
+        planta13.put("estado",0);
+        planta13.put("estacion","Esta planta se encuentra en la estación número 13");
+        final Map<String, Object> planta14 = new HashMap<>();
+        planta14.put("fecha", "00/00/0000");
+        planta14.put("hora", "00:00 a. m.");
+        planta14.put("name", "Planta 6");
+        planta14.put("piso", 2);
+        planta14.put("estado",0);
+        planta14.put("estacion","Esta planta se encuentra en la estación número 14");
+        final Map<String, Object> planta15 = new HashMap<>();
+        planta15.put("fecha", "00/00/0000");
+        planta15.put("hora", "00:00 a. m.");
+        planta15.put("name", "Planta 7");
+        planta15.put("piso", 2);
+        planta15.put("estado",0);
+        planta15.put("estacion","Esta planta se encuentra en la estación número 15");
+        final Map<String, Object> planta16 = new HashMap<>();
+        planta16.put("fecha", "00/00/0000");
+        planta16.put("hora", "00:00 a. m.");
+        planta16.put("name", "Planta 8");
+        planta16.put("piso", 2);
+        planta16.put("estado",0);
+        planta16.put("estacion","Esta planta se encuentra en la estación número 16");
+
         db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
-                .document("planta1").set(planta4);
+                .document("planta1").set(planta9);
         db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
-                .document("planta2").set(planta5);
+                .document("planta2").set(planta10);
         db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
-                .document("planta3").set(planta6);
+                .document("planta3").set(planta11);
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
+                .document("planta4").set(planta12);
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
+                .document("planta5").set(planta13);
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
+                .document("planta6").set(planta14);
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
+                .document("planta7").set(planta15);
+        db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
+                .document("planta8").set(planta16);
 
 
         //Toast.makeText(this, "Maquina añadida", Toast.LENGTH_SHORT).show();

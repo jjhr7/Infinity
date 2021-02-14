@@ -127,7 +127,7 @@ public class ProfileForoFragment extends Fragment {
         imgP = root.findViewById(R.id.imgP);
         imgP.setEnabled(false);
         btnEdit = root.findViewById(R.id.btneditDesc);
-        btnSave = root.findViewById(R.id.btn_saveP);
+
         txtNamep = root.findViewById(R.id.nameP);
         txtNamep.setEnabled(false);
         descriptionP = root.findViewById(R.id.progiledescription);
