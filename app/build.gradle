@@ -86,5 +86,11 @@ dependencies {
     //libreria wheelview
     implementation'com.github.psuzn:wheelView:1.0.0'
     implementation'com.loopj.android:android-async-http:1.4.11'//libreria para el tiempo
+    //libreria arc seek bar
+
+    implementation'com.akaita.android:circular-seek-bar:1.0'
+
+
+
 }
 apply plugin: 'com.google.gms.google-services'

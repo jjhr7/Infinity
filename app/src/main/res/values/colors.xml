@@ -21,4 +21,13 @@
     <color name="green">#474747</color>
     <color name="red">#ff0000</color>
     <color name="grenn">#6c7156</color>
+    <!-- Arc Seek BAR colors-->
+    <color name="slider_background">#4227395a</color>
+    <array name="gradient">
+        <item>#b5fff6</item>
+        <item>#00ffdf</item>
+        <item>#00bfa4</item>
+        <item>#007c6a</item>
+    </array>
+
 </resources>

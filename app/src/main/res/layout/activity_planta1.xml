@@ -277,7 +277,37 @@
                             android:paddingTop="5dp">
 
                         </RelativeLayout>
-
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <!--<com.marcinmoskala.arcseekbar.ArcSeekBar
+                                android:id="@+id/defaultSeekBar"
+                                android:layout_width="match_parent"
+                                android:layout_height="120dp"
+                                app:progressBackgroundColor="@color/slider_background"
+                                app:progressBackgroundWidth="20dp"
+                                app:progress="50"
+                                />-->
+                            <com.akaita.android.circularseekbar.CircularSeekBar
+                                android:layout_height="200dp"
+                                android:id="@+id/seekbar"
+                                android:layout_width="200dp"
+                                app:enabled="true"
+                                app:innerCircleColor="#e0f7e9"
+                                app:min="0"
+                                app:max="100"
+                                app:progress="0"
+                                app:progressTextSize="26"
+                                app:progressTextColor="@color/black"
+                                app:ringColor="@color/black"
+                                app:ringWidth="0.5"
+                                app:showIndicator="true"
+                                app:showInnerCircle="true"
+                                app:showProgressText="true"
+                                app:speedMultiplier="2"
+                            />
+                        </LinearLayout>
 
                     </LinearLayout>
                 </LinearLayout>

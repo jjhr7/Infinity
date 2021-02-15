@@ -30,12 +30,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.akaita.android.circularseekbar.CircularSeekBar;
 import com.example.infinitycrop.R;
 import com.example.infinitycrop.ui.dashboard.DashboardFragment;
 import com.example.infinitycrop.ui.dashboard.GeneralFragment;
 import com.example.infinitycrop.ui.logmail.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -44,7 +46,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
+
 import java.sql.Time;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -70,7 +74,8 @@ public class planta1 extends AppCompatActivity {
     private ConstraintLayout fondoR;
     private ImageView imgr,goBack,imgEstado;
     private TextView textR;
-    //
+    //SeekBar
+
 
     private int piso = 1;
     String one = String.valueOf(piso);
@@ -122,6 +127,43 @@ public class planta1 extends AppCompatActivity {
                finish();
             }
         });
+        /*defaultSeekBar=(ArcSeekBar) findViewById(R.id.defaultSeekBar);*/
+        CircularSeekBar seekBar= (CircularSeekBar)findViewById(R.id.seekbar);
+        seekBar.setProgressTextFormat(new DecimalFormat("###,###,##0.00"));
+        seekBar.setRingColor(Color.GREEN);
+        seekBar.setOnCenterClickedListener(new CircularSeekBar.OnCenterClickedListener() {
+            @Override
+            public void onCenterClicked(CircularSeekBar seekBar, float progress) {
+                Snackbar.make(seekBar,"Reset",Snackbar.LENGTH_SHORT)
+                .show();
+                seekBar.setProgress(0);
+            }
+        });
+        seekBar.setOnCircularSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(CircularSeekBar seekBar, float progress, boolean fromUser) {
+                if(progress<25){
+                    seekBar.setRingColor(Color.GREEN);
+                }
+                else if(progress<50){
+                    seekBar.setRingColor(Color.YELLOW);
+                }
+                else if(progress<75){
+                    seekBar.setRingColor(Color.RED);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(CircularSeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(CircularSeekBar seekBar) {
+
+            }
+        });
+
 
         db=FirebaseFirestore.getInstance();
         //bungle get extra
