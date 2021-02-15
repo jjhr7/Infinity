@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +48,7 @@ public class Control_panelFragment extends Fragment {
     private ConstraintLayout btn_grafics;
     private ConstraintLayout btn_notificaciones;
     private ConstraintLayout btn_guia;
+    private ConstraintLayout btn_estado;
 
     public Control_panelFragment() {
         // Required empty public constructor
@@ -158,6 +161,34 @@ public class Control_panelFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), GuiaActivity.class);
                 startActivity(intent);
+            }
+        });
+
+
+
+        btn_estado=v.findViewById(R.id.btn_estado);
+        btn_estado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String[] idRealMachine = {""};
+                db.collection("Machine")
+                        .whereEqualTo("description",uid)
+                        .limit(1)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        idRealMachine[0] =document.getId();
+
+                                        Intent intent = new Intent(getActivity(), StatusMachine.class);
+                                        intent.putExtra("idDocumentMachine", idRealMachine[0]);
+                                        startActivity(intent);
+                                    }
+                                } else { }
+                            }
+                        });
             }
         });
 
