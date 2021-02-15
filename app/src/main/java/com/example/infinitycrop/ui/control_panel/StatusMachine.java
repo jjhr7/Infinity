@@ -28,6 +28,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.util.UUID;
+
 import static com.example.comun.Mqtt.topicRoot;
 
 public class StatusMachine extends AppCompatActivity implements MqttCallback {
@@ -92,7 +94,7 @@ public class StatusMachine extends AppCompatActivity implements MqttCallback {
 
     public void enviarLucesOff(){
         try {
-            client = new MqttClient(Mqtt.broker, Mqtt.clientId+"2321", new
+            client = new MqttClient(Mqtt.broker, Mqtt.clientId+UUID.randomUUID().toString(), new
                     MemoryPersistence());
         } catch (MqttException e) {
             e.printStackTrace();

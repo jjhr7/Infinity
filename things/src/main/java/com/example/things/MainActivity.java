@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements MqttCallback{
         idUser = mAuth.getUid();
 
         btnStatus=findViewById(R.id.iotImage);
+        idMachine="";
 
 
         //Camara
