@@ -278,12 +278,14 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta1.put("piso", 1);
         planta1.put("estacion","Esta planta se encuentra en la estación número 1");
         planta1.put("estado",0);
+        planta1.put("intensidad",50);
         final Map<String, Object> planta2 = new HashMap<>();
         planta2.put("fecha", "00/00/0000");
         planta2.put("hora", "00:00 a. m.");
         planta2.put("name", "Planta 2");
         planta2.put("piso", 1);
         planta2.put("estado",0);
+        planta2.put("intensidad",50);
         planta2.put("estacion","Esta planta se encuentra en la estación número 2");
         final Map<String, Object> planta3 = new HashMap<>();
         planta3.put("fecha", "00/00/0000");
@@ -292,6 +294,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta3.put("piso", 1);
         planta3.put("estado",0);
         planta3.put("estacion","Esta planta se encuentra en la estación número 3");
+        planta3.put("intensidad",50);
         final Map<String, Object> planta4 = new HashMap<>();
         planta4.put("fecha", "00/00/0000");
         planta4.put("hora", "00:00 a. m.");
@@ -299,6 +302,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta4.put("piso", 1);
         planta4.put("estado",0);
         planta4.put("estacion","Esta planta se encuentra en la estación número 4");
+        planta4.put("intensidad",50);
         final Map<String, Object> planta5 = new HashMap<>();
         planta5.put("fecha", "00/00/0000");
         planta5.put("hora", "00:00 a. m.");
@@ -306,6 +310,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta5.put("piso", 1);
         planta5.put("estado",0);
         planta5.put("estacion","Esta planta se encuentra en la estación número 5");
+        planta5.put("intensidad",50);
         final Map<String, Object> planta6 = new HashMap<>();
         planta6.put("fecha", "00/00/0000");
         planta6.put("hora", "00:00 a. m.");
@@ -313,6 +318,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta6.put("piso", 1);
         planta6.put("estado",0);
         planta6.put("estacion","Esta planta se encuentra en la estación número 6");
+        planta6.put("intensidad",50);
         final Map<String, Object> planta7 = new HashMap<>();
         planta7.put("fecha", "00/00/0000");
         planta7.put("hora", "00:00 a. m.");
@@ -320,6 +326,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta7.put("piso", 1);
         planta7.put("estado",0);
         planta7.put("estacion","Esta planta se encuentra en la estación número 7");
+        planta7.put("intensidad",50);
         final Map<String, Object> planta8 = new HashMap<>();
         planta8.put("fecha", "00/00/0000");
         planta8.put("hora", "00:00 a. m.");
@@ -327,6 +334,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta8.put("piso", 1);
         planta8.put("estado",0);
         planta8.put("estacion","Esta planta se encuentra en la estación número 8");
+        planta8.put("intensidad",50);
         db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
                 .document("planta1").set(planta1);
         db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
@@ -353,6 +361,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta9.put("piso", 2);
         planta9.put("estacion","Esta planta se encuentra en la estación número 9");
         planta9.put("estado",0);
+        planta9.put("intensidad",50);
         final Map<String, Object> planta10 = new HashMap<>();
         planta10.put("fecha", "00/00/0000");
         planta10.put("hora", "00:00 a. m.");
@@ -360,6 +369,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta10.put("piso", 2);
         planta10.put("estado",0);
         planta10.put("estacion","Esta planta se encuentra en la estación número 10");
+        planta10.put("intensidad",50);
         final Map<String, Object> planta11 = new HashMap<>();
         planta11.put("fecha", "00/00/0000");
         planta11.put("hora", "00:00 a. m.");
@@ -367,6 +377,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta11.put("piso", 2);
         planta11.put("estado",0);
         planta11.put("estacion","Esta planta se encuentra en la estación número 11");
+        planta11.put("intensidad",50);
         final Map<String, Object> planta12 = new HashMap<>();
         planta12.put("fecha", "00/00/0000");
         planta12.put("hora", "00:00 a. m.");
@@ -374,6 +385,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta12.put("piso", 2);
         planta12.put("estado",0);
         planta12.put("estacion","Esta planta se encuentra en la estación número 12");
+        planta12.put("intensidad",50);
         final Map<String, Object> planta13 = new HashMap<>();
         planta13.put("fecha", "00/00/0000");
         planta13.put("hora", "00:00 a. m.");
@@ -381,6 +393,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta13.put("piso", 2);
         planta13.put("estado",0);
         planta13.put("estacion","Esta planta se encuentra en la estación número 13");
+        planta13.put("intensidad",50);
         final Map<String, Object> planta14 = new HashMap<>();
         planta14.put("fecha", "00/00/0000");
         planta14.put("hora", "00:00 a. m.");
@@ -388,6 +401,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta14.put("piso", 2);
         planta14.put("estado",0);
         planta14.put("estacion","Esta planta se encuentra en la estación número 14");
+        planta14.put("intensidad",0);
         final Map<String, Object> planta15 = new HashMap<>();
         planta15.put("fecha", "00/00/0000");
         planta15.put("hora", "00:00 a. m.");
@@ -395,6 +409,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta15.put("piso", 2);
         planta15.put("estado",0);
         planta15.put("estacion","Esta planta se encuentra en la estación número 15");
+        planta15.put("intensidad",0);
         final Map<String, Object> planta16 = new HashMap<>();
         planta16.put("fecha", "00/00/0000");
         planta16.put("hora", "00:00 a. m.");
@@ -402,6 +417,7 @@ public class AddMachine extends AppCompatActivity implements View.OnClickListene
         planta16.put("piso", 2);
         planta16.put("estado",0);
         planta16.put("estacion","Esta planta se encuentra en la estación número 16");
+        planta16.put("intensidad",50);
 
         db.collection("Mediciones planta 2").document(id).collection("DatosPiso")
                 .document("planta1").set(planta9);

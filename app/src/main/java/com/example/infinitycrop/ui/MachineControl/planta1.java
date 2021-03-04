@@ -1,65 +1,40 @@
 package com.example.infinitycrop.ui.MachineControl;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.FragmentTransaction;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.AlarmClock;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 
 import com.akaita.android.circularseekbar.CircularSeekBar;
 import com.example.infinitycrop.R;
-import com.example.infinitycrop.ui.dashboard.DashboardFragment;
-import com.example.infinitycrop.ui.dashboard.GeneralFragment;
-import com.example.infinitycrop.ui.logmail.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
-import java.sql.Time;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import kotlin.Unit;
@@ -69,6 +44,7 @@ import me.sujanpoudel.wheelview.WheelView;
 public class planta1 extends AppCompatActivity {
     private List<String> nombres;
     private List<String> estado;
+
 
     //Aviso al entrar
     private ConstraintLayout fondoR;
@@ -84,7 +60,7 @@ public class planta1 extends AppCompatActivity {
 
 
 
-    private Button editInfo, saveChanges;
+    private Button editInfo, saveChanges, luminosidad;
     private TextView mDisplayHour,infoTitle,mStation,txtEstado;
     private EditText nameplant;
     private FirebaseFirestore db;
@@ -92,7 +68,9 @@ public class planta1 extends AppCompatActivity {
     private String idDocument;
     private String id;
 
-
+    private float date;
+    private  int intensi;
+    private int intensidad;
 
     //Reloj
     int t2Hour, t2Minute;
@@ -101,7 +79,7 @@ public class planta1 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planta1);
-
+        luminosidad= findViewById(R.id.btnregular);
         //Aviso al entrar
         fondoR = findViewById(R.id.constraitR);
         imgr = findViewById(R.id.imageprevius);
@@ -127,42 +105,8 @@ public class planta1 extends AppCompatActivity {
                finish();
             }
         });
-        /*defaultSeekBar=(ArcSeekBar) findViewById(R.id.defaultSeekBar);*/
-        CircularSeekBar seekBar= (CircularSeekBar)findViewById(R.id.seekbar);
-        seekBar.setProgressTextFormat(new DecimalFormat("###,###,##0.00"));
-        seekBar.setRingColor(Color.GREEN);
-        seekBar.setOnCenterClickedListener(new CircularSeekBar.OnCenterClickedListener() {
-            @Override
-            public void onCenterClicked(CircularSeekBar seekBar, float progress) {
-                Snackbar.make(seekBar,"Reset",Snackbar.LENGTH_SHORT)
-                .show();
-                seekBar.setProgress(0);
-            }
-        });
-        seekBar.setOnCircularSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(CircularSeekBar seekBar, float progress, boolean fromUser) {
-                if(progress<25){
-                    seekBar.setRingColor(Color.GREEN);
-                }
-                else if(progress<50){
-                    seekBar.setRingColor(Color.YELLOW);
-                }
-                else if(progress<75){
-                    seekBar.setRingColor(Color.RED);
-                }
-            }
 
-            @Override
-            public void onStartTrackingTouch(CircularSeekBar seekBar) {
 
-            }
-
-            @Override
-            public void onStopTrackingTouch(CircularSeekBar seekBar) {
-
-            }
-        });
 
 
         db=FirebaseFirestore.getInstance();
@@ -173,6 +117,7 @@ public class planta1 extends AppCompatActivity {
         //arrays
         nombres=new ArrayList<>();
         estado=new ArrayList<>();
+
         //firestore
         db.collection("Mediciones planta 1").document(id).collection("DatosPiso")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -186,6 +131,7 @@ public class planta1 extends AppCompatActivity {
                         for (final DocumentSnapshot doc : snapshots) {
                                 nombres.add(doc.getString("name"));
                                 estado.add(doc.getId());
+
 
                         }
 
@@ -349,7 +295,7 @@ public class planta1 extends AppCompatActivity {
 
     }
 
-    private void itenInfo(String uiDoc){
+    private void itenInfo(final String uiDoc){
         //hacer consulta a ese documento con uiDOc y sacar su info
         //luego set Text a all
         db.collection("Mediciones planta 1").document(id).collection("DatosPiso").document(uiDoc).get()
@@ -359,6 +305,10 @@ public class planta1 extends AppCompatActivity {
                         if(documentSnapshot.exists()){
                             String nombre = documentSnapshot.getString("name");
                             String estacion = documentSnapshot.getString("estacion");
+                            intensidad = documentSnapshot.getLong("intensidad").intValue();
+                            date=(float)intensidad;
+
+
                             int resultado =documentSnapshot.getLong("estado").intValue();
                             if(resultado==1){
                                 txtEstado.setText("Ocupado");
@@ -382,6 +332,78 @@ public class planta1 extends AppCompatActivity {
                             mStation.setText(estacion);
 
 
+
+                            luminosidad.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(planta1.this);
+                                    bottomSheetDialog.setContentView(R.layout.bottom_sheet_regular_luz);
+                                    TextView textView = bottomSheetDialog.findViewById(R.id.texttitle);
+                                    Button btacept = bottomSheetDialog.findViewById(R.id.btnaceptar);
+
+                                    final CircularSeekBar seekBar= bottomSheetDialog.findViewById(R.id.seekbar2);
+                                    seekBar.setProgressTextFormat(new DecimalFormat("###,###,##0.00"));
+                                    seekBar.setProgress(date);
+                                    seekBar.setOnCenterClickedListener(new CircularSeekBar.OnCenterClickedListener() {
+                                        @Override
+                                        public void onCenterClicked(CircularSeekBar seekBar, float progress) {
+                                            Snackbar.make(seekBar,"Reset",Snackbar.LENGTH_SHORT)
+                                                    .show();
+                                            seekBar.setProgress(0);
+                                        }
+                                    });
+                                    seekBar.setOnCircularSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
+
+                                        @Override
+                                        public void onProgressChanged(CircularSeekBar seekBar, float progress, boolean fromUser) {
+                                            if(progress<25){
+                                                seekBar.setRingColor(Color.GREEN);
+                                            }
+                                            else if(progress<50){
+                                                seekBar.setRingColor(Color.YELLOW);
+                                            }
+                                            else if(progress<75){
+                                                seekBar.setRingColor(Color.RED);
+                                            }
+                                            date = progress;
+                                        }
+
+                                        @Override
+                                        public void onStartTrackingTouch(CircularSeekBar seekBar) {
+
+                                        }
+
+                                        @Override
+                                        public void onStopTrackingTouch(CircularSeekBar seekBar) {
+
+
+
+                                        }
+                                    });
+                                    btacept.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Map<String, Object> note = new HashMap<>();
+                                            intensi=(int) date;
+                                            note.put("intensidad",intensi);
+                                            db.collection("Mediciones planta 1").document(id).collection("DatosPiso").document(uiDoc).update(note).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(planta1.this,"Intensidad establecida correctamente",Toast.LENGTH_SHORT).show();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(planta1.this,"Error al guardar intensidad",Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                            bottomSheetDialog.dismiss();
+                                        }
+                                    });
+                                    bottomSheetDialog.show();
+                                }
+
+                            });
 
                         }else{
                             Toast.makeText(planta1.this,"Document does exist",Toast.LENGTH_SHORT).show();

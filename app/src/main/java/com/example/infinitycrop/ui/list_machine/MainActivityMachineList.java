@@ -87,6 +87,7 @@ public class MainActivityMachineList extends AppCompatActivity {
                 //botttom sheet
                 final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(MainActivityMachineList.this);
                 bottomSheetDialog.setContentView(R.layout.machine_bottom_sheet);
+
                 Button btnenter=bottomSheetDialog.findViewById(R.id.enterMachineButton);
                 Button btnmodify=bottomSheetDialog.findViewById(R.id.madifyMachineButton);
                 Button btncancel=bottomSheetDialog.findViewById(R.id.cancelMachineButton);

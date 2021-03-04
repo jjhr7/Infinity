@@ -281,32 +281,17 @@
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
-                            <!--<com.marcinmoskala.arcseekbar.ArcSeekBar
-                                android:id="@+id/defaultSeekBar"
-                                android:layout_width="match_parent"
-                                android:layout_height="120dp"
-                                app:progressBackgroundColor="@color/slider_background"
-                                app:progressBackgroundWidth="20dp"
-                                app:progress="50"
-                                />-->
-                            <com.akaita.android.circularseekbar.CircularSeekBar
-                                android:layout_height="200dp"
-                                android:id="@+id/seekbar"
-                                android:layout_width="200dp"
-                                app:enabled="true"
-                                app:innerCircleColor="#e0f7e9"
-                                app:min="0"
-                                app:max="100"
-                                app:progress="0"
-                                app:progressTextSize="26"
-                                app:progressTextColor="@color/black"
-                                app:ringColor="@color/black"
-                                app:ringWidth="0.5"
-                                app:showIndicator="true"
-                                app:showInnerCircle="true"
-                                app:showProgressText="true"
-                                app:speedMultiplier="2"
-                            />
+
+                            <Button
+                            android:id="@+id/btnregular"
+                            android:layout_width="200dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/btn_scan"
+                           android:layout_gravity="center"
+                            android:text="Regular luminosidad"
+                            android:textColor="#FFFFFF"
+                            android:layout_marginBottom="20dp"/>
                         </LinearLayout>
 
                     </LinearLayout>
